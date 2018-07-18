@@ -5,7 +5,9 @@
     "pages/addCgi/addCgi",
     "pages/night/night",
     "pages/pm/pm",
-    "pages/home/home"
+    "pages/home/home",
+    "pages/am/prepare",
+    "pages/traffic/traffic"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
