@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/am/am",
+    "pages/index/index",
+    "pages/addCgi/addCgi",
+    "pages/night/night",
+    "pages/pm/pm",
+    "pages/home/home"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#F6F6F6",
+    "navigationBarTitleText": "1天管家",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#000000",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/am/am",
+        "iconPath": "images/上班.png",
+        "selectedIconPath": "images/上班.png",
+        "text": "上班"
+      },
+      {
+        "pagePath": "pages/pm/pm",
+        "iconPath": "images/工作.png",
+        "selectedIconPath": "images/工作.png",
+        "text": "工作"
+      },
+      {
+        "pagePath": "pages/pm/pm",
+        "iconPath": "images/下班.png",
+        "selectedIconPath": "images/下班.png",
+        "text": "下班"
+      },
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "images/统计.png",
+        "selectedIconPath": "images/统计.png",
+        "text": "统计"
+      }
+    ],
+    "position": "bottom"
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "connectSocket": 60000,
+    "uploadFile": 60000,
+    "downloadFile": 10000
+  },
+  "debug": true
+}

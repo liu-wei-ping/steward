@@ -1,0 +1,5 @@
+<!--pages/am/am.wxml-->
+<view class='bar'>
+  <view class='box l-bar'>准备</view>
+  <view class='box r-bar'>路况</view>
+</view>

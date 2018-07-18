@@ -1,0 +1,21 @@
+/* pages/am/am.wxss */
+
+page {
+  background: #fff;
+}
+
+.bar {
+  display: flex;
+  top: 0;
+  right: 50%;
+  left: 50%;
+  /* background: blue; */
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  background: bisque;
+  width: 20%;
+}
