@@ -1,5 +1,5 @@
 // pages/am/am.js
-var util = require('../../utils/util.js')
+var util = require('../../utils/util.js')  
 var timer;
 Page({
 
@@ -59,14 +59,17 @@ Page({
     })
   },
   startClick: function(e) {
-    this.timing(this);
+    var that = this;
+    timer = util.timer({
+      milliseconds: 50,
+      dataKey: "_dateTimer"
+    }, that)
+    console.log(timer);
+    if (!timer._setTimeout) {
+      timer.getDateTimer();
+    }
   },
-  timing:function(that) {
-    timer = setTimeout(function() {
-      that.setData({
-        _dateTimer: util.formatUnixTime(Date.parse(new Date()))
-      })
-      that.timing(that)
-    }, 1000);
+  endClick: function(e) {
+    timer.clearTimeout()
   }
 })

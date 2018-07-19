@@ -7,10 +7,14 @@
   <view class="prepare-box" hidden="{{_num!=1}}">
     <view class='w-box'>
       <view class='view-btn start' bindtap='startClick'>
-        上班出发</view>
-      <label>
-        {{_dateTimer}}
-      </label>
+        <label>
+          上班出发
+        </label>
+        <label>
+          {{_dateTimer}}
+        </label>
+      </view>
+
     </view>
     <view class='r-box'>
       <view>
@@ -31,7 +35,7 @@
       </view>
     </view>
     <view class='w-box'>
-      <view class='view-btn end'>上班打卡</view>
+      <view class='view-btn end' bindtap='endClick'>上班打卡</view>
     </view>
   </view>
   <view class="traffic-box" hidden="{{_num!=2}}">
