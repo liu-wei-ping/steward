@@ -39,43 +39,134 @@ const format3Number = n => {
   return n[2] ? n : n[1] ? '0' + n : '00' + n
 }
 //计数器
-var timer = function(obj, that) {
-  var timer = new Object();
-  var n = obj.n || 50;
-  timer.hour = obj.hour || 0;
-  timer.minutes = obj.minutes || 0;
-  timer.second = obj.second || 0;
-  timer.millisecond = obj.millisecond || 0;
-  var _dataKey = obj.dataKey
-  timer._that = that;
-  var _setTimeout = null;
-  timer.getDateTimer = function() {
-    _setTimeout = setTimeout(function() {
-      timer.millisecond = timer.millisecond + n;
-      if (timer.millisecond >= 1000) {
-        timer.millisecond = 0;
-        timer.second = timer.second + 1;
-      }
-      if (timer.second >= 60) {
-        timer.second = 0;
-        timer.minutes = timer.minutes + 1;
-      }
-      if (timer.minutes >= 60) {
-        timer.minutes = 0;
-        timer.hour = timer.hour + 1;
-      }
-      var res = formatNumber(timer.hour) + ":" + formatNumber(timer.minutes) + ":" + formatNumber(timer.second) + ":" + format3Number(timer.millisecond);
-      var thatData = {};
-      thatData[obj.dataKey] = res;
-      timer._that.setData(thatData);
-      timer.getDateTimer()
-    }, n);
+var timer = function(that) {
+  var spend = that._timerSpend || 50;
+  that._timerHour = that._timerHour || 0;
+  that._timerMinutes = that._timerMinutes || 0;
+  that._timerSecond = that._timerSecond || 0;
+  that._timerMillisecond = that._timerMillisecond || 0;
+  that.initTimer = function() {
+    this._timerHour = 0;
+    this._timerMinutes = 0;
+    this._timerSecond = 0;
+    this._timerMillisecond = 0;
   }
-  timer.clearTimeout = function() {
-    clearTimeout(timer._setTimeout);
-    timer._setTimeout = null;
+  that.getDateTimer = function() {
+    that.setTimeout = setTimeout(function() {
+      that._timerMillisecond = that._timerMillisecond + spend;
+      if (that._timerMillisecond >= 1000) {
+        that._timerMillisecond = 0;
+        that._timerSecond = that._timerSecond + 1;
+      }
+      if (that._timerSecond >= 60) {
+        that._timerSecond = 0;
+        that._timerMinutes = that._timerMinutes + 1;
+      }
+      if (that._timerMinutes >= 60) {
+        that._timerMinutes = 0;
+        that._timerHour = that._timerHour + 1;
+      }
+      var res = formatNumber(that._timerHour) + ":" + formatNumber(that._timerMinutes) + ":" + formatNumber(that._timerSecond) + ":" + format3Number(that._timerMillisecond);
+      that.setData({
+        _timerDate: res
+      });
+      that.getDateTimer()
+    }, spend);
   }
-  return timer;
+  that.clearTimeout = function() {
+    clearTimeout(that.setTimeout);
+    that.setTimeout = null;
+  }
+  return that;
+}
+
+var marquee = function(that, obj) {
+  var obj = obj != undefined ? obj : {};
+  var marqueeConfig = {
+    marqueeType: obj.marqueeType || 1, //滚动类型 1：文字滚动完了在滚动；2：新的文字接着滚动
+    text: obj.text || 'This default marquee text', //滚动文字
+    marqueePace: obj.marqueePace || 10, //滚动速度
+    marqueeDistance: obj.marqueeDistance || 0, //初始滚动距离
+    marqueeDistance2: obj.marqueeDistance || 0, //
+    marquee2copy_status: false, //是否显示copy文本信息
+    marquee2_margin: obj.marquee2_margin || 50, //滚动左边和右边的距离
+    size: obj.size || 15, //字体大小
+    color: obj.color || '#000',
+    orientation: obj.orientation || 'left', //滚动方向
+    interval: obj.interval || 20 // 时间间隔
+  }
+  var marquee = marqueeConfig;
+  var length = marquee.text.length * marquee.size; //文字长度
+  var windowWidth = wx.getSystemInfoSync().windowWidth; // 屏幕宽度
+  marqueeConfig.marquee2_margin = length < windowWidth ? windowWidth - length : marqueeConfig.marquee2_margin //当文字长度小于屏幕长度时，需要增加补
+  that.setData({
+    marqueeType: marqueeConfig.marqueeType,
+    marquee: marqueeConfig,
+    length: length,
+    windowWidth: windowWidth,
+    marquee: marquee
+  });
+
+  var marqueeType1 = function() {
+    var interval = setInterval(function() {
+      var lastMarquee = that.data.marquee;
+      if (-lastMarquee.marqueeDistance < that.data.length) {
+        lastMarquee.marqueeDistance = lastMarquee.marqueeDistance - lastMarquee.marqueePace;
+        that.setData({
+          marquee: lastMarquee
+        });
+      } else {
+        clearInterval(interval);
+        lastMarquee.marqueeDistance = that.data.windowWidth;
+        that.setData({
+          marquee: lastMarquee
+        });
+        marqueeType1();
+      }
+    }, marqueeConfig.interval);
+  }
+  var marqueeType2 = function() {
+    var interval = setInterval(function() {
+      var lastMarquee = that.data.marquee;
+      if (-lastMarquee.marqueeDistance2 < that.data.length) {
+        // 如果文字滚动到出现marquee2_margin的白边，就接着显示
+        lastMarquee.marqueeDistance2 = lastMarquee.marqueeDistance2 - lastMarquee.marqueePace;
+        // lastMarquee.marquee2copy_status = that.data.length + lastMarquee.marqueeDistance2 <= that.data.windowWidth + lastMarquee.marquee2_margin;
+
+        lastMarquee.marquee2copy_status = that.data.length + lastMarquee.marqueeDistance2 <= that.data.windowWidth + lastMarquee.marquee2_margin;
+        that.setData({
+          marquee: lastMarquee
+        });
+      } else {
+        if (-lastMarquee.marqueeDistance2 >= lastMarquee.marquee2_margin) { // 当第二条文字滚动到最左边时
+          // console.log("重新滚动-->" +( -lastMarquee.marqueeDistance2))
+          // console.log("重新滚动-->" + lastMarquee.marquee2_margin)
+          //这里会出现闪屏
+          lastMarquee.marqueeDistance2 = lastMarquee.marquee2_margin //重新回滚
+          that.setData({
+            marquee: lastMarquee
+          });
+          clearInterval(interval);
+          marqueeType2();
+        } else {
+          clearInterval(interval);
+          lastMarquee.marqueeDistance2 = -that.data.windowWidth;
+          that.setData({
+            marquee: lastMarquee
+          });
+          marqueeType2();
+        }
+      }
+    }, marqueeConfig.interval);
+  }
+  if (obj.marqueeType == 1) {
+    marqueeType1();
+  } else if (obj.marqueeType == 2) {
+    marqueeType2(obj.marqueeType == -1)
+  } else if (-1) {
+    marqueeType1();
+    marqueeType2();
+  }
 }
 // 显示繁忙提示
 var showBusy = text => wx.showToast({
@@ -105,6 +196,7 @@ module.exports = {
   formatDate,
   formatUnixTime,
   timer,
+  marquee,
   showBusy,
   showSuccess,
   showModel

@@ -1,0 +1,24 @@
+.map {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.map_box {
+  height: 60%;
+  width: 100%;
+  background: red;
+}
+
+.map_box map {
+  width: inherit;
+  height: 100%;
+}
+
+.text_box {
+  height: 40%;
+  width: 100%;
+  background: blue;
+}

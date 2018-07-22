@@ -1,0 +1,32 @@
+<!--pages/pm/pm.wxml-->
+<view>
+  <view class='task-tip'>
+    <view class="circle-out">
+      <view class="circle-in">
+        <!-- <text class='tip'>{{taskId}}</text> -->
+        <text class='tip'>{{taskTip}}</text>
+        <text class='tipTimer'>{{_timerDate}}</text>
+      </view>
+    </view>
+  </view>
+  <scroll-view scroll-y class='task-list'>
+    <block wx:if="{{taskList.length>0}}">
+      <view wx:for="{{taskList}}" wx:key="key" wx:index="{{index}}">
+        <view class="task {{index % 2==0? 'even':'odd'}}">
+          <view class='t-delete' bindtap='deleteTask' data-index='{{index}}'>
+            <label>×</label>
+          </view>
+          <view class='t-input'>
+            <input placeholder="任务内容~~~" bindinput="input" data-index='{{index}}' value="{{item.content}}"> </input>
+          </view>
+          <view class='t-save'>
+            <button type="{{item.optType==1 || item.optType==4?'default':'primary'}}" data-content='{{item.content}}' data-index='{{index}}' data-optType='{{item.optType}}' bindtap='editTask'>{{item.btnText}}</button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+  <view class='task-btn'>
+    <button bindtap='addTask' type="primary">新增任务</button>
+  </view>
+</view>

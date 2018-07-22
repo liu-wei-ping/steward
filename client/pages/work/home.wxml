@@ -1,0 +1,43 @@
+<!--pages/home/home.wxml-->
+<view class='bar'>
+  <view bindtap='headClick' data-num="1" class="btn l-btn {{_num==1?'active':''}}">下 班</view>
+  <view bindtap='headClick' data-num="2" class="btn r-btn {{_num==2?'active':''}}">路 况</view>
+</view>
+<view class='box'>
+  <view class="prepare-box" hidden="{{_num!=1}}">
+    <view class='w-tip'>
+      <label>
+        {{_timerDate}}
+      </label>
+    </view>
+    <view class='w-box'>
+      <view class='view-btn {{btnClass}}' bindtap='startClick'>
+        <label>
+          {{workStatus}}
+        </label>
+      </view>
+
+    </view>
+    <view class='r-box'>
+      <view>
+        <image src='../images/早餐.png'></image>
+        <input type='digit' placeholder="我的晚餐费~"></input>
+      </view>
+      <view>
+        <image src='../images/交通.png'></image>
+        <input type='digit' placeholder="我的交通费~"></input>
+      </view>
+      <view>
+        <image src='../images/其他.png'></image>
+        <input type='digit' placeholder="其他费用~"></input>
+      </view>
+      <view class='sub-btn'>
+        <view class='view-btn'>
+          <text>确定</text> </view>
+      </view>
+    </view>
+  </view>
+  <view class="traffic-box" hidden="{{_num!=2}}">
+    路况
+  </view>
+</view>
