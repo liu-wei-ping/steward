@@ -5,55 +5,56 @@ var myAmapFun = new amapFile.AMapWX({
   key: key
 });
 var markers = [{
-    iconPath: "../images/mapicon_navi_s.png",
-    id: 0,
-    latitude: 39.989643,
-    longitude: 116.481028,
-    width: 23,
-    height: 33
-  }, {
-    iconPath: "../images/mapicon_navi_e.png",
-    id: 0,
-    latitude: 39.90816,
-    longitude: 116.434446,
-    width: 24,
-    height: 34
-  }];
-  function getRegeo(that) {
-    myAmapFun.getRegeo({
-      iconPath: "../images/marker.png",
-      iconWidth: 22,
-      iconHeight: 32,
-      success: function(data) {
-        var marker = [{
-          id: data[0].id,
-          latitude: data[0].latitude,
-          longitude: data[0].longitude,
-          iconPath: data[0].iconPath,
-          width: data[0].width,
-          height: data[0].height
-        }]
-        that.setData({
-          markers: marker
-        });
-        that.setData({
-          latitude: data[0].latitude
-        });
-        that.setData({
-          longitude: data[0].longitude
-        });
-        that.setData({
-          textData: {
-            name: data[0].name,
-            desc: data[0].desc
-          }
-        })
-      },
-      fail: function(info) {
-        // wx.showModal({title:info.errMsg})
-      }
-    })
-  }
+  iconPath: "../images/mapicon_navi_s.png",
+  id: 0,
+  latitude: 39.989643,
+  longitude: 116.481028,
+  width: 23,
+  height: 33
+}, {
+  iconPath: "../images/mapicon_navi_e.png",
+  id: 0,
+  latitude: 39.90816,
+  longitude: 116.434446,
+  width: 24,
+  height: 34
+}];
+
+function getRegeo(that) {
+  myAmapFun.getRegeo({
+    iconPath: "../images/marker.png",
+    iconWidth: 22,
+    iconHeight: 32,
+    success: function(data) {
+      var marker = [{
+        id: data[0].id,
+        latitude: data[0].latitude,
+        longitude: data[0].longitude,
+        iconPath: data[0].iconPath,
+        width: data[0].width,
+        height: data[0].height
+      }]
+      that.setData({
+        markers: marker
+      });
+      that.setData({
+        latitude: data[0].latitude
+      });
+      that.setData({
+        longitude: data[0].longitude
+      });
+      that.setData({
+        textData: {
+          name: data[0].name,
+          desc: data[0].desc
+        }
+      })
+    },
+    fail: function(info) {
+      // wx.showModal({title:info.errMsg})
+    }
+  })
+}
 
 function getDrivingRoute(that, origin, destination) {
   myAmapFun.getDrivingRoute({
@@ -232,11 +233,29 @@ function getInputtips(keywords, city, citylimit, location) {
     }
   })
 }
+
+function getWeather(params, callback) {
+  var wType = params != null && params.type ? params.type : 'live'; //forecast
+  var obj = new Object();
+  obj.type = wType;
+  if (params != null && params.city) {
+    obj.city = params.city;
+  }
+  obj.success=function(data){
+    callback(data);
+  }
+  obj.fail = function (info){
+    //失败回调
+    console.log(info)
+  }
+  myAmapFun.getWeather(obj);
+}
 module.exports = {
   getRegeo,
   getDrivingRoute,
   getRidingRout,
   getWalkingRoute,
   getTransitRoute,
-  getInputtips
+  getInputtips,
+  getWeather
 }

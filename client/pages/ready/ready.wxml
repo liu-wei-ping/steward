@@ -1,13 +1,12 @@
-<!--pages/am/am.wxml-->
+<!--pages/ready/ready.wxml-->
 <view class='bar'>
-  <view   class="btn l-btn active">上 班</view>
-  <view bindtap='goToTraffic'  class="btn r-btn">路 况</view>
+  <view class="btn l-btn active">上 班</view>
+  <view bindtap='goToTraffic' class="btn r-btn">路 况</view>
 </view>
 <import src="../template/marquee.wxml" />
 <template is="marquee_{{marqueeType}}" data="{{...marquee}}"></template>
-<!-- <view>天气</view> -->
 <view class='box'>
-  <view class="prepare-box" hidden="{{_num!=1}}">
+  <view class="prepare-box">
     <view class='w-tip'>
       <label>
         {{_timerDate}}
@@ -19,7 +18,6 @@
           {{workStatus}}
         </label>
       </view>
-
     </view>
     <view class='r-box'>
       <view>
@@ -36,12 +34,9 @@
       </view>
       <view class='sub-btn'>
         <view class='view-btn'>
-          <text>确定</text> </view>
+          <text>确定</text>
+        </view>
       </view>
     </view>
-  </view>
-  <view class="traffic-box" hidden="{{_num!=2}}">
-    <import src="../template/traffic.wxml" />
-    <template is="traffic" data="{{...trafficInfo}}"></template>
   </view>
 </view>

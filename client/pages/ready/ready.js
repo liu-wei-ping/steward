@@ -1,14 +1,14 @@
-// pages/am/am.js
-var util = require('../../utils/util.js')  
-var amap = require('../../utils/amap.js')  
+// pages/ready/ready.js
+var util = require('../../utils/util.js')
+var amap = require('../../utils/amap.js')
 var app = getApp();
 Page({
+
   /**
    * 页面的初始数据
    */
   data: {
     _timerDate: '',
-    _num: 1,
     btnClass: 'work',
     workStatus: '上班出发',
     marqueeType: 1
@@ -41,7 +41,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    wx.showTabBar();
   },
 
   /**
@@ -59,28 +59,29 @@ Page({
   },
 
   /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function() {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function() {
+
+  },
+
+  /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
 
   },
-  goToTraffic: function() {
+  goToTraffic: function(e) {
     wx.redirectTo({
-      url: './traffic'
+      url: '../traffic/traffic',
     })
-  },
-  headClick: function(e) {
-    var num = e.currentTarget.dataset.num;
-    console.log(num);
-    this.setData({
-      _num: num
-    })
-    if (num == 2) {
-      var origin = '116.481028,39.989643';
-      var destination = '116.434446,39.90816';
-      amap.getDrivingRoute(this, origin, destination);
-      console.log(this.data.trafficInfo);
-    }
   },
   startClick: function(e) {
     util.timer(this)

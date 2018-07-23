@@ -1,0 +1,5 @@
+<!--pages/work/traffic.wxml-->
+<view class='bar'>
+  <view bindtap='goToAm' class="btn l-btn ">上 班</view>
+  <view class="btn r-btn active">路 况</view>
+</view>
