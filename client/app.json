@@ -15,7 +15,6 @@
     "pages/navigation_ride_detail/navigation",
     "pages/navigation_walk/navigation",
     "pages/navigation_walk_detail/navigation",
-    "pages/work/traffic",
     "pages/traffic/traffic",
     "pages/ready/ready"
   ],
