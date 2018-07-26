@@ -7,7 +7,8 @@
     "pages/working/working",
     "pages/home/home",
     "pages/statistic/statistic",
-    "pages/traffic/traffic"
+    "pages/traffic/traffic",
+    "pages/traffic_detail/traffic_detail"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

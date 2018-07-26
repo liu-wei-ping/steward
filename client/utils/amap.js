@@ -213,6 +213,7 @@ function drivingRoutDefaultResult(data, origin, destination) {
     color: "#0091ff",
     width: 6
   }]
+  console.log(markers);
   trafficInfo.steps = steps;
   if (data.paths[0] && data.paths[0].distance) {
     trafficInfo.distance = data.paths[0].distance + '米';
@@ -220,6 +221,7 @@ function drivingRoutDefaultResult(data, origin, destination) {
   if (data.taxi_cost) {
     trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
   }
+
   if (origin && destination) {
     trafficInfo.origin = origin;
     trafficInfo.destination = destination;
@@ -228,7 +230,7 @@ function drivingRoutDefaultResult(data, origin, destination) {
     markers[0].latitude = originArr[0];
     markers[0].longitude = originArr[1];
     markers[1].latitude = destinationArr[0];
-    markers[2].longitude = destinationArr[0];
+    markers[1].longitude = destinationArr[0];
     trafficInfo.markers = markers;
   }
   return trafficInfo;
@@ -300,7 +302,7 @@ function ridingRoutDefaultResult(data, origin, destination) {
     markers[0].latitude = originArr[0];
     markers[0].longitude = originArr[1];
     markers[1].latitude = destinationArr[0];
-    markers[2].longitude = destinationArr[0];
+    markers[1].longitude = destinationArr[0];
     trafficInfo.markers = markers;
   }
   return trafficInfo;
@@ -379,7 +381,7 @@ function walkingRouteDefaultResult(data, origin, destination) {
     markers[0].latitude = originArr[0];
     markers[0].longitude = originArr[1];
     markers[1].latitude = destinationArr[0];
-    markers[2].longitude = destinationArr[0];
+    markers[1].longitude = destinationArr[0];
     trafficInfo.markers = markers;
   }
   return trafficInfo;
@@ -453,6 +455,7 @@ function transitRouteDefaultResult(data, origin, destination) {
     var trafficInfo = {
       transits: transits
     }
+    trafficInfo.polyline = [];
     if (origin && destination) {
       trafficInfo.origin = origin;
       trafficInfo.destination = destination;
@@ -461,7 +464,7 @@ function transitRouteDefaultResult(data, origin, destination) {
       markers[0].latitude = originArr[0];
       markers[0].longitude = originArr[1];
       markers[1].latitude = destinationArr[0];
-      markers[2].longitude = destinationArr[0];
+      markers[1].longitude = destinationArr[0];
       trafficInfo.markers = markers;
     }
     return trafficInfo;

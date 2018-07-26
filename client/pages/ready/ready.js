@@ -149,11 +149,32 @@ Page({
       }
     })
   },
+  save: function(e) {
+    console.log(e)
+  },
   trafficDetail: function(e) {
     var trafficType = e.currentTarget.dataset.traffictype;
     wx.navigateTo({
       url: '../traffic/traffic?type=' + trafficType,
     })
+  },
+  bindChange: function(e) {
+    var currentTab = e.detail.current;
+    this.setData({
+      currentTab: currentTab
+    })
+  },
+  nearbyClick: function(e) {
+
+  },
+  routeClick: function(e) {
+    console.log("routeClick...")
+    wx.navigateTo({
+      url: '../traffic/traffic',
+    })
+  },
+  newRouteClick: function(e) {
+
   },
   startClick: function(e) {
     util.timer(this)

@@ -5,9 +5,9 @@
 </view>
 <!-- <import src="../template/marquee.wxml" />
 <template is="marquee_{{marqueeType}}" data="{{...marquee}}"></template> -->
-
+<!-- style="height:{{winHeight - 31}}px"  -->
 <swiper current="{{currentTab}}" class="swiper-box" style="height:{{winHeight - 31}}px" duration="300" bindchange="bindChange">
-  <swiper-item>
+  <swiper-item class="swiper-item-work">
     <view class='item-tips'>
       <view class='weather-tips'>
         <view class='weather-tips-text'>
@@ -50,7 +50,23 @@
     <view class="map-box">
       <map id="navi-map" longitude="116.451028" latitude="39.949643" scale="12" markers="{{markers}}" polyline="{{polyline}}"></map>
     </view>
-    <view class='operation-box'>
+    <view class='navigation'>
+      <view class='navigation-box'>
+        <view class='navigation-list nearby' catchtap='nearbyClick'>
+          <image src='' style='width:32px;height:15px;'></image>
+          <view>发现附近</view>
+        </view>
+        <view class='navigation-list route' catchtap='routeClick'>
+          <image src='' style='width:32px;height:15px;'></image>
+          <view>线路</view>
+        </view>
+        <view class='navigation-list newRoute' catchtap='newRouteClick'>
+          <image src='' style='width:32px;height:15px;'></image>
+          <view>添加路径</view>
+        </view>
+      </view>
+    </view>
+    <!-- <view class='operation-box'>
       <view class='opt-tips'>{{tips}}</view>
       <view class='opt-way'>
         <view bindtap='switchTraffic' class='btn swich-btn'>
@@ -60,6 +76,6 @@
           <label>详情</label>
         </view>
       </view>
-    </view>
+    </view> -->
   </swiper-item>
 </swiper>

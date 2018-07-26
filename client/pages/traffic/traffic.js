@@ -1,11 +1,12 @@
 // pages/traffic/traffic.js
+var util = require('../../utils/util.js')
+var amap = require('../../utils/amap.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    trafficType: 0,
     distance: '',
     cost: '',
     transits: [],
@@ -20,8 +21,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-  },
+  onLoad: function(options) {},
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -84,9 +84,54 @@ Page({
   onShareAppMessage: function() {
 
   },
-  goToReady: function(e) {
-    wx.redirectTo({
-      url: '../ready/ready',
-    })
+  swichTab: function(e) {
+    var trafficType = e.currentTarget.dataset.traffictype;
+    var params = {
+      city: '北京',
+      origin: '116.481028,39.989643',
+      destination: '116.434446,39.90816',
+    }
+    var that = this;
+    if (trafficType == 0) {
+      amap.getTransitRoute(params, function(data) {
+        var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          trafficType: trafficType,
+          transitRoute: trafficInfo,
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    } else if (trafficType == 1) {
+      amap.getDrivingRoute(params, function(data) {
+        var trafficInfo = amap.drivingRoutDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          trafficType: trafficType,
+          drivingRoute: trafficInfo,
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    } else if (trafficType == 2) {
+      amap.getRidingRout(params, function(data) {
+        var trafficInfo = amap.ridingRoutDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          trafficType: trafficType,
+          ridingRout: trafficInfo,
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    } else if (trafficType == 3) {
+      amap.getWalkingRoute(params, function(data) {
+        var trafficInfo = amap.walkingRouteDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          trafficType: trafficType,
+          walkingRoute: trafficInfo,
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    }
   }
 })

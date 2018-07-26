@@ -3,11 +3,11 @@
 .swiper-tab {
   display: flex;
   flex-direction: row;
-  /* position: fixed; */
+  position: fixed;
   top: 40;
   width: 100%;
-  height: 100%;
   justify-content: center;
+  z-index: 99;
 }
 
 .swiper-tab-list {
@@ -38,8 +38,18 @@
 }
 
 .swiper-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  height: inherit;
+  height: 100%;
+  z-index: -1;
+}
+
+.swiper-item-work {
+  top: 40px;
 }
 
 .item-tips {
@@ -123,7 +133,7 @@
 }
 
 .map-box {
-  height: 70%;
+  height: 100%;
 }
 
 #navi-map {
@@ -131,7 +141,58 @@
   height: 100%;
 }
 
-.operation-box {
+.navigation {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  height: 40px;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+}
+
+.navigation-box {
+  display: flex;
+  flex-direction: row;
+  height: inherit;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: 20px;
+}
+
+.navigation-list {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: #fff 1px solid;
+  font-size: 13px;
+  padding: 0px 10px 10px 10px;
+}
+
+.nearby {
+  padding-left: 15px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.route {
+  padding: 15px;
+  border-radius: 50%;
+  background: blue;
+}
+
+.newRoute {
+  padding-right: 15px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+/* .operation-box {
   display: flex;
   flex-direction: row;
   height: 30%;
@@ -139,22 +200,19 @@
 
 .opt-tips {
   width: 70%;
-}
+} */
 
-.opt-way {
+/* .opt-way {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 30%;
-}
+} */
 
-.swich-btn {
+/* .swich-btn {
   font-size: 13px;
   background: rgb(30, 16, 233);
-}
+} */
 
-.detail-btn {
-  font-size: 13px;
-  background: #393;
-}
+

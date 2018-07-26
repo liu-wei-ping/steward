@@ -1,23 +1,49 @@
 <!--pages/traffic/traffic.wxml-->
-<block wx:if="{{trafficType==0}}">
-  <view class="text_box" wx:for="{{transitRoute}}" wx:for-item="item" wx:key="key">
-    <text class="text_item" wx:for="{{item.transport}}" wx:for-item="j" wx:key="uk">
+<view class='query-container'>
+  <view class='route-box'>
+    <view class='input-view'>
+      <view class='route-input start'>
+        <image src='' style='width:32px;height:24px'></image>
+        <input placeholder='我的位置' value='我的位置'></input>
+      </view>
+      <view class='line'></view>
+      <view class='route-input end'>
+        <image src='' style='width:32px;height:24px'></image>
+        <input placeholder='输入终点'></input>
+      </view>
+    </view>
+    <view class='input-view'>
+      <image src='' style='width:32px;height:24px'></image>
+    </view>
+  </view>
+  <scroll-view scroll-x class='strategy-scroll'>
+    <view class="strategy-item {{trafficType=='0'?'active':''}}" data-trafficType='0' bindtap='swichTab'>公交</view>
+    <view class="strategy-item {{trafficType=='1'?'active':''}}" data-trafficType='1' bindtap='swichTab'>自驾</view>
+    <view class="strategy-item {{trafficType=='2'?'active':''}}" data-trafficType='2' bindtap='swichTab'>骑行</view>
+    <view class="strategy-item {{trafficType=='3'?'active':''}}" data-trafficType='3' bindtap='swichTab'>步行</view>
+  </scroll-view>
+</view>
+<scroll-view scroll-y class='traffic-box'>
+  <block wx:if="{{trafficType==0}}">
+    <view class="text_box" wx:for="{{transitRoute.transits}}" wx:for-item="item" wx:key="key">
+      <text class="text_item" wx:for="{{item.transport}}" wx:for-item="j" wx:key="uk">
     {{j}}
   </text>
-  </view>
-</block>
-<block wx:if="{{trafficType==1}}">
-  <view class="text_box" wx:for="{{drivingRoute.steps}}" wx:for-item="i" wx:key="key">
-    {{i.instruction}}
-  </view>
-</block>
-<block wx:if="{{trafficType==2}}">
-  <view class="text_box" wx:for="{{ridingRout.steps}}" wx:for-item="i" wx:key="key">
-    {{i.instruction}}
-  </view>
-</block>
-<block wx:if="{{trafficType==3}}">
-  <view class="text_box" wx:for="{{walkingRoute.steps}}" wx:for-item="i" wx:key="key">
-    {{i.instruction}}
-  </view>
-</block>
+    </view>
+  </block>
+  <block wx:if="{{trafficType==1}}">
+    <view class="text_box" wx:for="{{drivingRoute.steps}}" wx:for-item="i" wx:key="key">
+      {{i.instruction}}
+    </view>
+  </block>
+  <block wx:if="{{trafficType==2}}">
+    <view class="text_box" wx:for="{{ridingRout.steps}}" wx:for-item="i" wx:key="key">
+      {{i.instruction}}
+    </view>
+  </block>
+  <block wx:if="{{trafficType==3}}">
+    <view class="text_box" wx:for="{{walkingRoute.steps}}" wx:for-item="i" wx:key="key">
+      {{i.instruction}}
+    </view>
+  </block>
+</scroll-view>

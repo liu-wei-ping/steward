@@ -1,5 +1,76 @@
 /* pages/traffic/traffic.wxss */
 
+.query-container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  justify-content: space-around;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  border-bottom: #ccc 1px solid;
+  box-shadow:0.5px 0.5px 0.5px 0.5px rgb(241, 237, 237);
+}
+
+.route-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 90%;
+  height: 60%;
+  margin: 0 auto;
+  background: rgb(245, 245, 245);
+  border-radius: 10px;
+}
+
+.input-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.route-input {
+  display: flex;
+  flex-direction: row;
+}
+.start input{
+
+}
+.line {
+  margin: 5px 0px 5px 0px;
+  width: 100%;
+  border-bottom: #ccc 1px solid;
+}
+
+.strategy-scroll {
+  width: 100%;
+  white-space: nowrap;
+  height: 30px;
+}
+
+.strategy-item {
+  display: inline-block;
+  width: 25%;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  margin: 0 auto;
+}
+
+.active {
+  border-radius: 10px;
+  background: rgba(0, 0, 255, 0.425);
+}
+
+.traffic-box {
+  position: fixed;
+  top: 30%;
+  height: 100%;
+  width: 100%;
+}
 .text_box {
   margin: 0 15px;
   padding: 15px 0;
