@@ -1,6 +1,6 @@
 /* pages/ready/ready.wxss */
 
-.box {
+.swiper-tab {
   display: flex;
   flex-direction: row;
   /* position: fixed; */
@@ -10,46 +10,80 @@
   justify-content: center;
 }
 
-.prepare-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.traffic-box {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.w-tip {
-  height: 30%;
-  width: 100%;
+.swiper-tab-list {
+  width: 30%;
+  height: 30px;
+  padding: 5px;
+  /* opacity: 0.5;  */
+  color: #fff;
+  font-size: 20px;
+  background: #ccc;
   text-align: center;
+  border: #ccc 1px solid;
 }
 
-.w-tip label {
-  font-size: 50px;
-  font-weight: bold;
-  color: red;
+.left {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
 }
 
-.w-box {
+.right {
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.active {
+  background: #39c;
+  border: #39c 1px solid;
+}
+
+.swiper-box {
+  width: 100%;
+  height: inherit;
+}
+
+.item-tips {
+  text-align: center;
+  height: 20%;
+}
+
+.weather-tips {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  margin: 5px;
 }
 
-.r-box {
+.weather-tips-text {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.weather-tips-text {
+  padding-right: 10rpx;
+  text-align: right;
+}
+
+.weather-tips-data {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.weather-tips-data {
+  padding-left: 10rpx;
+  text-align: left;
+}
+
+.item-box {
+  margin: 10px 10px;
   padding: 20px;
   border: #ccc 1px solid;
   border-radius: 10px;
 }
 
-.r-box > view:not(.sub-btn) {
+.item-box > view:not(.bottom-box) {
   display: flex;
   flex-direction: row;
   border-bottom: #ccc 1px solid;
@@ -57,55 +91,70 @@
   margin-bottom: 15px;
 }
 
-.r-box image {
+.item-box image {
   height: 30px;
   width: 30px;
 }
 
-.r-box input {
+.item-box input {
   padding-left: 10rpx;
 }
 
-.sub-btn {
+.bottom-box {
   display: flex;
   width: 100%;
   justify-content: flex-end;
 }
 
-.view-btn {
+.btn {
   display: flex;
   width: 80px;
   height: 40px;
-  background: #393;
+  line-height: 40px;
   border-radius: 10px;
   border: #fff 1px solid;
-  line-height: 40px;
   color: #fff;
   justify-content: center;
   align-items: center;
 }
 
-.work {
-  display: flex;
-  min-width: 100px;
-  width: auto;
-  background: #f96;
-  height: auto;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.work label {
-  display: flex;
-  justify-content: center;
-}
-
-.work-on {
-  width: 100px;
+.sub-btn {
   background: #393;
 }
 
-.p-box {
-  height: 40px;
-  margin: 10px;
+.map-box {
+  height: 70%;
+}
+
+#navi-map {
+  width: 100%;
+  height: 100%;
+}
+
+.operation-box {
+  display: flex;
+  flex-direction: row;
+  height: 30%;
+}
+
+.opt-tips {
+  width: 70%;
+}
+
+.opt-way {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.swich-btn {
+  font-size: 13px;
+  background: rgb(30, 16, 233);
+}
+
+.detail-btn {
+  font-size: 13px;
+  background: #393;
 }

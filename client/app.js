@@ -5,6 +5,9 @@ var bmap = require('./libs/bmap-wx.min.js');
 var amap = require('./utils/amap.js');
 App({
   onLaunch: function() {
+    //手机信息
+    var phoneInfo=wx.getSystemInfoSync();
+    this.globalData.phoneInfo = phoneInfo;
     qcloud.setLoginUrl(config.service.loginUrl)
   },
   onShow: function() {
@@ -17,7 +20,7 @@ App({
   },
   getWeatherData: function(params) {
     //   // var location="116.43,40.75";
-      var that = this;
+    var that = this;
     //   var BMap = new bmap.BMapWX({
     //     ak: 'BsnPjk8egn0Vm6RAzgfxhhZQ1QmUeNbn'
     //   });
@@ -41,7 +44,8 @@ App({
     })
   },
   globalData: {
-    userInfo: null,
+    userInfo: {},
+    phoneInfo: {},
     weatherData: {}
   }
 })

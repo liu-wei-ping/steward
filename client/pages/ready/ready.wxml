@@ -1,25 +1,32 @@
 <!--pages/ready/ready.wxml-->
-<view class='bar'>
-  <view class="btn l-btn active">上 班</view>
-  <view bindtap='goToTraffic' class="btn r-btn">路 况</view>
+<view class='swiper-tab'>
+  <view bindtap='swichTab' data-currentTab='0' class="swiper-tab-list left {{currentTab=='0'?'active':''}}">上 班</view>
+  <view bindtap='swichTab' data-currentTab='1' class="swiper-tab-list right {{currentTab=='1'?'active':''}}">路 况</view>
 </view>
-<import src="../template/marquee.wxml" />
-<template is="marquee_{{marqueeType}}" data="{{...marquee}}"></template>
-<view class='box'>
-  <view class="prepare-box">
-    <view class='w-tip'>
-      <label>
-        {{_timerDate}}
-      </label>
-    </view>
-    <view class='w-box'>
-      <view class='view-btn {{btnClass}}' bindtap='startClick'>
-        <label>
-          {{workStatus}}
-        </label>
+<!-- <import src="../template/marquee.wxml" />
+<template is="marquee_{{marqueeType}}" data="{{...marquee}}"></template> -->
+
+<swiper current="{{currentTab}}" class="swiper-box" style="height:{{winHeight - 31}}px" duration="300" bindchange="bindChange">
+  <swiper-item>
+    <view class='item-tips'>
+      <view class='weather-tips'>
+        <view class='weather-tips-text'>
+          <view>{{weatherData.city.text}} :</view>
+          <view>{{weatherData.weather.text}} :</view>
+          <view>{{weatherData.windpower.text}} :</view>
+          <view>{{weatherData.temperature.text}} :</view>
+          <view>{{weatherData.winddirection.text}} :</view>
+        </view>
+        <view class='weather-tips-data'>
+          <view>{{weatherData.city.data}}</view>
+          <view>{{weatherData.weather.data}}</view>
+          <view>{{weatherData.windpower.data}}</view>
+          <view>{{weatherData.temperature.data}} :</view>
+          <view>{{weatherData.winddirection.data}}</view>
+        </view>
       </view>
     </view>
-    <view class='r-box'>
+    <view class='item-box'>
       <view>
         <image src='../images/早餐.png'></image>
         <input type='digit' placeholder="我的早餐费~"></input>
@@ -32,11 +39,27 @@
         <image src='../images/其他.png'></image>
         <input type='digit' placeholder="其他费用~"></input>
       </view>
-      <view class='sub-btn'>
-        <view class='view-btn'>
+      <view class='bottom-box'>
+        <view class='btn sub-btn'>
           <text>确定</text>
         </view>
       </view>
     </view>
-  </view>
-</view>
+  </swiper-item>
+  <swiper-item>
+    <view class="map-box">
+      <map id="navi-map" longitude="116.451028" latitude="39.949643" scale="12" markers="{{markers}}" polyline="{{polyline}}"></map>
+    </view>
+    <view class='operation-box'>
+      <view class='opt-tips'>{{tips}}</view>
+      <view class='opt-way'>
+        <view bindtap='switchTraffic' class='btn swich-btn'>
+          <label>选择方式</label>
+        </view>
+        <view bindtap='trafficDetail' class='btn detail-btn' data-trafficType='{{trafficType}}'>
+          <label>详情</label>
+        </view>
+      </view>
+    </view>
+  </swiper-item>
+</swiper>

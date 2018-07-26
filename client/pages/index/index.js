@@ -73,7 +73,7 @@ Page({
   },
   workday: function(e) {
     wx.reLaunch({
-      url: '../work/am',
+      url: '../ready/ready',
     })
 
   }

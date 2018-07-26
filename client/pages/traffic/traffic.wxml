@@ -1,5 +1,23 @@
 <!--pages/traffic/traffic.wxml-->
-<view class='bar'>
-  <view bindtap='goToReady' class="btn l-btn">上 班</view>
-  <view class="btn r-btn active">路 况</view>
-</view>
+<block wx:if="{{trafficType==0}}">
+  <view class="text_box" wx:for="{{transitRoute}}" wx:for-item="item" wx:key="key">
+    <text class="text_item" wx:for="{{item.transport}}" wx:for-item="j" wx:key="uk">
+    {{j}}
+  </text>
+  </view>
+</block>
+<block wx:if="{{trafficType==1}}">
+  <view class="text_box" wx:for="{{drivingRoute.steps}}" wx:for-item="i" wx:key="key">
+    {{i.instruction}}
+  </view>
+</block>
+<block wx:if="{{trafficType==2}}">
+  <view class="text_box" wx:for="{{ridingRout.steps}}" wx:for-item="i" wx:key="key">
+    {{i.instruction}}
+  </view>
+</block>
+<block wx:if="{{trafficType==3}}">
+  <view class="text_box" wx:for="{{walkingRoute.steps}}" wx:for-item="i" wx:key="key">
+    {{i.instruction}}
+  </view>
+</block>

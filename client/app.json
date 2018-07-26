@@ -1,22 +1,13 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/navigation_car/navigation",
-    "pages/template/marquee",
-    "pages/work/am",
-    "pages/work/pm",
-    "pages/work/home",
     "pages/addCgi/addCgi",
-    "pages/statistic/statistic",
     "pages/reset/index",
-    "pages/navigation_bus/navigation",
-    "pages/navigation_car_detail/navigation",
-    "pages/navigation_ride/navigation",
-    "pages/navigation_ride_detail/navigation",
-    "pages/navigation_walk/navigation",
-    "pages/navigation_walk_detail/navigation",
-    "pages/traffic/traffic",
-    "pages/ready/ready"
+    "pages/ready/ready",
+    "pages/working/working",
+    "pages/home/home",
+    "pages/statistic/statistic",
+    "pages/traffic/traffic"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -32,19 +23,19 @@
     "borderStyle": "black",
     "list": [
       {
-        "pagePath": "pages/work/am",
+        "pagePath": "pages/ready/ready",
         "iconPath": "images/上班.png",
         "selectedIconPath": "images/上班.png",
         "text": "上班"
       },
       {
-        "pagePath": "pages/work/pm",
+        "pagePath": "pages/working/working",
         "iconPath": "images/工作.png",
         "selectedIconPath": "images/工作.png",
         "text": "工作"
       },
       {
-        "pagePath": "pages/work/home",
+        "pagePath": "pages/home/home",
         "iconPath": "images/下班.png",
         "selectedIconPath": "images/下班.png",
         "text": "下班"

@@ -8,10 +8,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-    _timerDate: '',
-    btnClass: 'work',
-    workStatus: '上班出发',
-    marqueeType: 1
+    winHeight: 0,
+    currentTab: 0,
+    weatherData: {},
+    trafficType: 0, //0：公交 1：自驾 2：骑行 3：步行
+    transitRoute: {}, //公交
+    drivingRoute: {}, //自驾
+    ridingRout: {}, //骑行
+    walkingRoute: {}, //步行
   },
 
   /**
@@ -20,14 +24,13 @@ Page({
   onLoad: function(options) {
     var weatherData = app.globalData.weatherData;
     console.log(weatherData);
+    var winHeight = app.globalData.phoneInfo.windowHeight;
     var weatherText = weatherData.liveData.province + "\t" + weatherData.city.data + "\t " + weatherData.weather.data + " \t" + weatherData.temperature.data + "℃" + weatherData.winddirection.data;
-    util.marquee(this, {
-      marqueeType: 1,
-      text: weatherText,
-      marqueePace: 1, //滚动速度
-      size: 18,
-      interval: 30 // 时间间隔
-    });
+    this.setData({
+      winHeight: winHeight,
+      weatherData: weatherData
+    })
+
   },
 
   /**
@@ -71,16 +74,84 @@ Page({
   onReachBottom: function() {
 
   },
+  swichTab: function(e) {
+    var currentTab = e.currentTarget.dataset.currenttab;
+    this.setData({
+      currentTab: currentTab
+    })
+  },
+  bindChange: function(e) {
 
+  },
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
 
   },
-  goToTraffic: function(e) {
-    wx.redirectTo({
-      url: '../traffic/traffic',
+  switchTraffic: function(e) {
+    var params = {
+      city: '北京',
+      origin: '116.481028,39.989643',
+      destination: '116.434446,39.90816',
+    }
+    var that = this;
+    wx.showActionSheet({
+      itemList: ['公交', '自驾', '骑行', '步行'],
+      success: function(res) {
+        console.log(res.tapIndex)
+        if (res.tapIndex == 0) {
+          amap.getTransitRoute(params, function(data) {
+            var transitRoute = amap.transitRouteDefaultResult(data);
+            transitRoute.origin = params.origin;
+            transitRoute.destination = params.destination;
+            that.setData({
+              trafficType: 0,
+              transitRoute: transitRoute
+            })
+          });
+
+        } else if (res.tapIndex == 1) {
+          amap.getDrivingRoute(params, function(data) {
+            var drivingRoute = amap.drivingRoutDefaultResult(data);
+            drivingRoute.origin = params.origin;
+            drivingRoute.destination = params.destination;
+            that.setData({
+              trafficType: 1,
+              drivingRoute: drivingRoute
+            })
+          });
+        } else if (res.tapIndex == 2) {
+          amap.getRidingRout(params, function(data) {
+            var ridingRout = amap.ridingRoutDefaultResult(data);
+            ridingRout.origin = params.origin;
+            ridingRout.destination = params.destination;
+            that.setData({
+              trafficType: 2,
+              ridingRout: ridingRout
+            })
+          });
+        } else if (res.tapIndex == 3) {
+          amap.getWalkingRoute(params, function(data) {
+            var walkingRoute = amap.walkingRouteDefaultResult(data);
+            walkingRoute.origin = params.origin;
+            walkingRoute.destination = params.destination;
+            that.setData({
+              trafficType: 3,
+              walkingRoute: walkingRoute
+            })
+          });
+        }
+      },
+      fail: function(res) {
+        console.log(res.errMsg)
+      }
+    })
+  },
+  trafficDetail: function(e) {
+    var trafficType = e.currentTarget.dataset.traffictype;
+    wx.navigateTo({
+      url: '../traffic/traffic?type=' + trafficType,
     })
   },
   startClick: function(e) {

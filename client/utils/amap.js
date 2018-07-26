@@ -1,8 +1,12 @@
+/***
+ * 高德地图 API
+ */
+
 var amapFile = require('../libs/amap-wx.js');
 var config = require('../libs/config.js');
 var key = config.Config.key;
 var myAmapFun = new amapFile.AMapWX({
-    key: key
+  key: key
 });
 
 /**
@@ -18,47 +22,74 @@ var myAmapFun = new amapFile.AMapWX({
  * location：经纬度坐标。为空时，基于当前位置进行地址解析。格式：'经度,纬度'
  */
 function getPoiAround(params, callback) {
-    var obj = new Object();
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    obj.iconPath = params.iconPath || "../images/marker.png";
-    if (params.iconPathSelected) {
-        obj.iconPathSelected = params.iconPathSelected;
-    }
-    if (params.querykeywords) {
-        obj.querykeywords = params.querykeywords;
-    }
-    if (params.querytypes) {
-        obj.querytypes = params.querytypes;
-    }
-    myAmapFun.getPoiAround(obj);
+  var obj = new Object();
+  obj.success = function(data) {
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  obj.iconPath = params.iconPath || "../images/marker.png";
+  if (params.iconPathSelected) {
+    obj.iconPathSelected = params.iconPathSelected;
+  }
+  if (params.querykeywords) {
+    obj.querykeywords = params.querykeywords;
+  }
+  if (params.querytypes) {
+    obj.querytypes = params.querytypes;
+  }
+  myAmapFun.getPoiAround(obj);
 }
+
+/**
+ * 获取静态的地图图片
+ * @param params
+ * @param callback
+ * location：地图中心点坐标，非必填。默认为当前位置。格式：'经度,纬度'
+ * zoom：缩放级别，必填。地图缩放级别:[1,17]
+ * size：地图大小，非必填。图片宽度*图片高度。最大值为1024*1024。
+ * 2:调用高清图，图片高度和宽度都增加一倍，zoom也增加一倍（当zoom为最大值时，zoom不再改变）。
+ * markers：Marker。使用规则见下方字段说明 markers，标注最大数50个。
+ * labels：标签。使用规则见下方字段说明 labels，标签最大数10个。
+ * paths：折线。使用规则见下方字段说明 paths，折线和多边形最大数4个。
+ * traffic：交通路况标识。底图是否展现实时路况。 可选值： 0，不展现；1，展现。
+ */
 function getStaticmap(params, callback) {
-    var obj = new Object();
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    obj.iconPath = params.iconPath || "../images/marker.png";
-    if (params.iconPathSelected) {
-        obj.iconPathSelected = params.iconPathSelected;
-    }
-    if (params.querykeywords) {
-        obj.querykeywords = params.querykeywords;
-    }
-    if (params.querytypes) {
-        obj.querytypes = params.querytypes;
-    }
-    myAmapFun.getPoiAround(obj);
+  var obj = new Object();
+  obj.success = function(data) {
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  if (params.location) {
+    obj.location = params.location;
+  }
+  if (params.zoom) {
+    obj.zoom = params.zoom;
+  }
+  if (params.size) {
+    obj.size = params.size;
+  }
+  if (params.markers) {
+    obj.markers = params.markers;
+  }
+  if (params.labels) {
+    obj.labels = params.labels;
+  }
+  if (params.paths) {
+    obj.paths = params.paths;
+  }
+  if (params.traffic) {
+    obj.traffic = params.traffic;
+  }
+  console.log(myAmapFun);
+  myAmapFun.getStaticmap(obj);
 }
+
 /**
  *  获取地址描述信息
  * @param params
@@ -70,21 +101,21 @@ function getStaticmap(params, callback) {
  * location：经纬度坐标，非必填。为空时，基于当前位置进行地址解析。格式：'经度,纬度'
  */
 function getRegeo(params, callback) {
-    var obj = new Object();
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    obj.iconPath = params.iconPath || "../images/marker.png";
-    obj.iconWidth = params.iconWidth || 22;
-    obj.iconHeight = params.iconHeight || 32;
-    if (params.location) {
-        obj.location = params.location;
-    }
-    myAmapFun.getRegeo(obj);
+  var obj = new Object();
+  obj.success = function(data) {
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  obj.iconPath = params.iconPath || "../images/marker.png";
+  obj.iconWidth = params.iconWidth || 22;
+  obj.iconHeight = params.iconHeight || 32;
+  if (params.location) {
+    obj.location = params.location;
+  }
+  myAmapFun.getRegeo(obj);
 }
 
 /**
@@ -94,30 +125,31 @@ function getRegeo(params, callback) {
  * @returns {{markers: *[], latitude: *, longitude: *, textData: {name: *, desc: *}}}
  */
 function regeoDefaultResult(data) {
-    var marker = [{
-        id: data[0].id,
-        latitude: data[0].latitude,
-        longitude: data[0].longitude,
-        iconPath: data[0].iconPath,
-        width: data[0].width,
-        height: data[0].height
-    }]
-    var result = {
-        markers: marker,
-        latitude: data[0].latitude,
-        longitude: data[0].longitude,
-        textData: {
-            name: data[0].name,
-            desc: data[0].desc
-        }
+  var marker = [{
+    id: data[0].id,
+    latitude: data[0].latitude,
+    longitude: data[0].longitude,
+    iconPath: data[0].iconPath,
+    width: data[0].width,
+    height: data[0].height
+  }]
+  var result = {
+    markers: marker,
+    latitude: data[0].latitude,
+    longitude: data[0].longitude,
+    textData: {
+      name: data[0].name,
+      desc: data[0].desc
     }
-    return result;
+  }
+  return result;
 }
 
 /**
  *  获取驾车路线
  * @param params
  * @param callback
+ * @see https://lbs.amap.com/api/webservice/guide/api/direction#driving
  * origin：出发地的经纬度坐标，格式：'经度,纬度'。
  * destination：目的地的经纬度坐标，格式：'经度,纬度'。
  * strategy：驾车策略。
@@ -126,21 +158,22 @@ function regeoDefaultResult(data) {
  * avoidroad：避让道路名称。仅支持一条避让道路。
  */
 function getDrivingRoute(params, callback) {
-    var obj = new Object();
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    if (params.origin) {
-        obj.origin = params.origin;
-    }
-    if (params.destination) {
-        obj.destination = params.destination;
-    }
-    myAmapFun.getDrivingRoute(obj);
+  var obj = new Object();
+  obj.success = function(data) {
+    console.log(data);
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  if (params.origin) {
+    obj.origin = params.origin;
+  }
+  if (params.destination) {
+    obj.destination = params.destination;
+  }
+  myAmapFun.getDrivingRoute(obj);
 }
 
 /**
@@ -148,35 +181,34 @@ function getDrivingRoute(params, callback) {
  * @param data
  */
 function drivingRoutDefaultResult(data) {
-    var points = [];
-    if (data.paths && data.paths[0] && data.paths[0].steps) {
-        var steps = data.paths[0].steps;
-        for (var i = 0; i < steps.length; i++) {
-            var poLen = steps[i].polyline.split(';');
-            for (var j = 0; j < poLen.length; j++) {
-                points.push({
-                    longitude: parseFloat(poLen[j].split(',')[0]),
-                    latitude: parseFloat(poLen[j].split(',')[1])
-                })
-            }
-        }
+  var points = [];
+  if (data.paths && data.paths[0] && data.paths[0].steps) {
+    var steps = data.paths[0].steps;
+    for (var i = 0; i < steps.length; i++) {
+      var poLen = steps[i].polyline.split(';');
+      for (var j = 0; j < poLen.length; j++) {
+        points.push({
+          longitude: parseFloat(poLen[j].split(',')[0]),
+          latitude: parseFloat(poLen[j].split(',')[1])
+        })
+      }
     }
-    var trafficInfo = {};
-    trafficInfo.polyline = [{
-        points: points,
-        color: "#0091ff",
-        width: 6
-    }]
-    trafficInfo.longitude = origin
-    trafficInfo.latitude = destination
-    if (data.paths[0] && data.paths[0].distance) {
-        trafficInfo.distance = data.paths[0].distance + '米';
-    }
-    if (data.taxi_cost) {
-        trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
-    }
-    trafficInfo.markers = markers;
-    return trafficInfo;
+  }
+  var trafficInfo = {};
+  trafficInfo.polyline = [{
+    points: points,
+    color: "#0091ff",
+    width: 6
+  }]
+  trafficInfo.steps = steps;
+  if (data.paths[0] && data.paths[0].distance) {
+    trafficInfo.distance = data.paths[0].distance + '米';
+  }
+  if (data.taxi_cost) {
+    trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
+  }
+  // trafficInfo.markers = markers;
+  return trafficInfo;
 }
 
 /**
@@ -187,21 +219,22 @@ function drivingRoutDefaultResult(data) {
  * destination：目的地的经纬度坐标，格式：'经度,纬度'。
  */
 function getRidingRout(params, callback) {
-    var obj = new Object();
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    if (params.origin) {
-        obj.origin = params.origin;
-    }
-    if (params.destination) {
-        obj.destination = params.destination;
-    }
-    myAmapFun.getRidingRoute(obj);
+  var obj = new Object();
+  obj.success = function(data) {
+    console.log(data);
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  if (params.origin) {
+    obj.origin = params.origin;
+  }
+  if (params.destination) {
+    obj.destination = params.destination;
+  }
+  myAmapFun.getRidingRoute(obj);
 }
 
 /**
@@ -210,60 +243,60 @@ function getRidingRout(params, callback) {
  * @constructor
  */
 function ridingRoutDefaultResult(data) {
-    var points = [];
-    if (data.paths && data.paths[0] && data.paths[0].steps) {
-        var steps = data.paths[0].steps;
-        for (var i = 0; i < steps.length; i++) {
-            var poLen = steps[i].polyline.split(';');
-            for (var j = 0; j < poLen.length; j++) {
-                points.push({
-                    longitude: parseFloat(poLen[j].split(',')[0]),
-                    latitude: parseFloat(poLen[j].split(',')[1])
-                })
-            }
-        }
+  var points = [];
+  if (data.paths && data.paths[0] && data.paths[0].steps) {
+    var steps = data.paths[0].steps;
+    for (var i = 0; i < steps.length; i++) {
+      var poLen = steps[i].polyline.split(';');
+      for (var j = 0; j < poLen.length; j++) {
+        points.push({
+          longitude: parseFloat(poLen[j].split(',')[0]),
+          latitude: parseFloat(poLen[j].split(',')[1])
+        })
+      }
     }
-    var trafficInfo = {};
-    trafficInfo.polyline = [{
-        points: points,
-        color: "#0091ff",
-        width: 6
-    }]
-    trafficInfo.longitude = origin
-    trafficInfo.latitude = destination
-    if (data.paths[0] && data.paths[0].distance) {
-        trafficInfo.distance = data.paths[0].distance + '米';
-    }
-    if (data.taxi_cost) {
-        trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
-    }
-    return trafficInfo;
+  }
+  var trafficInfo = {};
+  trafficInfo.polyline = [{
+    points: points,
+    color: "#0091ff",
+    width: 6
+  }]
+  trafficInfo.steps = steps;
+  if (data.paths[0] && data.paths[0].distance) {
+    trafficInfo.distance = data.paths[0].distance + '米';
+  }
+  if (data.taxi_cost) {
+    trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
+  }
+  return trafficInfo;
 }
 
 /**
- *
+ * 获取步行路线
  * @param params
  * @param callback
- * @see
+ * @see https://lbs.amap.com/api/webservice/guide/api/direction#walk
  * origin：出发地的经纬度坐标，格式：'经度,纬度'。
  * destination：目的地的经纬度坐标，格式：'经度,纬度'。
  */
 function getWalkingRoute(params, callback) {
-    var obj = new Object();
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    if (params.origin) {
-        obj.origin = params.origin;
-    }
-    if (params.destination) {
-        obj.destination = params.destination;
-    }
-    myAmapFun.getWalkingRoute(obj);
+  var obj = new Object();
+  obj.success = function(data) {
+    console.log(data)
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  if (params.origin) {
+    obj.origin = params.origin;
+  }
+  if (params.destination) {
+    obj.destination = params.destination;
+  }
+  myAmapFun.getWalkingRoute(obj);
 }
 
 /**
@@ -271,76 +304,84 @@ function getWalkingRoute(params, callback) {
  * @param data
  */
 function walkingRouteDefaultResult(data) {
-    var points = [];
-    if (data.paths && data.paths[0] && data.paths[0].steps) {
-        var steps = data.paths[0].steps;
-        for (var i = 0; i < steps.length; i++) {
-            var poLen = steps[i].polyline.split(';');
-            for (var j = 0; j < poLen.length; j++) {
-                points.push({
-                    longitude: parseFloat(poLen[j].split(',')[0]),
-                    latitude: parseFloat(poLen[j].split(',')[1])
-                })
-            }
-        }
+  var points = [];
+  var steps = [];
+  if (data.paths && data.paths[0] && data.paths[0].steps) {
+    steps = data.paths[0].steps;
+    for (var i = 0; i < steps.length; i++) {
+      var poLen = steps[i].polyline.split(';');
+      for (var j = 0; j < poLen.length; j++) {
+        points.push({
+          longitude: parseFloat(poLen[j].split(',')[0]),
+          latitude: parseFloat(poLen[j].split(',')[1])
+        })
+      }
     }
-    var distance = "";
-    if (data.paths[0] && data.paths[0].distance) {
-        distance = data.paths[0].distance + '米'
-    }
-    var cost = "";
-    if (data.paths[0] && data.paths[0].duration) {
-        cost = parseInt(data.paths[0].duration / 60) + '分钟'
-    }
-    var polyline = [{
-        points: points,
-        color: "#0091ff",
-        width: 6
-    }]
-    var result = {
-        polyline: polyline,
-        distance: distance,
-        cost: cost
-    }
-    return result;
+  }
+  var distance = "";
+  if (data.paths[0] && data.paths[0].distance) {
+    distance = data.paths[0].distance + '米'
+  }
+  var cost = "";
+  if (data.paths[0] && data.paths[0].duration) {
+    cost = parseInt(data.paths[0].duration / 60) + '分钟'
+  }
+  var polyline = [{
+    points: points,
+    color: "#0091ff",
+    width: 6
+  }]
+  var result = {
+    steps: steps,
+    polyline: polyline,
+    distance: distance,
+    cost: cost
+  }
+  return result;
 }
 
-/**
+/** 
+ *  获取公交路线
  * @param params
  * @param callback
  * @see https://lbs.amap.com/api/webservice/guide/api/direction#bus
- * origin：出发地的经纬度坐标，格式：'经度,纬度'。
- * destination：目的地的经纬度坐标，格式：'经度,纬度'。
- * strategy：公交换乘策略。
- * city：出发点的城市名称。
- * cityd：目的地的城市名称。
+ * origin：出发地的经纬度坐标，格式：'经度,纬度'。 必填
+ * destination：目的地的经纬度坐标，格式：'经度,纬度'。 必填
+ * strategy：公交换乘策略。 0：最快捷模式 1：最经济模式 2：最少换乘模式 3：最少步行模式 5：不乘地铁模
+ * city：出发点的城市名称。必填
+ * cityd：目的地的城市名称。跨城必填
  */
 function getTransitRoute(params, callback) {
-    var obj = new Object();
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    if (params.city) {
-        obj.city = params.city;
-    }
-    if (params.origin) {
-        obj.origin = params.origin;
-    }
-    if (params.destination) {
-        obj.destination = params.destination;
-    }
-    if (params.strategy) {
-        obj.strategy = params.strategy;
-    }
-    if (params.cityd) {
-        obj.cityd = params.cityd;
-    }
-    myAmapFun.getTransitRoute(obj);
+  console.log("获取公交路线---" + JSON.stringify(params));
+  var obj = new Object();
+  var flag = params != undefined && params != null;
+  if (flag && params.city) {
+    obj.city = params.city;
+  }
+  if (flag && params.origin) {
+    obj.origin = params.origin;
+  }
+  if (flag && params.destination) {
+    obj.destination = params.destination;
+  }
+  if (flag && params.strategy) {
+    obj.strategy = params.strategy;
+  }
+  if (flag && params.cityd) {
+    obj.cityd = params.cityd;
+  }
+  obj.success = function success(data) {
+    console.log(data);
+    callback(data);
+  };
+  obj.fail = function fail(data) {
+    //失败回调
+    console.log(info)
+  };
+  myAmapFun.getTransitRoute(obj);
 }
+
+
 
 /**
  *  获取公交路线 默认的解析
@@ -349,25 +390,25 @@ function getTransitRoute(params, callback) {
  * @returns {*}
  */
 function transitRouteDefaultResult(data) {
-    if (data && data.transits) {
-        var transits = data.transits;
-        for (var i = 0; i < transits.length; i++) {
-            var segments = transits[i].segments;
-            transits[i].transport = [];
-            for (var j = 0; j < segments.length; j++) {
-                if (segments[j].bus && segments[j].bus.buslines && segments[j].bus.buslines[0] && segments[j].bus.buslines[0].name) {
-                    var name = segments[j].bus.buslines[0].name
-                    if (j !== 0) {
-                        name = '--' + name;
-                    }
-                    transits[i].transport.push(name);
-                }
-            }
+  if (data && data.transits) {
+    var transits = data.transits;
+    for (var i = 0; i < transits.length; i++) {
+      var segments = transits[i].segments;
+      transits[i].transport = [];
+      for (var j = 0; j < segments.length; j++) {
+        if (segments[j].bus && segments[j].bus.buslines && segments[j].bus.buslines[0] && segments[j].bus.buslines[0].name) {
+          var name = segments[j].bus.buslines[0].name
+          if (j !== 0) {
+            name = '--' + name;
+          }
+          transits[i].transport.push(name);
         }
-        return transits;
-    } else {
-        return null;
+      }
     }
+    return transits;
+  } else {
+    return null;
+  }
 
 }
 
@@ -383,28 +424,28 @@ function transitRouteDefaultResult(data) {
  * location：经纬度坐标。设置该参数会在此 location 附近优先返回关键词信息。
  */
 function getInputtips(params, callback) {
-    var obj = new Object();
-    obj.keywords = params.keywords || "";
-    if (params.city) {
-        obj.city = params.city;
-    }
-    if (params.type) {
-        obj.type = params.type;
-    }
-    if (params.citylimit) {
-        obj.citylimit = params.citylimit;
-    }
-    if (params.location) {
-        obj.location = params.location;
-    }
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    myAmapFun.getInputtips(obj);
+  var obj = new Object();
+  obj.keywords = params.keywords || "";
+  if (params.city) {
+    obj.city = params.city;
+  }
+  if (params.type) {
+    obj.type = params.type;
+  }
+  if (params.citylimit) {
+    obj.citylimit = params.citylimit;
+  }
+  if (params.location) {
+    obj.location = params.location;
+  }
+  obj.success = function(data) {
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  myAmapFun.getInputtips(obj);
 }
 
 /**
@@ -415,28 +456,35 @@ function getInputtips(params, callback) {
  * city：城市对应的adcode，非必填。为空时，基于当前位置所在区域。
  */
 function getWeather(params, callback) {
-    var wType = params != null && params.type ? params.type : 'live';
-    var obj = new Object();
-    obj.type = wType;
-    if (params != null && params.city) {
-        obj.city = params.city;
-    }
-    obj.success = function (data) {
-        callback(data);
-    }
-    obj.fail = function (info) {
-        //失败回调
-        console.log(info)
-    }
-    myAmapFun.getWeather(obj);
+  var wType = params != null && params.type ? params.type : 'live';
+  var obj = new Object();
+  obj.type = wType;
+  if (params != null && params.city) {
+    obj.city = params.city;
+  }
+  obj.success = function(data) {
+    callback(data);
+  }
+  obj.fail = function(info) {
+    //失败回调
+    console.log(info)
+  }
+  myAmapFun.getWeather(obj);
 }
 
 module.exports = {
-    getRegeo,
-    getDrivingRoute,
-    getRidingRout,
-    getWalkingRoute,
-    getTransitRoute,
-    getInputtips,
-    getWeather
+  getPoiAround,
+  getStaticmap,
+  getRegeo,
+  regeoDefaultResult,
+  getDrivingRoute,
+  drivingRoutDefaultResult,
+  getRidingRout,
+  ridingRoutDefaultResult,
+  getWalkingRoute,
+  walkingRouteDefaultResult,
+  getTransitRoute,
+  transitRouteDefaultResult,
+  getInputtips,
+  getWeather
 }
