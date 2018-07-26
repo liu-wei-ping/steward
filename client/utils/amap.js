@@ -8,7 +8,21 @@ var key = config.Config.key;
 var myAmapFun = new amapFile.AMapWX({
   key: key
 });
-
+var markers = [{
+  iconPath: "../imgages/mapicon_navi_s.png",
+  id: 0,
+  latitude: 39.989643,
+  longitude: 116.481028,
+  width: 23,
+  height: 33
+}, {
+  iconPath: "../imgages/mapicon_navi_e.png",
+  id: 0,
+  latitude: 39.90816,
+  longitude: 116.434446,
+  width: 24,
+  height: 34
+}];
 /**
  * 获取周边的POI
  * @param params
@@ -179,7 +193,7 @@ function getDrivingRoute(params, callback) {
  * 获取驾车路线  默认的解析
  * @param data
  */
-function drivingRoutDefaultResult(data) {
+function drivingRoutDefaultResult(data, origin, destination) {
   var points = [];
   if (data.paths && data.paths[0] && data.paths[0].steps) {
     var steps = data.paths[0].steps;
@@ -206,7 +220,17 @@ function drivingRoutDefaultResult(data) {
   if (data.taxi_cost) {
     trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
   }
-  // trafficInfo.markers = markers;
+  if (origin && destination) {
+    trafficInfo.origin = origin;
+    trafficInfo.destination = destination;
+    var originArr = origin.split(",");
+    var destinationArr = destination.split(",");
+    markers[0].latitude = originArr[0];
+    markers[0].longitude = originArr[1];
+    markers[1].latitude = destinationArr[0];
+    markers[2].longitude = destinationArr[0];
+    trafficInfo.markers = markers;
+  }
   return trafficInfo;
 }
 
@@ -241,7 +265,7 @@ function getRidingRout(params, callback) {
  * @param data
  * @constructor
  */
-function ridingRoutDefaultResult(data) {
+function ridingRoutDefaultResult(data, origin, destination) {
   var points = [];
   if (data.paths && data.paths[0] && data.paths[0].steps) {
     var steps = data.paths[0].steps;
@@ -267,6 +291,17 @@ function ridingRoutDefaultResult(data) {
   }
   if (data.taxi_cost) {
     trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
+  }
+  if (origin && destination) {
+    trafficInfo.origin = origin;
+    trafficInfo.destination = destination;
+    var originArr = origin.split(",");
+    var destinationArr = destination.split(",");
+    markers[0].latitude = originArr[0];
+    markers[0].longitude = originArr[1];
+    markers[1].latitude = destinationArr[0];
+    markers[2].longitude = destinationArr[0];
+    trafficInfo.markers = markers;
   }
   return trafficInfo;
 }
@@ -302,7 +337,7 @@ function getWalkingRoute(params, callback) {
  *  获取步行路线 默认的解析
  * @param data
  */
-function walkingRouteDefaultResult(data) {
+function walkingRouteDefaultResult(data, origin, destination) {
   var points = [];
   var steps = [];
   if (data.paths && data.paths[0] && data.paths[0].steps) {
@@ -330,13 +365,24 @@ function walkingRouteDefaultResult(data) {
     color: "#0091ff",
     width: 6
   }]
-  var result = {
+  var trafficInfo = {
     steps: steps,
     polyline: polyline,
     distance: distance,
     cost: cost
   }
-  return result;
+  if (origin && destination) {
+    trafficInfo.origin = origin;
+    trafficInfo.destination = destination;
+    var originArr = origin.split(",");
+    var destinationArr = destination.split(",");
+    markers[0].latitude = originArr[0];
+    markers[0].longitude = originArr[1];
+    markers[1].latitude = destinationArr[0];
+    markers[2].longitude = destinationArr[0];
+    trafficInfo.markers = markers;
+  }
+  return trafficInfo;
 }
 
 /** 
@@ -388,7 +434,7 @@ function getTransitRoute(params, callback) {
  * @param data
  * @returns {*}
  */
-function transitRouteDefaultResult(data) {
+function transitRouteDefaultResult(data, origin, destination) {
   if (data && data.transits) {
     var transits = data.transits;
     for (var i = 0; i < transits.length; i++) {
@@ -404,7 +450,21 @@ function transitRouteDefaultResult(data) {
         }
       }
     }
-    return transits;
+    var trafficInfo = {
+      transits: transits
+    }
+    if (origin && destination) {
+      trafficInfo.origin = origin;
+      trafficInfo.destination = destination;
+      var originArr = origin.split(",");
+      var destinationArr = destination.split(",");
+      markers[0].latitude = originArr[0];
+      markers[0].longitude = originArr[1];
+      markers[1].latitude = destinationArr[0];
+      markers[2].longitude = destinationArr[0];
+      trafficInfo.markers = markers;
+    }
+    return trafficInfo;
   } else {
     return null;
   }

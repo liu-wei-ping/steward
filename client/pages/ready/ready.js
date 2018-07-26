@@ -16,6 +16,8 @@ Page({
     drivingRoute: {}, //自驾
     ridingRout: {}, //骑行
     walkingRoute: {}, //步行
+    markers: [],
+    polyline: []
   },
 
   /**
@@ -102,43 +104,42 @@ Page({
         console.log(res.tapIndex)
         if (res.tapIndex == 0) {
           amap.getTransitRoute(params, function(data) {
-            var transitRoute = amap.transitRouteDefaultResult(data);
-            transitRoute.origin = params.origin;
-            transitRoute.destination = params.destination;
+            var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
             that.setData({
               trafficType: 0,
-              transitRoute: transitRoute
+              transitRoute: trafficInfo,
+              markers: trafficInfo.markers,
+              polyline: trafficInfo.polyline
             })
           });
-
         } else if (res.tapIndex == 1) {
           amap.getDrivingRoute(params, function(data) {
-            var drivingRoute = amap.drivingRoutDefaultResult(data);
-            drivingRoute.origin = params.origin;
-            drivingRoute.destination = params.destination;
+            var trafficInfo = amap.drivingRoutDefaultResult(data, params.origin, params.destination);
             that.setData({
               trafficType: 1,
-              drivingRoute: drivingRoute
+              drivingRoute: trafficInfo,
+              markers: trafficInfo.markers,
+              polyline: trafficInfo.polyline
             })
           });
         } else if (res.tapIndex == 2) {
           amap.getRidingRout(params, function(data) {
-            var ridingRout = amap.ridingRoutDefaultResult(data);
-            ridingRout.origin = params.origin;
-            ridingRout.destination = params.destination;
+            var trafficInfo = amap.ridingRoutDefaultResult(data, params.origin, params.destination);
             that.setData({
               trafficType: 2,
-              ridingRout: ridingRout
+              ridingRout: trafficInfo,
+              markers: trafficInfo.markers,
+              polyline: trafficInfo.polyline
             })
           });
         } else if (res.tapIndex == 3) {
           amap.getWalkingRoute(params, function(data) {
-            var walkingRoute = amap.walkingRouteDefaultResult(data);
-            walkingRoute.origin = params.origin;
-            walkingRoute.destination = params.destination;
+            var trafficInfo = amap.walkingRouteDefaultResult(data, params.origin, params.destination);
             that.setData({
               trafficType: 3,
-              walkingRoute: walkingRoute
+              walkingRoute: trafficInfo,
+              markers: trafficInfo.markers,
+              polyline: trafficInfo.polyline
             })
           });
         }
