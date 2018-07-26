@@ -86,7 +86,6 @@ function getStaticmap(params, callback) {
   if (params.traffic) {
     obj.traffic = params.traffic;
   }
-  console.log(myAmapFun);
   myAmapFun.getStaticmap(obj);
 }
 
