@@ -1,13 +1,13 @@
 /* pages/ready/ready.wxss */
 
 .swiper-tab {
+  position: fixed;
   display: flex;
   flex-direction: row;
-  position: fixed;
   top: 40;
   width: 100%;
   justify-content: center;
-  z-index: 99;
+  z-index: 3;
 }
 
 .swiper-tab-list {
@@ -38,7 +38,7 @@
 }
 
 .swiper-box {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -148,7 +148,7 @@
   align-items: center;
   position: fixed;
   height: 40px;
-  bottom: 15px;
+  bottom: 40px;
   left: 0;
   right: 0;
 }
@@ -214,5 +214,3 @@
   font-size: 13px;
   background: rgb(30, 16, 233);
 } */
-
-

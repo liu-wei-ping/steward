@@ -21,7 +21,7 @@
           <view>{{weatherData.city.data}}</view>
           <view>{{weatherData.weather.data}}</view>
           <view>{{weatherData.windpower.data}}</view>
-          <view>{{weatherData.temperature.data}} :</view>
+          <view>{{weatherData.temperature.data}}</view>
           <view>{{weatherData.winddirection.data}}</view>
         </view>
       </view>
@@ -66,16 +66,5 @@
         </view>
       </view>
     </view>
-    <!-- <view class='operation-box'>
-      <view class='opt-tips'>{{tips}}</view>
-      <view class='opt-way'>
-        <view bindtap='switchTraffic' class='btn swich-btn'>
-          <label>选择方式</label>
-        </view>
-        <view bindtap='trafficDetail' class='btn detail-btn' data-trafficType='{{trafficType}}'>
-          <label>详情</label>
-        </view>
-      </view>
-    </view> -->
   </swiper-item>
 </swiper>

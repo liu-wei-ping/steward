@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    location: {},
     distance: '',
     cost: '',
     transits: [],
@@ -21,7 +22,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
+  onLoad: function(options) {
+
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -34,6 +37,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    var that = this;
+    wx.getLocation({
+      type: 'wgs84',
+      success: function(res) {
+        console.log(res);
+        that.setData({
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude,
+            speed: res.speed,
+            accuracy: res.accuracy
+          }
+        })
+      }
+    })
     var pages = getCurrentPages();
     var prePage = pages[pages.length - 2]; //上一页面
     console.log(prePage);
@@ -86,9 +104,12 @@ Page({
   },
   swichTab: function(e) {
     var trafficType = e.currentTarget.dataset.traffictype;
+    var location = this.data.location;
+    var origin = location.latitude
+    origin = origin + "," + location.longitude;
     var params = {
       city: '北京',
-      origin: '116.481028,39.989643',
+      origin: origin, //'116.481028,39.989643',
       destination: '116.434446,39.90816',
     }
     var that = this;
@@ -133,5 +154,21 @@ Page({
         })
       });
     }
+  },
+  bindinput: function(e) {
+    var keywords = e.detail.value;
+    var parmas = {
+      city: '上海',
+      keywords: keywords
+    }
+    var that=this;
+    amap.getInputtips(parmas, function(data) {
+      console.log(data);
+      if (data && data.tips) {
+        that.setData({
+          tips: data.tips
+        });
+      }
+    })
   }
 })
