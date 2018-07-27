@@ -8,6 +8,8 @@ Page({
    */
   data: {
     location: {},
+    tips: [],
+    inputValue: "",
     distance: '',
     cost: '',
     transits: [],
@@ -107,11 +109,18 @@ Page({
     var location = this.data.location;
     var origin = location.latitude
     origin = origin + "," + location.longitude;
-    var params = {
-      city: '北京',
-      origin: origin, //'116.481028,39.989643',
-      destination: '116.434446,39.90816',
+    var tips = this.data.tips;
+    var destination = "";
+    if (tips && tips.length > 0) {
+      var tip = tips[0];
+      destination = tip.location
     }
+    var params = {
+      city: '上海',
+      origin: origin, //'116.481028,39.989643',
+      destination: destination,
+    }
+    console.log(params);
     var that = this;
     if (trafficType == 0) {
       amap.getTransitRoute(params, function(data) {
@@ -161,11 +170,12 @@ Page({
       city: '上海',
       keywords: keywords
     }
-    var that=this;
+    var that = this;
     amap.getInputtips(parmas, function(data) {
       console.log(data);
       if (data && data.tips) {
         that.setData({
+          // inputValue: data.tips[0].name,
           tips: data.tips
         });
       }
