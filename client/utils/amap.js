@@ -4,20 +4,20 @@
 
 var amapFile = require('../libs/amap-wx.js');
 var config = require('../libs/config.js');
-var key = config.Config.key;
+var key = config.Config.gaode_key;
 var myAmapFun = new amapFile.AMapWX({
   key: key
 });
 var markers = [{
-  iconPath: "../imgages/mapicon_navi_s.png",
+  iconPath: "../images/mapicon_navi_s.png",
   id: 0,
   latitude: 39.989643,
   longitude: 116.481028,
   width: 23,
   height: 33
 }, {
-  iconPath: "../imgages/mapicon_navi_e.png",
-  id: 0,
+  iconPath: "../images/mapicon_navi_e.png",
+  id: 1,
   latitude: 39.90816,
   longitude: 116.434446,
   width: 24,
@@ -122,9 +122,9 @@ function getRegeo(params, callback) {
     //失败回调
     console.log(info)
   }
-  obj.iconPath = params.iconPath || "../images/marker.png";
-  obj.iconWidth = params.iconWidth || 22;
-  obj.iconHeight = params.iconHeight || 32;
+  obj.iconPath = params['iconPath'] != undefined ? params['iconPath'] : "../images/marker.png";
+  obj.iconWidth = params.iconWidth != undefined ? params.iconWidth : 22;
+  obj.iconHeight = params.iconHeigh != undefined ? params.iconHeigh : 32;
   if (params.location) {
     obj.location = params.location;
   }
@@ -227,9 +227,9 @@ function drivingRoutDefaultResult(data, origin, destination) {
     trafficInfo.destination = destination;
     var originArr = origin.split(",");
     var destinationArr = destination.split(",");
-    markers[0].latitude = originArr[0];
-    markers[0].longitude = originArr[1];
-    markers[1].latitude = destinationArr[0];
+    markers[0].latitude = originArr[1];
+    markers[0].longitude = originArr[0];
+    markers[1].latitude = destinationArr[1];
     markers[1].longitude = destinationArr[0];
     trafficInfo.markers = markers;
   }
@@ -299,9 +299,9 @@ function ridingRoutDefaultResult(data, origin, destination) {
     trafficInfo.destination = destination;
     var originArr = origin.split(",");
     var destinationArr = destination.split(",");
-    markers[0].latitude = originArr[0];
-    markers[0].longitude = originArr[1];
-    markers[1].latitude = destinationArr[0];
+    markers[0].latitude = originArr[1];
+    markers[0].longitude = originArr[0];
+    markers[1].latitude = destinationArr[1];
     markers[1].longitude = destinationArr[0];
     trafficInfo.markers = markers;
   }
@@ -378,9 +378,9 @@ function walkingRouteDefaultResult(data, origin, destination) {
     trafficInfo.destination = destination;
     var originArr = origin.split(",");
     var destinationArr = destination.split(",");
-    markers[0].latitude = originArr[0];
-    markers[0].longitude = originArr[1];
-    markers[1].latitude = destinationArr[0];
+    markers[0].latitude = originArr[1];
+    markers[0].longitude = originArr[0];
+    markers[1].latitude = destinationArr[1];
     markers[1].longitude = destinationArr[0];
     trafficInfo.markers = markers;
   }
@@ -461,9 +461,9 @@ function transitRouteDefaultResult(data, origin, destination) {
       trafficInfo.destination = destination;
       var originArr = origin.split(",");
       var destinationArr = destination.split(",");
-      markers[0].latitude = originArr[0];
-      markers[0].longitude = originArr[1];
-      markers[1].latitude = destinationArr[0];
+      markers[0].latitude = originArr[1];
+      markers[0].longitude = originArr[0];
+      markers[1].latitude = destinationArr[1];
       markers[1].longitude = destinationArr[0];
       trafficInfo.markers = markers;
     }

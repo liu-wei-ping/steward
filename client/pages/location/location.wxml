@@ -1,0 +1,9 @@
+<!--pages/location/location.wxml-->
+<view class="section">
+  <input placeholder='{{placeholder}}' bindinput='bindinput' value='{{inputValue}}'></input>
+</view>
+<block wx:for="{{tips}}" wx:for-item="item" wx:key="{{key}}" wx:index="{{index}}">
+  <view bindtouchstart="bindSearch" data-index="{{index}}" class="text_box">
+    {{item.name}}
+  </view>
+</block>

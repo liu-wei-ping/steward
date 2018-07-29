@@ -62,7 +62,7 @@
 
 .active {
   border-radius: 10px;
-  background: rgba(0, 0, 255, 0.425);
+  background: #00abff;
 }
 
 .traffic-box {

@@ -4,16 +4,13 @@
     <view class='input-view'>
       <view class='route-input start'>
         <image src='' style='width:32px;height:24px'></image>
-        <input placeholder="我的位置" value='我的位置'></input>
+        <input placeholder="我的位置" data-location='0' value='{{startLocation.name}}' bindfocus='bindfocus'></input>
       </view>
       <view class='line'></view>
       <view class='route-input end'>
         <image src='' style='width:32px;height:24px'></image>
-        <input placeholder='输入终点' value="{{inputValue}}" bindinput='bindinput'></input>
+        <input placeholder='输入终点' data-location='1' value="{{endLocation.name}}" bindfocus='bindfocus'></input>
       </view>
-      <!-- <view bindtouchstart="bindSearch" data-keywords="{{i.name}}" class="text_box" wx:for="{{tips}}" wx:for-item="i">
-        {{i.name}}
-      </view> -->
     </view>
     <view class='input-view'>
       <image src='' style='width:32px;height:24px'></image>

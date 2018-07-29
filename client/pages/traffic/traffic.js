@@ -7,9 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    location: {},
-    tips: [],
-    inputValue: "",
+    startLocation: {},
+    endLocation: {},
     distance: '',
     cost: '',
     transits: [],
@@ -40,41 +39,59 @@ Page({
    */
   onShow: function() {
     var that = this;
-    wx.getLocation({
-      type: 'wgs84',
-      success: function(res) {
-        console.log(res);
-        that.setData({
-          location: {
+    var endLocation = wx.getStorageSync("endLocation");
+    var startLocation = wx.getStorageSync("startLocation");
+    if (!startLocation) {
+      wx.getLocation({
+        type: 'gcj02',
+        success: function(res) {
+          console.log(res);
+          var startLocation = {
+            location: res.longitude + "," + res.latitude,
             latitude: res.latitude,
             longitude: res.longitude,
             speed: res.speed,
-            accuracy: res.accuracy
+            accuracy: res.accuracy,
+            name: '我的位置'
           }
-        })
-      }
-    })
-    var pages = getCurrentPages();
-    var prePage = pages[pages.length - 2]; //上一页面
-    console.log(prePage);
-    if (prePage.route == 'pages/ready/ready') {
-      var preData = prePage.data;
-      this.setData({
-        trafficType: preData.trafficType,
-        transitRoute: preData.transitRoute,
-        drivingRoute: preData.drivingRoute,
-        ridingRout: preData.ridingRout,
-        walkingRoute: preData.walkingRoute,
+          that.setData({
+            startLocation: startLocation,
+            endLocation: endLocation
+          })
+          wx.setStorageSync("startLocation", startLocation);
+        }
       })
-      console.log(preData)
+    } else {
+      this.setData({
+        startLocation: startLocation,
+        endLocation: endLocation
+      })
     }
+    this.defaultSearch();
+
+    // var pages = getCurrentPages();
+    // var prePage = pages[pages.length - 2]; //上一页面
+    // console.log(prePage);
+    // if (prePage.route == 'pages/ready/ready') {
+    //   var preData = prePage.data;
+    //   this.setData({
+    //     trafficType: preData.trafficType,
+    //     transitRoute: preData.transitRoute,
+    //     drivingRoute: preData.drivingRoute,
+    //     ridingRout: preData.ridingRout,
+    //     walkingRoute: preData.walkingRoute,
+    //   })
+    //   console.log(preData)
+    // }
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-
+    console.log("traffic---onHide")
+    // wx.removeStorageSync("startLocation")
+    // wx.removeStorageSync("endLocation")
   },
 
   /**
@@ -106,15 +123,10 @@ Page({
   },
   swichTab: function(e) {
     var trafficType = e.currentTarget.dataset.traffictype;
-    var location = this.data.location;
-    var origin = location.latitude
-    origin = origin + "," + location.longitude;
-    var tips = this.data.tips;
-    var destination = "";
-    if (tips && tips.length > 0) {
-      var tip = tips[0];
-      destination = tip.location
-    }
+    var startLocation = this.data.startLocation;
+    var endLocation = this.data.endLocation;
+    var origin = startLocation.location
+    var destination = endLocation.location;
     var params = {
       city: '上海',
       origin: origin, //'116.481028,39.989643',
@@ -131,6 +143,8 @@ Page({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
         })
+        trafficInfo.trafficTyp = trafficType;
+        wx.setStorageSync("trafficInfo", trafficInfo)
       });
     } else if (trafficType == 1) {
       amap.getDrivingRoute(params, function(data) {
@@ -141,6 +155,8 @@ Page({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
         })
+        trafficInfo.trafficTyp = trafficType;
+        wx.setStorageSync("trafficInfo", trafficInfo)
       });
     } else if (trafficType == 2) {
       amap.getRidingRout(params, function(data) {
@@ -151,6 +167,8 @@ Page({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
         })
+        trafficInfo.trafficTyp = trafficType;
+        wx.setStorageSync("trafficInfo", trafficInfo)
       });
     } else if (trafficType == 3) {
       amap.getWalkingRoute(params, function(data) {
@@ -161,24 +179,69 @@ Page({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
         })
+        trafficInfo.trafficTyp = trafficType;
+        wx.setStorageSync("trafficInfo", trafficInfo)
       });
     }
   },
-  bindinput: function(e) {
-    var keywords = e.detail.value;
-    var parmas = {
-      city: '上海',
-      keywords: keywords
-    }
+  bindfocus: function(e) {
+    var location = e.currentTarget.dataset.location;
     var that = this;
-    amap.getInputtips(parmas, function(data) {
-      console.log(data);
-      if (data && data.tips) {
-        that.setData({
-          // inputValue: data.tips[0].name,
-          tips: data.tips
-        });
+    wx.chooseLocation({
+      success: function(res) {
+        if (location == 0) {
+          var startLocation = {
+            location: res.longitude + "," + res.latitude,
+            longitude: res.longitude,
+            latitude: res.latitude,
+            name: res.name
+          }
+          that.setData({
+            startLocation: startLocation
+          })
+          wx.setStorageSync("startLocation", startLocation)
+        } else if (location == 1) {
+          var endLocation = {
+            location: res.longitude + "," + res.latitude,
+            longitude: res.longitude,
+            latitude: res.latitude,
+            name: res.name
+          }
+          that.setData({
+            endLocation: endLocation
+          })
+          wx.setStorageSync("endLocation", endLocation)
+
+        }
+        that.defaultSearch();
+
       }
     })
+    // wx.navigateTo({
+    //   url: '../location/location?location=' + location,
+    // })
+  },
+  defaultSearch: function() {
+    var startLocation = this.data.startLocation;
+    var endLocation = this.data.endLocation;
+    var origin = startLocation.location
+    var destination = endLocation.location;
+    var params = {
+      city: '上海',
+      origin: origin, //'116.481028,39.989643',
+      destination: destination,
+    }
+    var that=this;
+    amap.getTransitRoute(params, function(data) {
+      var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
+      that.setData({
+        trafficType: 0,
+        transitRoute: trafficInfo,
+        markers: trafficInfo.markers,
+        polyline: trafficInfo.polyline
+      })
+      trafficInfo.trafficTyp = 0;
+      wx.setStorageSync("trafficInfo", trafficInfo)
+    });
   }
 })

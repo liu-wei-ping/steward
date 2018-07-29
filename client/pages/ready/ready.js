@@ -9,6 +9,7 @@ Page({
    */
   data: {
     winHeight: 0,
+    scale: 12,
     currentTab: 0,
     weatherData: {},
     trafficType: 0, //0：公交 1：自驾 2：骑行 3：步行
@@ -17,7 +18,12 @@ Page({
     ridingRout: {}, //骑行
     walkingRoute: {}, //步行
     markers: [],
-    polyline: []
+    polyline: [],
+    localtion: {},
+    trafficInfo: {},
+    wareUpTime: '',
+    punchInTime: ''
+
   },
 
   /**
@@ -25,9 +31,8 @@ Page({
    */
   onLoad: function(options) {
     var weatherData = app.globalData.weatherData;
-    console.log(weatherData);
+    // console.log(weatherData);
     var winHeight = app.globalData.phoneInfo.windowHeight;
-    var weatherText = weatherData.liveData.province + "\t" + weatherData.city.data + "\t " + weatherData.weather.data + " \t" + weatherData.temperature.data + "℃" + weatherData.winddirection.data;
     this.setData({
       winHeight: winHeight,
       weatherData: weatherData
@@ -39,14 +44,31 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-
+    this.mapCtx = wx.createMapContext('navi-map')
   },
-
+  getCenterLocation: function() {
+    this.mapCtx.getCenterLocation({
+      success: function(res) {
+        console.log(res.longitude)
+        console.log(res.latitude)
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    wx.showTabBar();
+    if (this.data.currentTab == 1) {
+      var startLocation = wx.getStorageSync("startLocation");
+      var trafficInfo = wx.getStorageSync("trafficInfo");
+      var data = {
+        startLocation: startLocation
+      }
+      if (trafficInfo) {
+        data.trafficInfo = trafficInfo;
+      }
+      this.setData(data);
+    }
   },
 
   /**
@@ -81,73 +103,26 @@ Page({
     this.setData({
       currentTab: currentTab
     })
-  },
-  bindChange: function(e) {
-
+    console.log(this.data.currentTab);
+    if (currentTab == 1) {
+      var startLocation = wx.getStorageSync("startLocation");
+      console.log(startLocation);
+      var trafficInfo = wx.getStorageSync("trafficInfo");
+      var data = {
+        startLocation: startLocation
+      }
+      if (trafficInfo) {
+        data.trafficInfo = trafficInfo;
+      }
+      console.log(data);
+      this.setData(data)
+    }
   },
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
 
-  },
-  switchTraffic: function(e) {
-    var params = {
-      city: '北京',
-      origin: '116.481028,39.989643',
-      destination: '116.434446,39.90816',
-    }
-    var that = this;
-    wx.showActionSheet({
-      itemList: ['公交', '自驾', '骑行', '步行'],
-      success: function(res) {
-        console.log(res.tapIndex)
-        if (res.tapIndex == 0) {
-          amap.getTransitRoute(params, function(data) {
-            var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
-            that.setData({
-              trafficType: 0,
-              transitRoute: trafficInfo,
-              markers: trafficInfo.markers,
-              polyline: trafficInfo.polyline
-            })
-          });
-        } else if (res.tapIndex == 1) {
-          amap.getDrivingRoute(params, function(data) {
-            var trafficInfo = amap.drivingRoutDefaultResult(data, params.origin, params.destination);
-            that.setData({
-              trafficType: 1,
-              drivingRoute: trafficInfo,
-              markers: trafficInfo.markers,
-              polyline: trafficInfo.polyline
-            })
-          });
-        } else if (res.tapIndex == 2) {
-          amap.getRidingRout(params, function(data) {
-            var trafficInfo = amap.ridingRoutDefaultResult(data, params.origin, params.destination);
-            that.setData({
-              trafficType: 2,
-              ridingRout: trafficInfo,
-              markers: trafficInfo.markers,
-              polyline: trafficInfo.polyline
-            })
-          });
-        } else if (res.tapIndex == 3) {
-          amap.getWalkingRoute(params, function(data) {
-            var trafficInfo = amap.walkingRouteDefaultResult(data, params.origin, params.destination);
-            that.setData({
-              trafficType: 3,
-              walkingRoute: trafficInfo,
-              markers: trafficInfo.markers,
-              polyline: trafficInfo.polyline
-            })
-          });
-        }
-      },
-      fail: function(res) {
-        console.log(res.errMsg)
-      }
-    })
   },
   save: function(e) {
     console.log(e)
@@ -156,12 +131,6 @@ Page({
     var trafficType = e.currentTarget.dataset.traffictype;
     wx.navigateTo({
       url: '../traffic/traffic?type=' + trafficType,
-    })
-  },
-  bindChange: function(e) {
-    var currentTab = e.detail.current;
-    this.setData({
-      currentTab: currentTab
     })
   },
   nearbyClick: function(e) {
@@ -188,4 +157,68 @@ Page({
       this.clearTimeout()
     }
   },
+  clickScale: function(e) {
+    var scaleType = e.currentTarget.dataset.scaletype;
+    var scale = e.currentTarget.dataset.scale; //5-20
+    var newScale = scale + scaleType * 1; //增量1
+    if (newScale < 5) {
+      newScale = 5;
+    }
+    if (newScale > 20) {
+      newScale = 20
+    }
+    this.setData({
+      scale: newScale
+    })
+  },
+  bindmarkertap: function(e) {
+    console.log(e);
+    console.log(this.data.trafficInfo);
+    var marker = this.data.trafficInfo.markers[e.markerId];
+    console.log(marker);
+    var params = {
+      location: marker.longitude + "," + marker.latitude
+    }
+    amap.getRegeo(params, function(data) {
+      console.log(data);
+    })
+  },
+  wakeUp: function(e) {
+    var wareUpTime = this.data.wareUpTime;
+    if (!wareUpTime) {
+      wx.vibrateLong({
+        success: function() {
+
+        }
+      })
+      var wareUpTime = util.formatDate(new Date(), "h:m:s");
+      this.setData({
+        wareUpTime: wareUpTime
+      })
+    } else {
+      wx.showToast({
+        icon: 'success',
+        duration: 2000,
+        title: '你已经起床了啦~',
+      })
+    }
+  },
+  punchIn: function(e) {
+    var punchInTime = this.data.punchInTime;
+    if (!punchInTime) {
+      wx.vibrateLong({
+        success: function() {}
+      })
+      var punchInTime = util.formatDate(new Date(), "h:m:s");
+      this.setData({
+        punchInTime: punchInTime
+      })
+    } else {
+      wx.showToast({
+        icon: 'success',
+        duration: 2000,
+        title: '你已经打卡啦~',
+      })
+    }
+  }
 })

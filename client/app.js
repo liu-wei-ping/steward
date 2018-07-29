@@ -1,14 +1,41 @@
 //app.js
 var qcloud = require('./vendor/wafer2-client-sdk/index')
 var config = require('./config')
-var bmap = require('./libs/bmap-wx.min.js');
 var amap = require('./utils/amap.js');
+var bmap = require('./utils/bmap.js');
 App({
   onLaunch: function() {
     //手机信息
-    var phoneInfo=wx.getSystemInfoSync();
+    var phoneInfo = wx.getSystemInfoSync();
     this.globalData.phoneInfo = phoneInfo;
-    qcloud.setLoginUrl(config.service.loginUrl)
+    qcloud.setLoginUrl(config.service.loginUrl);
+    bmap.getWeather(null,function(res){
+      console.log(res);
+    })
+    bmap.regeocoding(null,function(data){
+      console.log("regeocoding----");
+      console.log(data);
+    })
+    //当前位置
+    wx.getLocation({
+      type: 'gcj02',
+      altitude:true,
+      success: function(res) {
+        console.log(res);
+        var currLocation = {
+          location: res.longitude + "," + res.latitude,
+          latitude: res.latitude,
+          longitude: res.longitude,
+          speed: res.speed,
+          accuracy: res.accuracy,
+          name: '我的位置'
+        }
+        amap.getRegeo(currLocation,function(data){
+            console.log(data);
+        })
+        wx.setStorageSync("startLocation", currLocation);
+      }
+    })
   },
   onShow: function() {
     this.getWeatherData();
@@ -19,26 +46,7 @@ App({
     }, 1000 * 60 * 60); //60分钟重新一次
   },
   getWeatherData: function(params) {
-    //   // var location="116.43,40.75";
     var that = this;
-    //   var BMap = new bmap.BMapWX({
-    //     ak: 'BsnPjk8egn0Vm6RAzgfxhhZQ1QmUeNbn'
-    //   });
-    //   var fail = function(data) {
-    //     console.log('查询天气失败')
-    //   };
-    //   var success = function(data) {
-    //     console.log('查询天气成功')
-    //     var weatherData = data.currentWeather[0];
-    //     // weatherData = '城市：' + weatherData.currentCity + '\n' + 'PM2.5：' + weatherData.pm25 + '\n' + '日期：' + weatherData.date + '\n' + '温度：' + weatherData.temperature + '\n' + '天气：' + weatherData.weatherDesc + '\n' + '风力：' + weatherData.wind + '\n';
-    //     // console.log(weatherData);
-    //     that.globalData.weatherData = weatherData;
-    //   }
-    //   BMap.weather({
-    //     location: location,
-    //     fail: fail,
-    //     success: success
-    //   });
     amap.getWeather(params, function(data) {
       that.globalData.weatherData = data;
     })

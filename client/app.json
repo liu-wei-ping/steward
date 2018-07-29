@@ -7,12 +7,13 @@
     "pages/working/working",
     "pages/home/home",
     "pages/statistic/statistic",
-    "pages/traffic/traffic"
+    "pages/traffic/traffic",
+    "pages/location/location"
   ],
   "window": {
-    "backgroundColor": "#F6F6F6",
+    "backgroundColor": "#00abff",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
+    "navigationBarBackgroundColor": "#00abff",
     "navigationBarTitleText": "1天管家",
     "navigationBarTextStyle": "black"
   },
