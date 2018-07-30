@@ -1,21 +1,57 @@
 // pages/statistic/statistic.js
+
+const currYear = new Date().getFullYear(); // 月份
+const currMonth = new Date().getMonth() + 1; // 月份
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    calendar: {
-
-    },
+    year: new Date().getFullYear(), // 年份
+    month: new Date().getMonth() + 1, // 月份
     days_style: []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
-
+  onLoad: function(options) {
+    var year = new Date().getFullYear(); // 年份
+    var month = new Date().getMonth() + 1; // 月份
+    this.initCalendar(year, month);
+  },
+  initCalendar: function(year, month) { //月份没有加1
+    let days_style = new Array;
+    let today = new Date().getDate();
+    const days_count = new Date(year, month, 0).getDate();
+    for (let i = 1; i <= days_count; i++) {
+      const date = new Date(year, month - 1, i);
+      if (date.getDay() == 0) {
+        days_style.push({
+          month: 'current',
+          day: i,
+          color: '#f488cd'
+        });
+      } else if (today == i && currMonth == month && currYear == year) {
+        days_style.push({
+          month: 'current',
+          day: i,
+          color: 'white',
+          background: '#84e7d0'
+        });
+      } else {
+        days_style.push({
+          month: 'current',
+          day: i,
+          color: '#a18ada'
+        });
+      }
+    }
+    this.setData({
+      days_style
+    });
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -26,49 +62,7 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
-    let days_style = new Array;
-    // for (let i = 1; i <= days_count; i++) {
-    //   const date = new Date(this.data.year, this.data.month - 1, i);
-    //   if (date.getDay() == 0) {
-    //     days_style.push({
-    //       month: 'current',
-    //       day: i,
-    //       color: '#f488cd'
-    //     });
-    //   } else {
-    //     days_style.push({
-    //       month: 'current',
-    //       day: i,
-    //       color: '#a18ada'
-    //     });
-    //   }
-    // }
-    days_style.push({
-      month: 'current',
-      day: 12,
-      color: 'white',
-      background: '#b49eeb'
-    }, {
-      month: 'current',
-      day: 17,
-      color: 'white',
-      background: '#f5a8f0'
-    }, {
-      month: 'current',
-      day: 20,
-      color: 'white',
-      background: '#aad4f5'
-    }, {
-      month: 'current',
-      day: 25,
-      color: 'white',
-      background: '#84e7d0'
-    }, );
-    this.setData({
-      days_style: days_style
-    })
-  },
+  onShow: function() {},
 
   /**
    * 生命周期函数--监听页面隐藏
@@ -106,12 +100,19 @@ Page({
   },
   next: function(event) {
     console.log(event.detail);
+    var obj = event.detail;
+    this.initCalendar(obj.currentYear, obj.currentMonth);
   },
   prev: function(event) {
     console.log(event.detail);
+    var obj = event.detail;
+    this.initCalendar(obj.currentYear, obj.currentMonth);
+
   },
   dateChange: function(event) {
     console.log(event.detail);
+    var obj = event.detail;
+    this.initCalendar(obj.currentYear, obj.currentMonth);
   },
   dayClick: function(event) {
     console.log(event.detail);

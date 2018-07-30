@@ -1,7 +1,7 @@
 /**app.wxss**/
 page {
     /* background-color: #efefef; */
-    background-color: #fff;
+    background-color: #f8f8f8;
 }
 .container {
   display: flex;

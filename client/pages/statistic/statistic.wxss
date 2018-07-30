@@ -1,19 +1,48 @@
 /* pages/statistic/statistic.wxss */
-.calendar-box{
-    padding: 15px;
+
+.calendar-box {
+  padding: 15px;
 }
+
 .calendar {
-    background-color: #5052a4;
-    padding-top: 10px;
-    border-radius: 15px;
+  background-color: white;
+  padding-top: 10px;
+  border-radius: 15px;
 }
 
 .header {
-    font-size: large;
-    color: #59518d;    
+  font-size: large;
+  color: #000;
 }
 
 .board {
-    color: #c7cbe2;
-    font-weight: bold;
+  color: #000;
+  font-weight: bold;
+}
+
+.tips-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.v-tip {
+  border-radius: 50%;
+  background: #84e7d0 !important;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  margin: 1px;
+}
+
+.normal {
+  background: #177cb0!important;
+}
+
+.warn {
+  background: #f00056 !important;
 }

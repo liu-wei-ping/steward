@@ -1,8 +1,13 @@
 <!--pages/statistic/statistic.wxml-->
-<view class='calendar-box'>
-  <calendar bindnextMonth="next" bindprevMonth="prev" binddateChange="dateChange" binddayClick="dayClick" calendar-style="calendar" header-style="header" lunar="{{true}}" board-style="board" next="{{true}}" prev="{{true}}" show-more-days="{{true}}" days-color="{{days_style}}"
-    cell-size="40" weeks="{{true}}" weeks-type="cn" active-type="rounded"></calendar>
+<view class="calendar-box">
+  <calendar lunar="{{true}}" days-color="{{days_style}}" show-more-days="{{false}}" cell-size="40" calendar-style="calendar" active-type="rounded" header-style="header" board-style="board" weeks-type="cn" bindnextMonth="next" bindprevMonth="prev" binddateChange="dateChange"
+    binddayClick="dayClick" />
 </view>
-<view class='tips-'>
-
+<view class='tips-box'>
+  <view class='v-tip warn'>
+    <text>加班</text>
+  </view>
+  <view class='v-tip normal'>
+    <text>休息</text>
+  </view>
 </view>
