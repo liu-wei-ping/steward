@@ -1,2 +1,8 @@
 <!--pages/statistic/statistic.wxml-->
-<text>pages/statistic/statistic.wxml</text>
+<view class='calendar-box'>
+  <calendar bindnextMonth="next" bindprevMonth="prev" binddateChange="dateChange" binddayClick="dayClick" calendar-style="calendar" header-style="header" lunar="{{true}}" board-style="board" next="{{true}}" prev="{{true}}" show-more-days="{{true}}" days-color="{{days_style}}"
+    cell-size="40" weeks="{{true}}" weeks-type="cn" active-type="rounded"></calendar>
+</view>
+<view class='tips-'>
+
+</view>

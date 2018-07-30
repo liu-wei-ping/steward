@@ -1,1 +1,19 @@
 /* pages/statistic/statistic.wxss */
+.calendar-box{
+    padding: 15px;
+}
+.calendar {
+    background-color: #5052a4;
+    padding-top: 10px;
+    border-radius: 15px;
+}
+
+.header {
+    font-size: large;
+    color: #59518d;    
+}
+
+.board {
+    color: #c7cbe2;
+    font-weight: bold;
+}
