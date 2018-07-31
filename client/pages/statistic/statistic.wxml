@@ -4,10 +4,15 @@
     binddayClick="dayClick" />
 </view>
 <view class='tips-box'>
-  <view class='v-tip warn'>
+  <view class='v-tip warn' bindtap='overtime'>
     <text>加班</text>
   </view>
-  <view class='v-tip normal'>
+  <view class='v-tip normal' bindtap='rest'>
     <text>休息</text>
   </view>
+</view>
+<view class='message-box'>
+    <view><text>加班总计：</text><text>{{overtimeSum}} 小时</text></view>
+    <view><text>休息总计：</text><text>{{restSum}} 天</text></view>
+    <view><text>工作总计：</text><text>{{workSum}} 天</text></view>
 </view>

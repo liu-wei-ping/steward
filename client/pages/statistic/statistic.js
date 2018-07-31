@@ -8,8 +8,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    year: new Date().getFullYear(), // 年份
-    month: new Date().getMonth() + 1, // 月份
+    workSum:0,
+    restSum:0,
+    overtimeSum:0,
     days_style: []
   },
 
@@ -38,7 +39,7 @@ Page({
           month: 'current',
           day: i,
           color: 'white',
-          background: '#84e7d0'
+          background: '#40de5a'
         });
       } else {
         days_style.push({
@@ -116,5 +117,11 @@ Page({
   },
   dayClick: function(event) {
     console.log(event.detail);
+  },
+  overtime: function(e) {
+
+  },
+  rest: function(e) {
+
   }
 })
