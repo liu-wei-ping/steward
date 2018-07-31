@@ -1,5 +1,28 @@
 <!--pages/template/traffic.wxml-->
 <template name="traffic">
+  <view class='route-c'>
+    <view class='route-box'>
+      <view class='input-view'>
+        <view class='route-input start'>
+          <image src='' style='width:32px;height:24px'></image>
+          <input placeholder="我的位置" data-location='0' value='{{startLocation.name}}' bindfocus='bindfocus'></input>
+        </view>
+        <view class='line'></view>
+        <view class='route-input end'>
+          <image src='' style='width:32px;height:24px'></image>
+          <input placeholder='输入终点' data-location='1' value="{{endLocation.name}}" bindfocus='bindfocus'></input>
+        </view>
+      </view>
+      <view class='input-view'>
+        <image src='' style='width:32px;height:24px'></image>
+      </view>
+      <view class='input-view'>
+        <view class="btn">
+          <text>查询</text>
+        </view>
+      </view>
+    </view>
+  </view>
   <view class='strategy-box'>
     <scroll-view scroll-x class='s-scroll'>
       <view class="s-item {{trafficInfo.trafficType=='0'?'active':''}}" data-trafficType='0' bindtap='swichTab'>公交</view>
@@ -9,30 +32,8 @@
     </scroll-view>
   </view>
   <view class='map-box'>
-    <map id="navi_map" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="12" markers="{{markers}}" polyline="{{polyline}}">
-      <cover-view class='route-c'>
-        <cover-view class='route-box'>
-          <cover-view class='input-view'>
-            <cover-view class='route-input start'>
-              <cover-image src='' style='width:32px;height:24px'></cover-image>
-              <input placeholder="我的位置" data-location='0' value='{{startLocation.name}}' bindfocus='bindfocus'></input>
-            </cover-view>
-            <cover-view class='line'></cover-view>
-            <cover-view class='route-input end'>
-              <cover-image src='' style='width:32px;height:24px'></cover-image>
-              <input placeholder='输入终点' data-location='1' value="{{endLocation.name}}" bindfocus='bindfocus'></input>
-            </cover-view>
-          </cover-view>
-          <cover-view class='input-view'>
-            <cover-image src='' style='width:32px;height:24px'></cover-image>
-          </cover-view>
-          <cover-view class='input-view'>
-            <cover-view class="btn">
-              <text>查询</text>
-            </cover-view>
-          </cover-view>
-        </cover-view>
-      </cover-view>
+    <map id="navi_map" show-location="{{true}}" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="12" markers="{{markers}}" polyline="{{polyline}}">
+
     </map>
   </view>
   <view class='result-box'>
