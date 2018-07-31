@@ -8,9 +8,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    workSum:0,
-    restSum:0,
-    overtimeSum:0,
+    workSum: 0,
+    restSum: 0,
+    overtimeSum: 0,
     days_style: []
   },
 
@@ -119,9 +119,19 @@ Page({
     console.log(event.detail);
   },
   overtime: function(e) {
-
+    var random = Math.floor(Math.random() * 100);
+    var random1 = Math.floor(Math.random() * 100);
+    this.setData({
+      overtimeSum: random,
+      workSum: random1
+    })
   },
   rest: function(e) {
-
-  }
+    var random = Math.floor(Math.random() * 100);
+    var random1 = Math.floor(Math.random() * 100);
+    this.setData({
+      restSum: random,
+      workSum: random1
+    })
+  },
 })
