@@ -19,59 +19,59 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
-  addTask: function (e) {
+  addTask: function(e) {
     var last = this.data.taskList;
     var task = {
       content: '',
@@ -83,14 +83,22 @@ Page({
       taskList: last
     })
   },
-  deleteTask: function (e) {
+  deleteTask: function(e) {
     var index = e.currentTarget.dataset.index; //位置索引从0开始
+    var optType = e.currentTarget.dataset.opttype;
+    console.log(optType);
+    if (optType == 3) {
+      wx.showToast({
+        title: '任务正在执行中',
+      })
+      return;
+    }
     var taskList = this.data.taskList;
     var that = this;
     wx.showModal({
       title: '提示',
       content: '是否删除此任务？',
-      success: function (res) {
+      success: function(res) {
         if (res.confirm) {
           taskList.splice(index, 1);
           that.setData({
@@ -102,7 +110,7 @@ Page({
 
 
   },
-  editTask: function (e) {
+  editTask: function(e) {
     var index = e.currentTarget.dataset.index; //位置索引从0开始
     var taskList = this.data.taskList;
     var item = taskList[index];
@@ -154,7 +162,7 @@ Page({
       taskId: taskId
     })
   },
-  input: function (e) {
+  input: function(e) {
     var index = e.currentTarget.dataset.index; //位置索引从0开始
     var taskList = this.data.taskList;
     taskList[index]['content'] = e.detail.value;

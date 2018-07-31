@@ -13,7 +13,7 @@
     <block wx:if="{{taskList.length>0}}">
       <view wx:for="{{taskList}}" wx:key="key" wx:index="{{index}}">
         <view class="task {{index % 2==0? 'even':'odd'}}">
-          <view class='t-delete' bindtap='deleteTask' data-index='{{index}}'>
+          <view class='t-delete' bindtap='deleteTask' data-optType='{{item.optType}}' data-index='{{index}}'>
             <label>×</label>
           </view>
           <view class='t-input'>

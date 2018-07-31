@@ -46,7 +46,7 @@
             <input type='digit' placeholder="其他费用~"></input>
           </view>
           <view class='bottom-box'>
-            <view class='btn sub-btn'>
+            <view class='btn'>
               <text>确定</text>
             </view>
           </view>
@@ -73,11 +73,10 @@
 
     </block>
     <block wx:if="{{currentTab==1}}">
-      <view class="flex-item map">
-        <map id="navi-map" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="{{scale}}" markers="{{trafficInfo.markers}}" bindmarkertap="bindmarkertap" polyline="{{trafficInfo.polyline}}">
-          <!-- <cover-view bindtap='getCenterLocation' class='mylocaltion'>
-            我的位置
-          </cover-view> -->
+      <!-- <view class="flex-item map"> -->
+        <import src="../template/traffic.wxml" />
+        <template is="traffic" data="{{...trafficInfoObj}}" />
+        <!-- <map id="navi-map" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="{{scale}}" markers="{{trafficInfo.markers}}" bindmarkertap="bindmarkertap" polyline="{{trafficInfo.polyline}}">
           <cover-view class='scale'>
             <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='1' bindtap='clickScale'>+</cover-view>
             <cover-view class='line'></cover-view>
@@ -100,8 +99,8 @@
               </cover-view>
             </cover-view>
           </cover-view>
-        </map>
-      </view>
+        </map> -->
+      <!-- </view> -->
     </block>
   </view>
 </view>

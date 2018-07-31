@@ -28,24 +28,18 @@ Page({
     const days_count = new Date(year, month, 0).getDate();
     for (let i = 1; i <= days_count; i++) {
       const date = new Date(year, month - 1, i);
-      if (date.getDay() == 0) {
-        days_style.push({
-          month: 'current',
-          day: i,
-          color: '#f488cd'
-        });
-      } else if (today == i && currMonth == month && currYear == year) {
+      if (today == i && currMonth == month && currYear == year) {
         days_style.push({
           month: 'current',
           day: i,
           color: 'white',
-          background: '#40de5a'
+          background: '#00abff'
         });
       } else {
         days_style.push({
           month: 'current',
           day: i,
-          color: '#a18ada'
+          color: '#4b5cc4'
         });
       }
     }
@@ -116,22 +110,29 @@ Page({
     this.initCalendar(obj.currentYear, obj.currentMonth);
   },
   dayClick: function(event) {
+    var selectedDate = event.detail;
     console.log(event.detail);
+    var date = selectedDate.year + "-" + selectedDate.month + "-" + selectedDate.day
+    wx.navigateTo({
+      url: './task?date=' + date,
+    })
   },
   overtime: function(e) {
     var random = Math.floor(Math.random() * 100);
-    var random1 = Math.floor(Math.random() * 100);
     this.setData({
       overtimeSum: random,
-      workSum: random1
     })
   },
   rest: function(e) {
     var random = Math.floor(Math.random() * 100);
-    var random1 = Math.floor(Math.random() * 100);
     this.setData({
       restSum: random,
-      workSum: random1
     })
   },
+  work: function(e) {
+    var random = Math.floor(Math.random() * 100);
+    this.setData({
+      workSum: random
+    })
+  }
 })

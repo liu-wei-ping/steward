@@ -1,13 +1,65 @@
 <!--pages/template/traffic.wxml-->
 <template name="traffic">
-  <view  class='map'>
-    <view class="map_box">
-      <map id="navi_map" longitude="{{longitude}}" latitude="{{latitude}}" scale="12" markers="{{markers}}" polyline="{{polyline}}"></map>
-    </view>
-    <view class="text_box">
-      <view class="text">{{distance}}</view>
-      <view class="text">{{cost}}</view>
-      <view class="detail_button" bindtouchstart="goDetail">详情</view>
-    </view>
+  <view class='strategy-box'>
+    <scroll-view scroll-x class='s-scroll'>
+      <view class="s-item {{trafficInfo.trafficType=='0'?'active':''}}" data-trafficType='0' bindtap='swichTab'>公交</view>
+      <view class="s-item {{trafficInfo.trafficType=='1'?'active':''}}" data-trafficType='1' bindtap='swichTab'>自驾</view>
+      <view class="s-item {{trafficInfo.trafficType=='2'?'active':''}}" data-trafficType='2' bindtap='swichTab'>骑行</view>
+      <view class="s-item {{trafficInfo.trafficType=='3'?'active':''}}" data-trafficType='3' bindtap='swichTab'>步行</view>
+    </scroll-view>
+  </view>
+  <view class='map-box'>
+    <map id="navi_map" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="12" markers="{{markers}}" polyline="{{polyline}}">
+      <cover-view class='route-c'>
+        <cover-view class='route-box'>
+          <cover-view class='input-view'>
+            <cover-view class='route-input start'>
+              <cover-image src='' style='width:32px;height:24px'></cover-image>
+              <input placeholder="我的位置" data-location='0' value='{{startLocation.name}}' bindfocus='bindfocus'></input>
+            </cover-view>
+            <cover-view class='line'></cover-view>
+            <cover-view class='route-input end'>
+              <cover-image src='' style='width:32px;height:24px'></cover-image>
+              <input placeholder='输入终点' data-location='1' value="{{endLocation.name}}" bindfocus='bindfocus'></input>
+            </cover-view>
+          </cover-view>
+          <cover-view class='input-view'>
+            <cover-image src='' style='width:32px;height:24px'></cover-image>
+          </cover-view>
+          <cover-view class='input-view'>
+            <cover-view class="btn">
+              <text>查询</text>
+            </cover-view>
+          </cover-view>
+        </cover-view>
+      </cover-view>
+    </map>
+  </view>
+  <view class='result-box'>
+    <scroll-view scroll-x class='r-scroll'>
+      <view class='r-item'>
+        <text>我的方案</text>
+      </view>
+      <!-- <block wx:for="{{trafficInfo.result}}" wx:for-item="item" wx:key="key"> -->
+      <view class='r-item'>
+        <text>方案1</text>
+      </view>
+      <view class='r-item'>
+        <text>方案2</text>
+      </view>
+      <view class='r-item'>
+        <text>方案3</text>
+      </view>
+      <view class='r-item'>
+        <text>方案4</text>
+      </view>
+      <view class='r-item'>
+        <text>方案5</text>
+      </view>
+      <view class='r-item'>
+        <text>方案6</text>
+      </view>
+      <!-- </block> -->
+    </scroll-view>
   </view>
 </template>

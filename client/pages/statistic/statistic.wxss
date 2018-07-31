@@ -1,12 +1,11 @@
 /* pages/statistic/statistic.wxss */
 
 .calendar-box {
-  padding: 15px;
+  padding: 0px 10px 0px 10px;
 }
 
 .calendar {
   background-color: white;
-  padding-top: 10px;
   border-radius: 15px;
 }
 
@@ -34,6 +33,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin: 5px 0px 5px 0px;
 }
 
 .v-tip {
@@ -50,18 +50,39 @@
 }
 
 .normal {
-  background: #177cb0 !important;
+  background: #00bc12 !important;
 }
 
 .warn {
   background: #f00056 !important;
 }
 
+.work {
+  background: #4b5cc4 !important;
+}
+
 .message-box {
-  margin: 10px 10px 10px 10px;
+  margin: 0px 10px 0px 10px;
   padding: 20px;
   border: #ccc 1px solid;
   border-radius: 10px;
   font-size: 20px;
   font-weight: 800;
+}
+
+.message-box >view {
+  padding: 5px;
+  border-bottom: #ccc 1rpx solid;
+}
+
+.message-box >view:nth-child(1) {
+  color: #f00056;
+}
+
+.message-box >view:nth-child(2) {
+  color: #00bc12;
+}
+
+.message-box >view:nth-child(3) {
+  color: #4b5cc4;
 }

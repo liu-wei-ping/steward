@@ -1,0 +1,4 @@
+<!--pages/statistic/task.wxml-->
+<view>
+<text>{{date}}</text>
+</view>

@@ -94,23 +94,6 @@
   justify-content: flex-end;
 }
 
-.btn {
-  display: flex;
-  width: 80px;
-  height: 40px;
-  line-height: 40px;
-  border-radius: 10px;
-  border: #fff 1px solid;
-  color: #fff;
-  justify-content: center;
-  align-items: center;
-  background: rgb(209, 207, 207);
-}
-
-.sub-btn {
-  background: #393;
-}
-
 .record {
   display: flex;
   flex-direction: row;
@@ -132,7 +115,6 @@
 
 .sleep {
   width: 50%;
-  background: rgb(95, 185, 11);
 }
 
 .punchOut {

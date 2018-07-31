@@ -22,8 +22,16 @@ Page({
     localtion: {},
     trafficInfo: {},
     wareUpTime: '',
-    punchInTime: ''
-
+    punchInTime: '',
+    trafficInfoObj: {
+      scale:12,
+      startLocation: {
+        longitude: '121.475424',
+        latitude: '31.191984'
+      },
+      markers:[],
+      polyline:[]
+    },
   },
 
   /**

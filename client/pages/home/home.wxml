@@ -46,7 +46,7 @@
             <input type='digit' placeholder="其他费用~"></input>
           </view>
           <view class='bottom-box'>
-            <view class='btn sub-btn'>
+            <view class='btn'>
               <text>确定</text>
             </view>
           </view>
