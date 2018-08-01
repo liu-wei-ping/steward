@@ -5,12 +5,12 @@
       <view class='input-view'>
         <view class='route-input start'>
           <image src='' style='width:32px;height:24px'></image>
-          <input placeholder="我的位置" data-location='0' value='{{startLocation.name}}' bindfocus='bindfocus'></input>
+          <input placeholder="我的位置" data-location='0' value='{{originName}}' bindfocus='bindfocus'></input>
         </view>
         <view class='line'></view>
         <view class='route-input end'>
           <image src='' style='width:32px;height:24px'></image>
-          <input placeholder='输入终点' data-location='1' value="{{endLocation.name}}" bindfocus='bindfocus'></input>
+          <input placeholder='输入终点' data-location='1' adjust-position="{{false}}" value="{{destinationName}}" bindfocus='bindfocus'></input>
         </view>
       </view>
       <view class='input-view'>
@@ -25,14 +25,14 @@
   </view>
   <view class='strategy-box'>
     <scroll-view scroll-x class='s-scroll'>
-      <view class="s-item {{trafficInfo.trafficType=='0'?'active':''}}" data-trafficType='0' bindtap='swichTab'>公交</view>
-      <view class="s-item {{trafficInfo.trafficType=='1'?'active':''}}" data-trafficType='1' bindtap='swichTab'>自驾</view>
-      <view class="s-item {{trafficInfo.trafficType=='2'?'active':''}}" data-trafficType='2' bindtap='swichTab'>骑行</view>
-      <view class="s-item {{trafficInfo.trafficType=='3'?'active':''}}" data-trafficType='3' bindtap='swichTab'>步行</view>
+      <view class="s-item {{strategy=='0'?'selected':''}}" data-strategy='0' bindtap='swichStrategy'>公交</view>
+      <view class="s-item {{strategy=='1'?'selected':''}}" data-strategy='1' bindtap='swichStrategy'>自驾</view>
+      <view class="s-item {{strategy=='2'?'selected':''}}" data-strategy='2' bindtap='swichStrategy'>骑行</view>
+      <view class="s-item {{strategy=='3'?'selected':''}}" data-strategy='3' bindtap='swichStrategy'>步行</view>
     </scroll-view>
   </view>
   <view class='map-box'>
-    <map id="navi_map" show-location="{{true}}" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="12" markers="{{markers}}" polyline="{{polyline}}">
+    <map id="navi_map" show-location="{{true}}" longitude="{{longitude}}" latitude="{{latitude}}" scale="12" markers="{{markers}}" polyline="{{polyline}}">
 
     </map>
   </view>

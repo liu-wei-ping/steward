@@ -8,30 +8,22 @@ Page({
    * 页面的初始数据
    */
   data: {
-    winHeight: 0,
-    scale: 12,
-    currentTab: 0,
-    weatherData: {},
-    trafficType: 0, //0：公交 1：自驾 2：骑行 3：步行
-    transitRoute: {}, //公交
-    drivingRoute: {}, //自驾
-    ridingRout: {}, //骑行
-    walkingRoute: {}, //步行
-    markers: [],
-    polyline: [],
-    localtion: {},
-    trafficInfo: {},
-    wareUpTime: '',
-    punchInTime: '',
-    trafficInfoObj: {
-      scale:12,
-      startLocation: {
-        longitude: '121.475424',
-        latitude: '31.191984'
-      },
-      markers:[],
-      polyline:[]
-    },
+    winHeight: 0, //手机屏幕高度
+    currentTab: 0, //tab 切换标识
+    weatherData: {}, //天气
+    wakeUpTime: '', //起床时间
+    punchInTime: '', //打卡时间
+    strategy: 0, //0：公交 1：自驾 2：骑行 3：步行
+    city: '上海',
+    originName: '我的位置', //起点
+    destinationName: '', // 目的地
+    origin: '', //起点 经度,纬度 例如： '116.481028,39.989643'
+    destination: '', // 目的地 经度,纬度
+    scale: 12, //地图比例
+    longitude: '121.475424', //经度
+    latitude: '31.191984', //纬度
+    markers: [], //地图标识
+    polyline: [], //路线
   },
 
   /**
@@ -67,15 +59,7 @@ Page({
    */
   onShow: function() {
     if (this.data.currentTab == 1) {
-      var startLocation = wx.getStorageSync("startLocation");
-      var trafficInfo = wx.getStorageSync("trafficInfo");
-      var data = {
-        startLocation: startLocation
-      }
-      if (trafficInfo) {
-        data.trafficInfo = trafficInfo;
-      }
-      this.setData(data);
+      
     }
   },
 
@@ -106,24 +90,105 @@ Page({
   onReachBottom: function() {
 
   },
+  /**
+   * 选择交通方式
+   */
+  swichStrategy: function(e) {
+    var strategy = e.currentTarget.dataset.strategy;
+    var params = {
+      city: this.data.city,
+      origin: this.data.origin,
+      destination: this.data.destination,
+    }
+    this.setData({
+      strategy: strategy
+    })
+    console.log(params);
+    var that = this;
+    if (strategy == 0) { //公交
+      amap.getTransitRoute(params, function(data) {
+        var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    } else if (strategy == 1) { //自驾
+      amap.getDrivingRoute(params, function(data) {
+        var trafficInfo = amap.drivingRoutDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    } else if (strategy == 2) { //骑行
+      amap.getRidingRout(params, function(data) {
+        var trafficInfo = amap.ridingRoutDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    } else if (strategy == 3) { //步行
+      amap.getWalkingRoute(params, function(data) {
+        var trafficInfo = amap.walkingRouteDefaultResult(data, params.origin, params.destination);
+        that.setData({
+          markers: trafficInfo.markers,
+          polyline: trafficInfo.polyline
+        })
+      });
+    }
+    // this.setData({
+    //     strategy: strategy
+    // })
+  },
+  bindfocus: function(e) {
+    var that = this;
+    wx.chooseLocation({
+      success: function(res) {
+        var name = res.name;
+        var address = res.address;
+        var loaction = res.longitude + "," + res.latitude;
+        if (name && name.lenght > 8) {
+          name = name.substring(0, 8) + "...";
+        }
+        if (location == 0) {
+          that.setData({
+            origin: loaction,
+            destination: name
+          })
+        } else if (location == 1) {
+          that.setData({
+            destination: loaction,
+            destinationName: name
+          })
+        }
+      }
+    })
+
+  },
   swichTab: function(e) {
     var currentTab = e.currentTarget.dataset.currenttab;
     this.setData({
       currentTab: currentTab
     })
-    console.log(this.data.currentTab);
     if (currentTab == 1) {
-      var startLocation = wx.getStorageSync("startLocation");
-      console.log(startLocation);
-      var trafficInfo = wx.getStorageSync("trafficInfo");
-      var data = {
-        startLocation: startLocation
-      }
-      if (trafficInfo) {
-        data.trafficInfo = trafficInfo;
-      }
-      console.log(data);
-      this.setData(data)
+      var that = this;
+      wx.getLocation({
+        type: 'gcj02',
+        altitude: true,
+        success: function (res) {
+          console.log(res);
+          that.setData({
+            longitude: res.longitude,
+            latitude: res.latitude,
+            originName: res.longitude + "," + res.latitude
+          })
+          // amap.getRegeo(currLocation, function (data) {
+          //   console.log(data);
+          // })
+        }
+      })
     }
   },
   /**
@@ -201,7 +266,7 @@ Page({
       })
       var wareUpTime = util.formatDate(new Date(), "h:m:s");
       this.setData({
-        wareUpTime: wareUpTime
+        wakeUpTime: wakeUpTime
       })
     } else {
       wx.showToast({

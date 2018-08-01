@@ -33,7 +33,6 @@ App({
         amap.getRegeo(currLocation,function(data){
             console.log(data);
         })
-        wx.setStorageSync("startLocation", currLocation);
       }
     })
   },

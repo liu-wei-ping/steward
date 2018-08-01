@@ -61,6 +61,7 @@
 
 .selected {
   background: #00abff;
+  color: #fff;
 }
 
 .map-box {
