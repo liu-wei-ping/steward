@@ -8,8 +8,8 @@
     "pages/home/home",
     "pages/statistic/statistic",
     "pages/traffic/traffic",
-    "pages/location/location",
-    "pages/statistic/task"
+    "pages/statistic/task",
+    "pages/traffic_detail/traffic_detail"
   ],
   "window": {
     "backgroundColor": "#f8f8f8",

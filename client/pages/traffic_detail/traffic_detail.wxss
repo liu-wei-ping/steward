@@ -1,0 +1,51 @@
+/* pages/traffic_detail/traffic_detail.wxss */
+
+page {
+  height: 100%;
+}
+
+.tfc-map {
+  height: 30%;
+}
+
+.tfc-strategy {
+  text-align: center;
+  height: 5%;
+}
+
+.tfc-digest {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 10%;
+  border-bottom: #ccc 1px solid;
+  padding: 10rpx;
+}
+
+.distance {
+  font-size: 24px;
+  font-weight: 800;
+  color: green;
+}
+
+.cost {
+  font-size: 24px;
+  font-weight: 800;
+  color: red;
+}
+
+.tfc-detail {
+  height: 55%;
+}
+
+.text_box {
+  margin: 0 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid #c3c3c3;
+  font-size: 13px;
+}
+
+.text_box .text_item {
+  display: inline-block;
+  line-height: 8px;
+}

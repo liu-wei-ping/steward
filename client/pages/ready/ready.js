@@ -24,6 +24,63 @@ Page({
     latitude: '31.191984', //纬度
     markers: [], //地图标识
     polyline: [], //路线
+    drivingStrategy: [{
+        strategy: 10,
+        strategyName: '路程较短'
+      }, {
+        strategy: 12,
+        strategyName: '躲避拥堵'
+      },
+      {
+        strategy: 13,
+        strategyName: '不走高速'
+      },
+      {
+        strategy: 14,
+        strategyName: '避免收费'
+      },
+      {
+        strategy: 19,
+        strategyName: '高速优先'
+      }, {
+        strategy: 20,
+        strategyName: '躲避拥堵&高速优先'
+      },
+      {
+        strategy: 20,
+        strategyName: '躲避拥堵&不走高速'
+      }
+    ], //自驾策略
+    transitStrategy: [{
+        strategy: 0,
+        strategyName: '最快捷'
+      },
+      {
+        strategy: 2,
+        strategyName: '最少换乘'
+      },
+      {
+        strategy: 3,
+        strategyName: '最少步行'
+      },
+      {
+        strategy: 1,
+        strategyName: '最经济'
+      },
+      {
+        strategy: 5,
+        strategyName: '不乘地铁'
+      }
+    ], //公交策略
+    myStrategy: [{
+      strategyType: 0, //交通策略类
+      detail: [{
+        origin: '', //起点
+        originName: '', //终点
+        destination: '', //起点名称 或方式
+        destinationName: '' //终点名称 或方式
+      }]
+    }] //我的策略
   },
 
   /**
@@ -59,7 +116,7 @@ Page({
    */
   onShow: function() {
     if (this.data.currentTab == 1) {
-      
+
     }
   },
 
@@ -95,19 +152,28 @@ Page({
    */
   swichStrategy: function(e) {
     var strategy = e.currentTarget.dataset.strategy;
+    console.log(strategy);
+    this.setData({
+      strategy: strategy
+    })
+    this.query(strategy);
+  },
+  search: function(e) {
+    var strategy = this.data.strategy
+    this.query(strategy)
+  },
+  query: function (strategy) {
     var params = {
       city: this.data.city,
       origin: this.data.origin,
       destination: this.data.destination,
     }
-    this.setData({
-      strategy: strategy
-    })
     console.log(params);
     var that = this;
     if (strategy == 0) { //公交
       amap.getTransitRoute(params, function(data) {
         var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
+        console.log(trafficInfo);
         that.setData({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
@@ -116,6 +182,7 @@ Page({
     } else if (strategy == 1) { //自驾
       amap.getDrivingRoute(params, function(data) {
         var trafficInfo = amap.drivingRoutDefaultResult(data, params.origin, params.destination);
+        console.log(trafficInfo);
         that.setData({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
@@ -124,6 +191,7 @@ Page({
     } else if (strategy == 2) { //骑行
       amap.getRidingRout(params, function(data) {
         var trafficInfo = amap.ridingRoutDefaultResult(data, params.origin, params.destination);
+        console.log(trafficInfo);
         that.setData({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
@@ -132,32 +200,49 @@ Page({
     } else if (strategy == 3) { //步行
       amap.getWalkingRoute(params, function(data) {
         var trafficInfo = amap.walkingRouteDefaultResult(data, params.origin, params.destination);
+        console.log(trafficInfo);
         that.setData({
           markers: trafficInfo.markers,
           polyline: trafficInfo.polyline
         })
       });
     }
-    // this.setData({
-    //     strategy: strategy
-    // })
   },
+  selectedStrategy: function(e) {
+    var strategy = this.data.strategy;
+    var origin = this.data.origin;
+    var destination = this.data.destination;
+    var city = this.data.city;
+    var paramStr = 'st=' + strategy + "&origin=" + origin + "&destination=" + destination + "&city=" + city;
+    if (e.currentTarget.dataset.strategytype!=undefined) {
+      paramStr = paramStr + '&stype=' + e.currentTarget.dataset.strategytype;
+    }
+    var url = '../traffic_detail/traffic_detail?' + paramStr
+    console.log(url);
+    wx.navigateTo({
+      url: url
+    })
+  },
+
   bindfocus: function(e) {
+    var lotType = e.currentTarget.dataset.lottype;
     var that = this;
     wx.chooseLocation({
       success: function(res) {
+        console.log(res);
         var name = res.name;
         var address = res.address;
         var loaction = res.longitude + "," + res.latitude;
-        if (name && name.lenght > 8) {
+        var len = util.strlen(name);
+        if (len > 8) {
           name = name.substring(0, 8) + "...";
         }
-        if (location == 0) {
+        if (lotType == 0) { //起点位置
           that.setData({
             origin: loaction,
-            destination: name
+            originName: name
           })
-        } else if (location == 1) {
+        } else if (lotType == 1) { //终点位置
           that.setData({
             destination: loaction,
             destinationName: name
@@ -177,7 +262,7 @@ Page({
       wx.getLocation({
         type: 'gcj02',
         altitude: true,
-        success: function (res) {
+        success: function(res) {
           console.log(res);
           that.setData({
             longitude: res.longitude,
@@ -190,7 +275,7 @@ Page({
             origin: that.data.origin,
             destination: that.data.destination,
           }
-          amap.getTransitRoute(params, function (data) {
+          amap.getTransitRoute(params, function(data) {
             var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
             that.setData({
               markers: trafficInfo.markers,

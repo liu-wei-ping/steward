@@ -171,12 +171,18 @@ function regeoDefaultResult(data) {
  * avoidroad：避让道路名称。仅支持一条避让道路。
  */
 function getDrivingRoute(params, callback) {
+  wx.showToast({
+    icon: 'loading',
+    title: '查询...'
+  })
   var obj = new Object();
   obj.success = function(data) {
     console.log(data);
+    wx.hideToast();
     callback(data);
   }
   obj.fail = function(info) {
+    wx.hideToast();
     //失败回调
     console.log(info)
   }
@@ -186,6 +192,7 @@ function getDrivingRoute(params, callback) {
   if (params.destination) {
     obj.destination = params.destination;
   }
+  console.log(obj)
   myAmapFun.getDrivingRoute(obj);
 }
 
@@ -216,10 +223,10 @@ function drivingRoutDefaultResult(data, origin, destination) {
   console.log(markers);
   trafficInfo.steps = steps;
   if (data.paths[0] && data.paths[0].distance) {
-    trafficInfo.distance = data.paths[0].distance + '米';
+    trafficInfo.distance = data.paths[0].distance;
   }
   if (data.taxi_cost) {
-    trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
+    trafficInfo.taxi_cost = parseInt(data.taxi_cost);
   }
 
   if (origin && destination) {
@@ -244,12 +251,18 @@ function drivingRoutDefaultResult(data, origin, destination) {
  * destination：目的地的经纬度坐标，格式：'经度,纬度'。
  */
 function getRidingRout(params, callback) {
+  wx.showToast({
+    icon: 'loading',
+    title: '查询...'
+  })
   var obj = new Object();
   obj.success = function(data) {
+    wx.hideToast();
     console.log(data);
     callback(data);
   }
   obj.fail = function(info) {
+    wx.hideToast();
     //失败回调
     console.log(info)
   }
@@ -259,6 +272,7 @@ function getRidingRout(params, callback) {
   if (params.destination) {
     obj.destination = params.destination;
   }
+  console.log(obj)
   myAmapFun.getRidingRoute(obj);
 }
 
@@ -288,12 +302,16 @@ function ridingRoutDefaultResult(data, origin, destination) {
     width: 6
   }]
   trafficInfo.steps = steps;
+  var distance = 0;
   if (data.paths[0] && data.paths[0].distance) {
-    trafficInfo.distance = data.paths[0].distance + '米';
+    distance = data.paths[0].distance
   }
-  if (data.taxi_cost) {
-    trafficInfo.cost = '打车约' + parseInt(data.taxi_cost) + '元';
+  var duration = 0;
+  if (data.paths[0] && data.paths[0].duration) {
+    duration = parseInt(data.paths[0].duration / 60);
   }
+  trafficInfo.distance = distance;
+  trafficInfo.duration = duration;
   if (origin && destination) {
     trafficInfo.origin = origin;
     trafficInfo.destination = destination;
@@ -317,12 +335,18 @@ function ridingRoutDefaultResult(data, origin, destination) {
  * destination：目的地的经纬度坐标，格式：'经度,纬度'。
  */
 function getWalkingRoute(params, callback) {
+  wx.showToast({
+    icon: 'loading',
+    title: '查询...'
+  })
   var obj = new Object();
   obj.success = function(data) {
+    wx.hideToast();
     console.log(data)
     callback(data);
   }
   obj.fail = function(info) {
+    wx.hideToast();
     //失败回调
     console.log(info)
   }
@@ -332,6 +356,7 @@ function getWalkingRoute(params, callback) {
   if (params.destination) {
     obj.destination = params.destination;
   }
+  console.log(obj)
   myAmapFun.getWalkingRoute(obj);
 }
 
@@ -354,13 +379,13 @@ function walkingRouteDefaultResult(data, origin, destination) {
       }
     }
   }
-  var distance = "";
+  var distance = 0;
   if (data.paths[0] && data.paths[0].distance) {
-    distance = data.paths[0].distance + '米'
+    distance = data.paths[0].distance
   }
-  var cost = "";
+  var duration = 0;
   if (data.paths[0] && data.paths[0].duration) {
-    cost = parseInt(data.paths[0].duration / 60) + '分钟'
+    duration = parseInt(data.paths[0].duration / 60);
   }
   var polyline = [{
     points: points,
@@ -371,7 +396,7 @@ function walkingRouteDefaultResult(data, origin, destination) {
     steps: steps,
     polyline: polyline,
     distance: distance,
-    cost: cost
+    duration: duration
   }
   if (origin && destination) {
     trafficInfo.origin = origin;
@@ -399,7 +424,10 @@ function walkingRouteDefaultResult(data, origin, destination) {
  * cityd：目的地的城市名称。跨城必填
  */
 function getTransitRoute(params, callback) {
-  console.log("获取公交路线---" + JSON.stringify(params));
+  wx.showToast({
+    icon: 'loading',
+    title: '查询...'
+  })
   var obj = new Object();
   var flag = params != undefined && params != null;
   if (flag && params.city) {
@@ -418,13 +446,16 @@ function getTransitRoute(params, callback) {
     obj.cityd = params.cityd;
   }
   obj.success = function success(data) {
+    wx.hideToast();
     console.log(data);
     callback(data);
   };
-  obj.fail = function fail(data) {
+  obj.fail = function fail(info) {
+    wx.hideToast();
     //失败回调
     console.log(info)
   };
+  console.log(obj)
   myAmapFun.getTransitRoute(obj);
 }
 
@@ -453,7 +484,9 @@ function transitRouteDefaultResult(data, origin, destination) {
       }
     }
     var trafficInfo = {
-      transits: transits
+      transits: transits,
+      distance: data.distance,
+      taxi_cost: parseInt(data.taxi_cost)
     }
     trafficInfo.polyline = [];
     if (origin && destination) {
@@ -507,6 +540,7 @@ function getInputtips(params, callback) {
     //失败回调
     console.log(info)
   }
+  console.log(obj)
   myAmapFun.getInputtips(obj);
 }
 
@@ -531,6 +565,7 @@ function getWeather(params, callback) {
     //失败回调
     console.log(info)
   }
+  console.log(obj)
   myAmapFun.getWeather(obj);
 }
 

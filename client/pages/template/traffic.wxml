@@ -5,19 +5,19 @@
       <view class='input-view'>
         <view class='route-input start'>
           <image src='' style='width:32px;height:24px'></image>
-          <input placeholder="我的位置" data-location='0' value='{{originName}}' bindfocus='bindfocus'></input>
+          <input placeholder="我的位置" data-lotType='0' value='{{originName}}' bindfocus='bindfocus'></input>
         </view>
         <view class='line'></view>
         <view class='route-input end'>
           <image src='' style='width:32px;height:24px'></image>
-          <input placeholder='输入终点' data-location='1' adjust-position="{{false}}" value="{{destinationName}}" bindfocus='bindfocus'></input>
+          <input placeholder='输入终点' data-lotType='1' adjust-position="{{false}}" value="{{destinationName}}" bindfocus='bindfocus'></input>
         </view>
       </view>
       <view class='input-view'>
         <image src='' style='width:32px;height:24px'></image>
       </view>
       <view class='input-view'>
-        <view class="btn">
+        <view class="btn" bindtap='search'>
           <text>查询</text>
         </view>
       </view>
@@ -38,29 +38,40 @@
   </view>
   <view class='result-box'>
     <scroll-view scroll-x class='r-scroll'>
-      <view class='r-item'>
-        <text>我的方案</text>
-      </view>
-      <!-- <block wx:for="{{trafficInfo.result}}" wx:for-item="item" wx:key="key"> -->
-      <view class='r-item'>
-        <text>方案1</text>
-      </view>
-      <view class='r-item'>
-        <text>方案2</text>
-      </view>
-      <view class='r-item'>
-        <text>方案3</text>
-      </view>
-      <view class='r-item'>
-        <text>方案4</text>
-      </view>
-      <view class='r-item'>
-        <text>方案5</text>
-      </view>
-      <view class='r-item'>
-        <text>方案6</text>
-      </view>
-      <!-- </block> -->
+      <!-- 公交策略 -->
+      <block wx:if="{{strategy==0}}" wx:for="{{transitStrategy}}" wx:for-item="item" wx:key="key" wx:index="{{index}}">
+        <view class='r-item' data-strategyType='{{item.strategy}}' bindtap='selectedStrategy'>
+          <view>
+            <text>方案{{index+1}}</text>
+          </view>
+          <view>
+            <text>{{item.strategyName}}</text>
+          </view>
+        </view>
+      </block>
+      <!-- 自驾策略 -->
+      <block wx:if="{{strategy==1}}" wx:for="{{drivingStrategy}}" wx:for-item="item" wx:key="key" wx:index="{{index}}">
+        <view class='r-item' data-strategyType='{{item.strategy}}' bindtap='selectedStrategy'>
+          <view>
+            <text>方案{{index+1}}</text>
+          </view>
+          <view>
+            <text>{{item.strategyName}}</text>
+          </view>
+        </view>
+      </block>
+      <!-- 骑行 -->
+      <block wx:if="{{strategy==2}}">
+        <view class='r-item no' bindtap='selectedStrategy'>
+          <text>方案1</text>
+        </view>
+      </block>
+      <!-- 步行 -->
+      <block wx:if="{{strategy==3}}">
+        <view class='r-item' bindtap='selectedStrategy'>
+          <text>方案1</text>
+        </view>
+      </block>
     </scroll-view>
   </view>
 </template>
