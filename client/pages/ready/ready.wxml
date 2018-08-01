@@ -75,7 +75,7 @@
     <block wx:if="{{currentTab==1}}">
       <!-- <view class="flex-item map"> -->
         <import src="../template/traffic.wxml" />
-        <template is="traffic" data="{{strategy,longitude,latitude,markers,polyline}}" />
+        <template is="traffic" data="{{originName,destinationName,strategy,longitude,latitude,markers,polyline}}" />
         <!-- <map id="navi-map" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="{{scale}}" markers="{{trafficInfo.markers}}" bindmarkertap="bindmarkertap" polyline="{{trafficInfo.polyline}}">
           <cover-view class='scale'>
             <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='1' bindtap='clickScale'>+</cover-view>

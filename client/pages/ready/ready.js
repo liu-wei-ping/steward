@@ -182,8 +182,21 @@ Page({
           that.setData({
             longitude: res.longitude,
             latitude: res.latitude,
-            originName: res.longitude + "," + res.latitude
+            origin: res.longitude + "," + res.latitude,
+            originName: '我的位置'
           })
+          var params = {
+            city: that.data.city,
+            origin: that.data.origin,
+            destination: that.data.destination,
+          }
+          amap.getTransitRoute(params, function (data) {
+            var trafficInfo = amap.transitRouteDefaultResult(data, params.origin, params.destination);
+            that.setData({
+              markers: trafficInfo.markers,
+              polyline: trafficInfo.polyline
+            })
+          });
           // amap.getRegeo(currLocation, function (data) {
           //   console.log(data);
           // })
