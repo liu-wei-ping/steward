@@ -26,29 +26,26 @@ Page({
     polyline: [], //路线
     drivingStrategy: [{
         strategy: 10,
-        strategyName: '路程较短'
+        strategyName: ['路程较短']
       }, {
         strategy: 12,
-        strategyName: '躲避拥堵'
+        strategyName: ['躲避拥堵']
       },
       {
         strategy: 13,
-        strategyName: '不走高速'
+        strategyName: ['不走高速']
       },
       {
         strategy: 14,
-        strategyName: '避免收费'
+        strategyName: ['避免收费']
       },
       {
         strategy: 19,
-        strategyName: '高速优先'
-      }, {
-        strategy: 20,
-        strategyName: '躲避拥堵&高速优先'
+        strategyName: ['高速优先']
       },
       {
         strategy: 20,
-        strategyName: '躲避拥堵&不走高速'
+        strategyName: ['躲避拥堵', '不走高速']
       }
     ], //自驾策略
     transitStrategy: [{
@@ -162,7 +159,7 @@ Page({
     var strategy = this.data.strategy
     this.query(strategy)
   },
-  query: function (strategy) {
+  query: function(strategy) {
     var params = {
       city: this.data.city,
       origin: this.data.origin,
@@ -214,7 +211,7 @@ Page({
     var destination = this.data.destination;
     var city = this.data.city;
     var paramStr = 'st=' + strategy + "&origin=" + origin + "&destination=" + destination + "&city=" + city;
-    if (e.currentTarget.dataset.strategytype!=undefined) {
+    if (e.currentTarget.dataset.strategytype != undefined) {
       paramStr = paramStr + '&stype=' + e.currentTarget.dataset.strategytype;
     }
     var url = '../traffic_detail/traffic_detail?' + paramStr

@@ -17,7 +17,7 @@
         <image src='' style='width:32px;height:24px'></image>
       </view>
       <view class='input-view'>
-        <view class="btn" bindtap='search'>
+        <view class="btn" style=' background: #00abff;' bindtap='search'>
           <text>查询</text>
         </view>
       </view>
@@ -32,8 +32,12 @@
     </scroll-view>
   </view>
   <view class='map-box'>
-    <map id="navi_map" show-location="{{true}}" longitude="{{longitude}}" latitude="{{latitude}}" scale="12" markers="{{markers}}" polyline="{{polyline}}">
-
+    <map id="navi_map" show-location="{{true}}"  longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" polyline="{{polyline}}">
+          <cover-view class='scale'>
+            <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='1' bindtap='clickScale'>+</cover-view>
+            <cover-view class='line'></cover-view>
+            <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='-1' bindtap='clickScale'>-</cover-view>
+          </cover-view>
     </map>
   </view>
   <view class='result-box'>
@@ -45,7 +49,7 @@
             <text>方案{{index+1}}</text>
           </view>
           <view>
-            <text>{{item.strategyName}}</text>
+            <text class='txt'>{{item.strategyName}}</text>
           </view>
         </view>
       </block>
@@ -55,21 +59,21 @@
           <view>
             <text>方案{{index+1}}</text>
           </view>
-          <view>
-            <text>{{item.strategyName}}</text>
+          <view class='txt'>
+            <text wx:for="{{item.strategyName}}" wx:for-item='i' wx:key="uq">{{i}}</text>
           </view>
         </view>
       </block>
       <!-- 骑行 -->
       <block wx:if="{{strategy==2}}">
-        <view class='r-item no' bindtap='selectedStrategy'>
-          <text>方案1</text>
+        <view class='r-item other' bindtap='selectedStrategy'>
+          <text>骑行方案</text>
         </view>
       </block>
       <!-- 步行 -->
       <block wx:if="{{strategy==3}}">
-        <view class='r-item' bindtap='selectedStrategy'>
-          <text>方案1</text>
+        <view class='r-item other' bindtap='selectedStrategy'>
+          <text>步行方案</text>
         </view>
       </block>
     </scroll-view>
