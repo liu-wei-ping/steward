@@ -54,7 +54,7 @@
         <view class='work-item record'>
           <view class='record-item'>
             <view class='record-text'>
-              <text>{{wareUpTime}}</text>
+              <text>{{wakeUpTime}}</text>
             </view>
             <view class='btn wakeUp' bindtap='wakeUp'>
               <text>早起</text>

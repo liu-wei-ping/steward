@@ -8,10 +8,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    winHeight: 0, //手机屏幕高度
+    winHeight: '300', //手机屏幕高度
     currentTab: 0, //tab 切换标识
     weatherData: {}, //天气
-    wakeUpTime: '', //起床时间
+    wakeUpTime: '', //起床时间 wake
     punchInTime: '', //打卡时间
     strategy: 0, //0：公交 1：自驾 2：骑行 3：步行
     city: '上海',
@@ -85,7 +85,6 @@ Page({
    */
   onLoad: function(options) {
     var weatherData = app.globalData.weatherData;
-    // console.log(weatherData);
     var winHeight = app.globalData.phoneInfo.windowHeight;
     this.setData({
       winHeight: winHeight,
@@ -354,12 +353,8 @@ Page({
   wakeUp: function(e) {
     var wareUpTime = this.data.wareUpTime;
     if (!wareUpTime) {
-      wx.vibrateLong({
-        success: function() {
-
-        }
-      })
-      var wareUpTime = util.formatDate(new Date(), "h:m:s");
+      wx.vibrateLong()
+      var wakeUpTime = util.formatDate(new Date(), "h:m:s");
       this.setData({
         wakeUpTime: wakeUpTime
       })
@@ -374,9 +369,7 @@ Page({
   punchIn: function(e) {
     var punchInTime = this.data.punchInTime;
     if (!punchInTime) {
-      wx.vibrateLong({
-        success: function() {}
-      })
+      wx.vibrateLong();
       var punchInTime = util.formatDate(new Date(), "h:m:s");
       this.setData({
         punchInTime: punchInTime

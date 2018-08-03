@@ -1,15 +1,17 @@
 // pages/traffic_detail/traffic_detail.js
 var util = require('../../utils/util.js')
 var amap = require('../../utils/amap.js')
+var app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    winHeight: '',
     scale: 12, //地图比例
-    // longitude: '121.475424', //经度
-    // latitude: '31.191984', //纬度
+    longitude: '121.475424', //经度
+    latitude: '31.191984', //纬度
     markers: [], //地图标识
     polyline: [], //路线
     transits: [],
@@ -27,25 +29,13 @@ Page({
     var city = options.city;
     var origin = options.origin;
     var destination = options.destination;
-    // var pages = getCurrentPages();
-    // var prePage = pages[pages.length - 2]; //上一页面
-    // console.log(prePage);
-    // if (prePage.route == 'pages/ready/ready') {
-    //   var preData = prePage.data;
-    //   this.setData({
-    //     trafficType: preData.trafficType,
-    //     transitRoute: preData.transitRoute,
-    //     drivingRoute: preData.drivingRoute,
-    //     ridingRout: preData.ridingRout,
-    //     walkingRoute: preData.walkingRoute,
-    //   })
-    //   console.log(preData)
-    // }
+    var winHeight = app.globalData.phoneInfo.windowHeight;
     var params = new Object();
     params.city = city;
     params.origin = origin;
     params.destination = destination;
     this.setData({
+      winHeight: winHeight,
       strategy: strategy
     })
     console.log(params);
@@ -97,6 +87,20 @@ Page({
         })
       });
     }
+    // var pages = getCurrentPages();
+    // var prePage = pages[pages.length - 2]; //上一页面
+    // console.log(prePage);
+    // if (prePage.route == 'pages/ready/ready') {
+    //   var preData = prePage.data;
+    //   this.setData({
+    //     trafficType: preData.trafficType,
+    //     transitRoute: preData.transitRoute,
+    //     drivingRoute: preData.drivingRoute,
+    //     ridingRout: preData.ridingRout,
+    //     walkingRoute: preData.walkingRoute,
+    //   })
+    //   console.log(preData)
+    // }
   },
 
   /**
@@ -146,5 +150,19 @@ Page({
    */
   onShareAppMessage: function() {
 
-  }
+  },
+  clickScale: function(e) {
+    var scaleType = e.currentTarget.dataset.scaletype;
+    var scale = e.currentTarget.dataset.scale; //5-20
+    var newScale = scale + scaleType * 1; //增量1
+    if (newScale < 5) {
+      newScale = 5;
+    }
+    if (newScale > 20) {
+      newScale = 20
+    }
+    this.setData({
+      scale: newScale
+    })
+  },
 })
