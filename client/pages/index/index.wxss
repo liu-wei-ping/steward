@@ -10,7 +10,7 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+  flex-direction: column;
 }
 
 .guide-page {
@@ -51,4 +51,5 @@ page {
   background: #00abff;
   color: #fff;
   width: 60%;
+  margin: 10rpx;
 }

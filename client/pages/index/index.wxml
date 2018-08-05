@@ -1,6 +1,7 @@
 <!--pages/index/index.wxml-->
 <view class='login-box' wx:if="{{!logged}}">
   <button class="userinfo-nickname" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">登录</button>
+    <button bindtap='workday'  style='background:green;' class="userinfo-nickname">免登录</button>
 </view>
 <block wx:if="{{logged}}">
   <view class='guide-page'>
