@@ -35,7 +35,7 @@
     <map id="navi_map" show-location="{{true}}" longitude="{{longitude}}" latitude="{{latitude}}" scale="{{scale}}" markers="{{markers}}" polyline="{{polyline}}">
       <cover-view class='scale'>
         <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='1' bindtap='clickScale'>+</cover-view>
-        <cover-view class='line'></cover-view>
+        <cover-view class='line' style='border-bottom: #ccc 1px solid;'></cover-view>
         <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='-1' bindtap='clickScale'>-</cover-view>
       </cover-view>
     </map>

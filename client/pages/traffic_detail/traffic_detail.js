@@ -8,8 +8,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    winHeight: '',
+    winHeight: 400,
+    animationData: {},
     scale: 12, //地图比例
+    map_scale: true, //地图view true:默认大小；false：缩小比例
     longitude: '121.475424', //经度
     latitude: '31.191984', //纬度
     markers: [], //地图标识
@@ -114,7 +116,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    var animation = wx.createAnimation({
+      duration: 1000,
+      timingFunction: 'linear',
+      delay: 100
+    })
 
+    this.animation = animation;
   },
 
   /**
@@ -163,6 +171,24 @@ Page({
     }
     this.setData({
       scale: newScale
+    })
+  },
+  bindtap: function(e) {
+    var mapscale = e.currentTarget.dataset.mapscale;
+    var mapheight = e.currentTarget.dataset.mapheight;
+    var height = this.data.winHeight;
+    console.log(mapscale);
+    console.log(mapheight);
+    console.log(height);
+    if (mapscale) {
+      height = height * 0.2
+    } else {
+      height = mapheight + 'px';
+    }
+    this.animation.height(height).step();
+    this.setData({
+      map_scale: !mapscale,
+      animationData: this.animation.export()
     })
   },
 })

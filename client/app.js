@@ -2,24 +2,28 @@
 var qcloud = require('./vendor/wafer2-client-sdk/index')
 var config = require('./config')
 var amap = require('./utils/amap.js');
-var bmap = require('./utils/bmap.js');
 App({
   onLaunch: function() {
+    wx.checkSession({
+      success: function() {
+        console.log("session_key 未过期");
+      },
+      fail: function() {
+        qcloud.Session.clear();
+        console.log("session_key 已过期");
+      }
+    })
     //手机信息
     var phoneInfo = wx.getSystemInfoSync();
     this.globalData.phoneInfo = phoneInfo;
     qcloud.setLoginUrl(config.service.loginUrl);
-    bmap.getWeather(null,function(res){
-      console.log(res);
-    })
-    bmap.regeocoding(null,function(data){
-      console.log("regeocoding----");
-      console.log(data);
-    })
+    const session = qcloud.Session.get()
+    console.log(session)
+    if (!session) return;
     //当前位置
     wx.getLocation({
       type: 'gcj02',
-      altitude:true,
+      altitude: true,
       success: function(res) {
         console.log(res);
         var currLocation = {
@@ -30,8 +34,8 @@ App({
           accuracy: res.accuracy,
           name: '我的位置'
         }
-        amap.getRegeo(currLocation,function(data){
-            console.log(data);
+        amap.getRegeo(currLocation, function(data) {
+          console.log(data);
         })
       }
     })
@@ -42,7 +46,7 @@ App({
     setInterval(function() {
       console.log("天气信息已经更新了");
       that.getWeatherData(location);
-    }, 1000 * 60 * 60); //60分钟重新一次
+    }, 1000 * 60 * 60 * 3); //3小时间重新一次
   },
   getWeatherData: function(params) {
     var that = this;
@@ -50,8 +54,8 @@ App({
       that.globalData.weatherData = data;
     })
   },
+
   globalData: {
-    userInfo: {},
     phoneInfo: {},
     weatherData: {}
   }

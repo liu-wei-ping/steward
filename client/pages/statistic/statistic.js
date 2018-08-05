@@ -1,7 +1,8 @@
 // pages/statistic/statistic.js
-
+const cache = require("../../utils/cache.js")
 const currYear = new Date().getFullYear(); // 月份
 const currMonth = new Date().getMonth() + 1; // 月份
+const app = getApp();
 Page({
 
   /**
@@ -11,13 +12,23 @@ Page({
     workSum: 0,
     restSum: 0,
     overtimeSum: 0,
-    days_style: []
+    days_style: [],
+    userInfo: {},
+    hasUserInfo: false,
+    canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    var userInfo = cache.getUserInfoCache();
+    console.log(userInfo);
+      this.setData({
+        userInfo: userInfo,
+        hasUserInfo: true
+      })
+
     var year = new Date().getFullYear(); // 年份
     var month = new Date().getMonth() + 1; // 月份
     this.initCalendar(year, month);
@@ -133,6 +144,19 @@ Page({
     var random = Math.floor(Math.random() * 100);
     this.setData({
       workSum: random
+    })
+  },
+  onGetUserInfo: function(e) {
+    app.globalData.userInfo = e.detail.userInfo;
+    this.setData({
+      userInfo: e.detail.userInfo,
+      hasUserInfo: true
+    })
+  },
+  setting: function(e) {
+    var uid = e.currentTarget.dataset.uid;
+    wx.navigateTo({
+      url: './setting?uid=' + uid,
     })
   }
 })

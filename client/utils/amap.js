@@ -188,9 +188,17 @@ function getDrivingRoute(params, callback) {
   }
   if (params.origin) {
     obj.origin = params.origin;
+  }else{
+    wx.showToast({
+      title: '请输入起点',
+    })
   }
   if (params.destination) {
     obj.destination = params.destination;
+  }else{
+    wx.showToast({
+      title: '请输入终点',
+    })
   }
   console.log(obj)
   myAmapFun.getDrivingRoute(obj);
@@ -268,9 +276,17 @@ function getRidingRout(params, callback) {
   }
   if (params.origin) {
     obj.origin = params.origin;
+  } else {
+    wx.showToast({
+      title: '请输入起点',
+    })
   }
   if (params.destination) {
     obj.destination = params.destination;
+  } else {
+    wx.showToast({
+      title: '请输入终点',
+    })
   }
   console.log(obj)
   myAmapFun.getRidingRoute(obj);
@@ -352,9 +368,17 @@ function getWalkingRoute(params, callback) {
   }
   if (params.origin) {
     obj.origin = params.origin;
+  } else {
+    wx.showToast({
+      title: '请输入起点',
+    })
   }
   if (params.destination) {
     obj.destination = params.destination;
+  } else {
+    wx.showToast({
+      title: '请输入终点',
+    })
   }
   console.log(obj)
   myAmapFun.getWalkingRoute(obj);
@@ -435,9 +459,17 @@ function getTransitRoute(params, callback) {
   }
   if (flag && params.origin) {
     obj.origin = params.origin;
+  } else {
+    wx.showToast({
+      title: '请输入起点',
+    })
   }
   if (flag && params.destination) {
     obj.destination = params.destination;
+  } else {
+    wx.showToast({
+      title: '请输入终点',
+    })
   }
   if (flag && params.strategy) {
     obj.strategy = params.strategy;

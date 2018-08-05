@@ -2,7 +2,7 @@
 <view class='container' style="height:{{winHeight}}px">
   <view class='flex-tab' style="height:40px">
     <view bindtap='swichTab' data-currentTab='0' class="flex-tab-list left {{currentTab=='0'?'active':''}}">上 班</view>
-    <view bindtap='swichTab' data-currentTab='1' class="flex-tab-list right {{currentTab=='1'?'active':''}}">路 况</view>
+    <view bindtap='swichTab' data-currentTab='1' class="flex-tab-list right {{currentTab=='1'?'active':''}}">下 班</view>
   </view>
   <view class="flex-box" style="height:{{winHeight-40}}px">
     <block wx:if="{{currentTab==0}}">
@@ -73,34 +73,10 @@
 
     </block>
     <block wx:if="{{currentTab==1}}">
+    下班
       <!-- <view class="flex-item map"> -->
-        <import src="../template/traffic.wxml" />
-        <template is="traffic" data="{{originName,destinationName,strategy,scale,longitude,latitude,markers,polyline,transitStrategy,drivingStrategy}}" />
-        <!-- <map id="navi-map" longitude="{{startLocation.longitude}}" latitude="{{startLocation.latitude}}" scale="{{scale}}" markers="{{trafficInfo.markers}}" bindmarkertap="bindmarkertap" polyline="{{trafficInfo.polyline}}">
-          <cover-view class='scale'>
-            <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='1' bindtap='clickScale'>+</cover-view>
-            <cover-view class='line'></cover-view>
-            <cover-view class='scale-box' data-scale='{{scale}}' data-scaleType='-1' bindtap='clickScale'>-</cover-view>
-          </cover-view>
-          <cover-view class='navigation'>
-            <cover-view class='navigation-box'>
-              <cover-view class='navigation-list nearby' catchtap='nearbyClick'>
-                <cover-image src=''>
-                </cover-image>
-                <cover-view>发现附近</cover-view>
-              </cover-view>
-              <cover-view class='navigation-list route' catchtap='routeClick'>
-                <cover-image src=''></cover-image>
-                <cover-view>线路</cover-view>
-              </cover-view>
-              <cover-view class='navigation-list newRoute' catchtap='newRouteClick'>
-                <cover-image src=''></cover-image>
-                <cover-view>添加路径</cover-view>
-              </cover-view>
-            </cover-view>
-          </cover-view>
-        </map> -->
-      <!-- </view> -->
+        <!-- <import src="../template/traffic.wxml" />
+        <template is="traffic" data="{{originName,destinationName,strategy,scale,longitude,latitude,markers,polyline,transitStrategy,drivingStrategy}}" /> -->
     </block>
   </view>
 </view>

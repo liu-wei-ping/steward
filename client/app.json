@@ -9,14 +9,17 @@
     "pages/statistic/statistic",
     "pages/traffic/traffic",
     "pages/statistic/task",
-    "pages/traffic_detail/traffic_detail"
+    "pages/traffic_detail/traffic_detail",
+    "pages/statistic/setting",
+    "pages/statistic/address"
   ],
   "window": {
     "backgroundColor": "#f8f8f8",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#00abff",
     "navigationBarTitleText": "1天管家",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white",
+    "navigationStyle": "defaut"
   },
   "tabBar": {
     "color": "#999999",
@@ -28,7 +31,13 @@
         "pagePath": "pages/ready/ready",
         "iconPath": "images/上班.png",
         "selectedIconPath": "images/上班.png",
-        "text": "上班"
+        "text": "上/下班"
+      },
+      {
+        "pagePath": "pages/traffic/traffic",
+        "iconPath": "images/traffic.png",
+        "selectedIconPath": "images/traffic.png",
+        "text": "路况"
       },
       {
         "pagePath": "pages/working/working",
@@ -37,16 +46,10 @@
         "text": "工作"
       },
       {
-        "pagePath": "pages/home/home",
-        "iconPath": "images/下班.png",
-        "selectedIconPath": "images/下班.png",
-        "text": "下班"
-      },
-      {
         "pagePath": "pages/statistic/statistic",
         "iconPath": "images/统计.png",
         "selectedIconPath": "images/统计.png",
-        "text": "统计"
+        "text": "我的"
       }
     ],
     "position": "bottom"

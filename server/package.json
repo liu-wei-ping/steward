@@ -6,7 +6,8 @@
     "scripts": {
         "start": "pm2 start process.prod.json --no-daemon",
         "dev": "nodemon --config nodemon.json app.js",
-        "initdb": "npm install && node tools/initdb.js"
+        "initdb": "npm install && node tools/initdb.js",
+        "test": "mocha"
     },
     "author": "Jason",
     "license": "MIT",
@@ -24,6 +25,7 @@
         "wafer-node-sdk": "^1.4.0"
     },
     "devDependencies": {
+        "mocha": "3.0.2",
         "babel-eslint": "^7.1.0",
         "debug": "^2.6.8",
         "eslint": "^3.9.1",

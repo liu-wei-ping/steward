@@ -27,6 +27,6 @@
     </block>
   </scroll-view>
   <view class='task-btn'>
-    <button bindtap='addTask' type="primary">新增任务</button>
+    <button bindtap='addTask' style='background:#00abff;border-radius:0px;color:#fff;'>新增任务</button>
   </view>
 </view>
