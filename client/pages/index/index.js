@@ -10,7 +10,7 @@ Page({
    */
   data: {
     userInfo: {},
-    logged: true,
+    logged: false,
     takeSession: false,
     requestResult: ''
   },
@@ -19,16 +19,63 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    if (this.data.logged) return;
+    var that = this;
+    //用户信息缓存
     const session = qcloud.Session.get()
-    if (!session) {
-      this.setData({
-        logged: false
-      });
+    console.log(session);
+    //已有过登录
+    if (session) {
+      console.log("第二次登录")
+      qcloud.loginWithCode({
+        success: res => {
+          that.setData({
+            userInfo: res,
+            logged: true
+          })
+          wx.setStorageSync("USER_TEMP", res);
+        },
+        fail: err => {
+          console.error(err)
+          util.showModel('登录错误', err.message)
+        }
+      })
+    } else {
+      //首次登录
+      qcloud.login({
+        success: res => {
+          console.log(res);
+          //获取用户信息 判断是否是老用户
+          request.getReq("getUserInfo", "uid=" + res.openId, function(data) {
+            //用户已存在直接登录
+            if (data.code == 1 && data.data.lenght > 0) {
+              //用户信息更新为系统获取信息
+              qcloud.Session.set(res.data[0]);
+              that.setData({
+                logged: true,
+              });
+            } else {
+              var params = {
+                userinfo: res
+              }
+              //创建用户信息
+              request.postReq("createUserInfo", params, function(result) {
+                if (result.code == 1) {
+                    console.log("用户创建成功!");
+                }else{
+                  //清除缓存
+                  qcloud.Session.clear();
+                }
+              })
+            }
+          })
+        },
+        fail: err => {
+          console.error(err)
+          util.showModel('登录错误', err.message)
+        }
+      })
     }
-    console.log("index onload")
-    request.req_get("getUserInfo",null,function(res){
-      console.log(res);
-    })
   },
 
   /**
@@ -92,7 +139,7 @@ Page({
   },
   // 用户登录示例
   bindGetUserInfo: function() {
-    // if (this.data.logged) return
+    if (this.data.logged) return
     util.showBusy('正在登录')
     const session = qcloud.Session.get()
     console.log(session);
@@ -107,6 +154,7 @@ Page({
             userInfo: res,
             logged: true
           })
+          wx.setStorageSync("USER_TEMP", res);
           // util.showSuccess('登录成功')
           this.workday();
         },
@@ -119,6 +167,7 @@ Page({
       // 首次登录
       qcloud.login({
         success: res => {
+          wx.setStorageSync("USER_TEMP", res);
           this.setData({
             userInfo: res,
             logged: true

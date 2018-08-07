@@ -1,5 +1,6 @@
 const Koa = require('koa')
 const app = new Koa()
+const logger = require('koa-log4')
 const debug = require('debug')('koa-weapp-demo')
 const response = require('./middlewares/response')
 const bodyParser = require('koa-bodyparser')
@@ -14,6 +15,8 @@ app.use(bodyParser())
 // 引入路由分发
 const router = require('./routes')
 app.use(router.routes())
-
+app.on('error', err => {
+    logger.error('server error', err)
+});
 // 启动程序，监听端口
 app.listen(config.port, () => debug(`listening on port ${config.port}`))

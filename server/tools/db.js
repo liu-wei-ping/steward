@@ -2,7 +2,7 @@ const {mysql} = require("../qcloud");
 const debug = require('debug');
 const uuidGenerator = require('uuid/v4');
 const moment = require('moment');
-
+const logger = require('koa-log4')
 /**
  *  get 查询数据
  * @param table 表名
@@ -10,19 +10,32 @@ const moment = require('moment');
  * @param cb
  * @returns {Promise<void>}
  */
-async function get(table, query, cb) {
-    // var query=query||{};
-    // query.stat=0;
-    // await mysql(table).select('*').where({stat:0}).then(async (res) => {
-    //     await cb(res);
-    // }).catch(e => {
-    //     debug('%s: %O', "get查询失败", e);
-    // });
-    await mysql(table).select("*").then(async (res) => {
-        await cb(res);
-    });
+async function get(table, query) {
+    var result = await mysql(table).select("*").where(query);
+    return result;
+}
+
+/**
+ *
+ * @param table
+ * @param data
+ * @param cb
+ * @returns {Promise<void>}
+ */
+async function create(table, data) {
+    data.id = uuidGenerator().replace(/-/g, "");
+    try {
+        await mysql(table).insert(data);
+        return data.id;
+    }catch (e) {
+        // logger.error('create error', e)
+        debug('create Error: %o', e)
+        return -1;
+    }
+
 }
 
 module.exports = {
-    get
+    get,
+    create
 }

@@ -49,6 +49,7 @@
             </view>
             <view>
               <text name="birthday" style="{{birthday?'':'color:#8B8B8B;'}}">{{birthday?birthday:'出生日期'}}</text>
+              <input hidden name="birthday" value="{{birthday}}"></input>
             </view>
             <view>></view>
           </view>

@@ -1,4 +1,5 @@
 // pages/statistic/setting.js
+var request = require('../../utils/request')
 Page({
 
   /**
@@ -7,12 +8,21 @@ Page({
   data: {
     avatar_url: '',
     gender: 0,
-    company_address: '',
-    compangy_loaction: '',
-    company_region: '',
-    family_address: '',
-    family_loaction: '',
-    family_region: '',
+    nick_name: "测试用户",
+    real_name: "刘测已",
+    birthday: "1991-05-21",
+    e_mail: "344545454@qq.com",
+    open: true,
+    company_name: "上海公司",
+    company_address: '上海市黄浦区黄河路65号',
+    compangy_loaction: '121.47081,31.23406',
+    company_region: '上海市黄浦区',
+    postcode: "2100010",
+    compangy_mail: "admin@iris.com",
+    family_address: '上海市浦东新区航昌路199弄1～31号',
+    family_loaction: '121.60946,31.07931',
+    family_region: '上海市浦东新区',
+    mobile_phone: "13900000011",
     userInfo: {},
   },
 
@@ -130,6 +140,12 @@ Page({
   },
   formSubmit: function(e) {
     console.log(e);
+    var params = {
+      userInfo: e.detail.value
+    };
+    request.postReq("createUserInfo", params,function(res){
+      
+    })
   },
   changeGender: function(e) {
     var that = this;

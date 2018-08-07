@@ -205,6 +205,7 @@ function strlen(str) {
   }
   return len;
 }
+
 module.exports = {
   formatTime,
   formatDate,

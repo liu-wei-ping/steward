@@ -18,7 +18,6 @@ App({
     this.globalData.phoneInfo = phoneInfo;
     qcloud.setLoginUrl(config.service.loginUrl);
     const session = qcloud.Session.get()
-    console.log(session)
     if (!session) return;
     //当前位置
     wx.getLocation({
@@ -35,7 +34,7 @@ App({
           name: '我的位置'
         }
         amap.getRegeo(currLocation, function(data) {
-          console.log(data);
+          // console.log(data);
         })
       }
     })

@@ -4,53 +4,93 @@ var util = require('../utils/util')
 /**
  * get 请求
  */
-function req_get(funKey, urlParams, callback) {
-  console.log("req_get 请求。。。")
+function getReq(funKey, params, callback) {
   var url = config.service[funKey];
-  var params = "";
-  if (urlParams) {
-    if (typeof(urlParams) == 'array') {
-      for (var i = 0; i < urlParams.length; i++) {
-        var up = urlParams[i]['key'] + "=" + encodeURIComponent(urlParams[i]['value']) + "&";
-        params += up;
-      }
-    } else if (typeof(urlParams) == 'string') {
-      var arr = urlParams.split("&");
-      for (var i = 0; i < arr.length; i++) {
-        var _PStr = arr[i];
-        var key = _PStr.substring(0, _PStr.indexOf("=") + 1)
-        console.log("编码之前参数:" + _PStr.substring(_PStr.indexOf("=") + 1))
-        var value = encodeURIComponent(_PStr.substring(_PStr.indexOf("=") + 1));
-        console.log("编码之后参数:" + value)
-        params += (key + value);
-      }
-    }
-    url = url + "?" + params;
+  if (params) {
+    url += ("?" + params);
   }
-
-  console.log("req_get 请求url-->" + url)
-  // util.showBusy('请求中...')
+  console.log('get request' + url);
   var that = this
   var options = {
     url: url,
     method: 'GET',
-    // login: true,
     success(result) {
-      // util.showSuccess('请求成功完成')
-      console.log('request success')
-      console.log(result)
-      callback(result);
-      //   requestResult: JSON.stringify(result.data)
+      console.log('get request result' + JSON.stringify(result));
+      if (callback && typeof(callback) == 'function') {
+        callback(result.data);
+      }
     },
     fail(error) {
+      console.log('get request fail', error);
       util.showModel('请求失败', error);
-      console.log('request fail', error);
     }
   }
   wx.request(options)
   // qcloud.request(options)
 }
+/**
+ * Post 请求
+ */
+const postReq = (funKey, params, callback, tip) => {
+  var url = config.service[funKey];
+  console.info("Post请求路径：" + url, "Post请求参数：" + JSON.stringify(params));
+  var options = {
+    url: url,
+    data: params ? params : {},
+    method: 'POST',
+    success: (res) => {
+      console.log('get request result', res);
+      if (callback && typeof(callback) == 'function') {
+        callback(res.data);
+      }
+    },
+    fail: (error) => {
+      console.log('post request fail', error);
+      util.showModel('请求失败', error);
+    }
+  };
+  wx.request(options);
+  // qcloud.request(options)
+};
+/**
+ * delete 请求
+ */
+const delReq = (funKey, params, callback) => {
+  wx.showModal({
+    content: "确定删除？",
+    success: function(res) {
+      if (res.confirm) {
+        var url = config.service[funKey];
+        if (params) {
+          url += ("?" + params);
+        }else{
+          util.showModel('删除失败', "参数错误");
+        }
+        console.log('delete request' + url);
+        var that = this
+        var options = {
+          url: url,
+          method: 'DELETE',
+          success(result) {
+            console.log('delete request result', result);
+            if (callback && typeof(callback) == 'function') {
+              callback(result);
+            }
+          },
+          fail(error) {
+            console.log('delete request fail', error);
+            util.showModel('请求失败', error);
+          }
+        }
+        wx.request(options)
+      } else if (res.cancel) {}
+    }
+  })
+
+};
 
 module.exports = {
-  req_get
+  getReq,
+  postReq,
+  delReq
 };
