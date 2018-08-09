@@ -9,7 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: {},
+    userinfo: {},
     logged: false,
     takeSession: false,
     requestResult: ''
@@ -23,21 +23,19 @@ Page({
     var that = this;
     //用户信息缓存
     const session = qcloud.Session.get()
-    console.log(session);
+    console.log("用户信息缓存",session);
     //已有过登录
     if (session) {
       console.log("第二次登录")
-      qcloud.loginWithCode({
-        success: res => {
+      //刷新用户信息
+      request.getReq("getUserInfo", "uid=" + session.uid, function (data) {
+        var result = data.data;
+        if (data.code == 1 && result && result.lenght !== 0) {
+          console.log("刷新用户信息", result);
+          qcloud.Session.set(result[0]);
           that.setData({
-            userInfo: res,
-            logged: true
-          })
-          wx.setStorageSync("USER_TEMP", res);
-        },
-        fail: err => {
-          console.error(err)
-          util.showModel('登录错误', err.message)
+            logged: true,
+          });
         }
       })
     } else {
@@ -47,20 +45,26 @@ Page({
           console.log(res);
           //获取用户信息 判断是否是老用户
           request.getReq("getUserInfo", "uid=" + res.openId, function(data) {
+            console.log(data);
+            var result = data.data;
             //用户已存在直接登录
-            if (data.code == 1 && data.data.lenght > 0) {
+            if (data.code == 1 && result && result.lenght!==0) {
               //用户信息更新为系统获取信息
-              qcloud.Session.set(res.data[0]);
+              console.log("用户信息已存在：", result)
+              qcloud.Session.set(result[0]);
               that.setData({
                 logged: true,
               });
             } else {
+              //创建用户信息
               var params = {
                 userinfo: res
               }
-              //创建用户信息
               request.postReq("createUserInfo", params, function(result) {
                 if (result.code == 1) {
+                  that.setData({
+                    logged: true,
+                  });
                     console.log("用户创建成功!");
                 }else{
                   //清除缓存

@@ -24,7 +24,7 @@ App({
       type: 'gcj02',
       altitude: true,
       success: function(res) {
-        console.log(res);
+        // console.log(res);
         var currLocation = {
           location: res.longitude + "," + res.latitude,
           latitude: res.latitude,

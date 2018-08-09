@@ -13,7 +13,7 @@ Page({
     restSum: 0,
     overtimeSum: 0,
     days_style: [],
-    userInfo: {},
+    userinfo:{},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
@@ -22,12 +22,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    var userInfo = cache.getUserInfoCache();
-    console.log(userInfo);
-      this.setData({
-        userInfo: userInfo,
-        hasUserInfo: true
-      })
+
 
     var year = new Date().getFullYear(); // 年份
     var month = new Date().getMonth() + 1; // 月份
@@ -68,7 +63,14 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function() {
+    var userinfo = cache.getUserInfoCache();
+    console.log(userinfo);
+    this.setData({
+      userinfo: userinfo,
+      hasUserInfo: true
+    })
+  },
 
   /**
    * 生命周期函数--监听页面隐藏

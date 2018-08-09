@@ -1,12 +1,11 @@
 var qcloud = require('../vendor/wafer2-client-sdk/index');
 module.exports={
    getUserInfoCache:function(){
-     var loginInfo = qcloud.Session.get();
-     if (loginInfo){
-       return loginInfo.userinfo;
-     }
-      return null;
+     return qcloud.Session.get()||{};
    },
+  setUserInfoCache: function (data) {
+     qcloud.Session.set(data);
+  },
    clearUserInfoCach:function(){
      qcloud.Session.clear();
    }

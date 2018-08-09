@@ -88,14 +88,13 @@ function request(options) {
 
                 var error, message;
                 if ((data && data.code === -1) || response.statusCode === 401) {
-                    Session.clear();
                     // 如果是登录态无效，并且还没重试过，会尝试登录后刷新凭据重新请求
                     if (!hasRetried) {
                         hasRetried = true;
                         doRequestWithLogin();
                         return;
                     }
-
+                   Session.clear();
                     message = '登录态已过期';
                     error = new RequestError(data.error, message);
 

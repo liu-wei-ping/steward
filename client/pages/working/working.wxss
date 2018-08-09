@@ -59,8 +59,9 @@ pag {
 
 .task-btn {
   position: fixed;
-  top: 90%;
-  height: 10%;
+  bottom: 0;
+    height: 46px;
+  /* height: 10%; */
   width: 100%;
 }
 
@@ -83,7 +84,9 @@ pag {
   border-bottom: #ccc 1px solid;
   width: 75%;
 }
-
+.task-btn button{
+  height:100%;
+}
 .t-save {
   display: flex;
   flex-direction: row;

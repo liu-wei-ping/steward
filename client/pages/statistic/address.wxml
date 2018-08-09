@@ -13,7 +13,7 @@
       <image src='../images/location.png' bindtap='selectAddress'></image>
     </view>
   </view>
-  <input name="loaction" value='{{loaction}}'></input>
+  <input name="location" value='{{location}}'></input>
   <view style='width:80%;margin:0 auto;'>
     <button formType="submit" type='primary'>确定</button>
   </view>

@@ -1,17 +1,17 @@
 <!--pages/statistic/statistic.wxml-->
 <view class='my-container'>
   <view class='avatar-box'>
-      <image  class="my-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <image  class="my-avatar" src="{{userinfo.avatarUrl}}" mode="cover"></image>
   </view>
   <view class='info-box'>
     <view>
-      <text>{{userInfo.nickName}}</text>
+      <text>{{userinfo.nickName}}</text>
     </view>
     <view>
-      <text style='font-size:15px;'>公司：</text>
+      <text style='font-size:15px;color:#ccc;'>{{userinfo.company_name?userinfo.company_name:'没有公司信息'}}</text>
     </view>
   </view>
-  <view class='setting-box' bindtap='setting' data-uid='{{userInfo.nickName}}'>
+  <view class='setting-box' bindtap='setting' data-uid='{{userinfo.uid}}'>
     <text>编辑</text>
     <text space="nbsp"> ></text>
   </view>

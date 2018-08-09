@@ -9,19 +9,19 @@ function getReq(funKey, params, callback) {
   if (params) {
     url += ("?" + params);
   }
-  console.log('get request' + url);
+  console.log('get request：' + url);
   var that = this
   var options = {
     url: url,
     method: 'GET',
     success(result) {
-      console.log('get request result' + JSON.stringify(result));
+      // console.log('get request result' + JSON.stringify(result));
       if (callback && typeof(callback) == 'function') {
         callback(result.data);
       }
     },
     fail(error) {
-      console.log('get request fail', error);
+      console.log('get request fail：', error);
       util.showModel('请求失败', error);
     }
   }
@@ -33,13 +33,13 @@ function getReq(funKey, params, callback) {
  */
 const postReq = (funKey, params, callback, tip) => {
   var url = config.service[funKey];
-  console.info("Post请求路径：" + url, "Post请求参数：" + JSON.stringify(params));
+  console.info("Post request：" + url, "Post request params：" + JSON.stringify(params));
   var options = {
     url: url,
     data: params ? params : {},
     method: 'POST',
     success: (res) => {
-      console.log('get request result', res);
+      // console.log('get request result', res);
       if (callback && typeof(callback) == 'function') {
         callback(res.data);
       }
@@ -56,6 +56,7 @@ const postReq = (funKey, params, callback, tip) => {
  * delete 请求
  */
 const delReq = (funKey, params, callback) => {
+  console.info("delete request：" + url, "delete request params:" + params);
   wx.showModal({
     content: "确定删除？",
     success: function(res) {
@@ -72,7 +73,7 @@ const delReq = (funKey, params, callback) => {
           url: url,
           method: 'DELETE',
           success(result) {
-            console.log('delete request result', result);
+            // console.log('delete request result', result);
             if (callback && typeof(callback) == 'function') {
               callback(result);
             }

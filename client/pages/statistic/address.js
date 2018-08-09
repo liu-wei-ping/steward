@@ -8,8 +8,9 @@ Page({
   data: {
     opType: 0,
     address: "",
-    loaction: '',
+    location: '',
     region: ['上海市', '上海市', '浦东新区'],
+    userinfo: {}
     // customItem: '全部'
   },
 
@@ -28,14 +29,19 @@ Page({
     console.log(prePage);
     if (prePage.route == 'pages/statistic/setting') {
       var preData = prePage.data;
+      var userinfo = preData.userinfo;
       if (opType == 0) {
         this.setData({
-          address: preData.family_address,
+          userinfo: userinfo,
+          address: userinfo.family_address,
+          location: userinfo.family_location,
           opType: opType
         })
       } else {
         this.setData({
-          address: preData.company_address,
+          userinfo: userinfo,
+          address: userinfo.company_address,
+          location: userinfo.company_location,
           opType: opType
         })
       }
@@ -83,27 +89,33 @@ Page({
         console.log(res);
         var name = res.name;
         var address = res.address;
-        var loaction = res.longitude + "," + res.latitude;
+        var location = res.longitude + "," + res.latitude;
         that.setData({
           address: address,
-          loaction: loaction
+          location: location
         })
       }
     })
   },
   formSubmit: function(e) {
     console.log(e);
-    var opType = this.data.opType;
+    var opt = this.data.opType;
     var data = e.detail.value;
-    var obj = {
-      address: data.address,
-      region: data.region,
-      loaction: data.loaction,
-    }
     var pages = getCurrentPages();
     var prePage = pages[pages.length - 2];
     if (prePage.route == 'pages/statistic/setting') {
-      prePage.changeAddressText(opType, obj);
+      var userinfo = prePage.data.userinfo;
+      console.log(userinfo);
+      if (opt == 0) {
+        userinfo.family_address = data.address;
+        userinfo.family_region = data.region;
+        userinfo.family_location = data.location;
+      } else {
+        userinfo.company_address = data.address;
+        userinfo.company_region = data.region;
+        userinfo.company_location = data.location;
+      }
+      prePage.changeAddressText(userinfo);
     }
     wx.navigateBack({
       delta: 1,

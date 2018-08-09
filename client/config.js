@@ -21,7 +21,9 @@ var config = {
     //获取用户信息
     getUserInfo: `${host}/weapp/userinfo/get`,
     //创建新的用户
-    createUserInfo: `${host}/weapp/userinfo/create`
+    createUserInfo: `${host}/weapp/userinfo/create`,
+    //更新用户信息
+    updateUserInfo: `${host}/weapp/userinfo/update`
   }
 };
 

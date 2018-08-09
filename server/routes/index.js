@@ -35,5 +35,7 @@ router.post('/message', controllers.message.post)
 router.get('/userinfo/get', controllers.userinfo.get)
 //创建用户信息
 router.post('/userinfo/create', controllers.userinfo.create)
+//跟新用户信息
+router.post('/userinfo/update', controllers.userinfo.update)
 
 module.exports = router
