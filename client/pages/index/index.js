@@ -26,9 +26,13 @@ Page({
     console.log("用户信息缓存",session);
     //已有过登录
     if (session) {
+      var uid = session.uid;
+      if (!uid){
+        uid= session.userinfo.openId;
+      }
       console.log("第二次登录")
       //刷新用户信息
-      request.getReq("getUserInfo", "uid=" + session.uid, function (data) {
+      request.getReq("getUserInfo", "uid=" + uid, function (data) {
         var result = data.data;
         if (data.code == 1 && result && result.lenght !== 0) {
           console.log("刷新用户信息", result);
