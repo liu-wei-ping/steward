@@ -1,6 +1,7 @@
 var qcloud = require('../vendor/wafer2-client-sdk/index')
 var config = require('../config')
 var util = require('../utils/util')
+const cache = require("./cache.js")
 /**
  * get 请求
  */
@@ -32,7 +33,10 @@ function getReq(funKey, params, callback) {
  * Post 请求
  */
 const postReq = (funKey, params, callback, tip) => {
+  var userinfo = cache.getUserInfoCache();
   var url = config.service[funKey];
+  params = params ? params : {};
+  params.uid = userinfo && userinfo.uid ? userinfo.uid : "";
   console.info("Post request：" + url, "Post request params：" + JSON.stringify(params));
   var options = {
     url: url,
@@ -64,7 +68,7 @@ const delReq = (funKey, params, callback) => {
         var url = config.service[funKey];
         if (params) {
           url += ("?" + params);
-        }else{
+        } else {
           util.showModel('删除失败', "参数错误");
         }
         console.log('delete request' + url);

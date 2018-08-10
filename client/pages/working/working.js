@@ -1,5 +1,8 @@
-// pages/pm/pm.js
+var config = require('../../config')
+var util = require('../../utils/util')
+var request = require('../../utils/request')
 var util = require('../../utils/util.js')
+const cache = require("../../utils/cache.js")
 Page({
 
   /**
@@ -20,7 +23,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
+    request.postReq("queryTaskInfo",null,function(res){
+        console.log(res);
+    })
   },
 
   /**
@@ -107,8 +112,6 @@ Page({
         }
       }
     })
-
-
   },
   editTask: function(e) {
     var index = e.currentTarget.dataset.index; //位置索引从0开始
@@ -125,7 +128,19 @@ Page({
       return;
     }
     var optType = e.currentTarget.dataset.opttype;
+    var content = e.currentTarget.dataset.content;
+    var userinfo = cache.getUserInfoCache();
     if (optType == 1) { //保存任务
+      var params = {
+        uid: userinfo.uid,
+        taskName: content,
+        stat: 0
+      }
+      //创建任务
+      request.postReq("createTaskInfo", params, function (res) {
+        util.showSuccess("保存成功");
+      })
+      console.log(res);
       item.optType = 2;
       item.btnText = '执行';
       taskList[index] = item;

@@ -10,7 +10,7 @@ const debug = require('debug');
  * @returns {Promise<void>}
  */
 async function get(ctx, next) {
-    var {uid} = ctx.query;
+    let {uid} = ctx.query;
     await db.geByCondition(CNF.DB_TABLE.user_info, {uid: uid}, function (res) {
         SUCCESS(ctx, res);
     });
@@ -24,8 +24,8 @@ async function get(ctx, next) {
  * @returns {Promise<void>}
  */
 async function create(ctx, next) {
-    var {userinfo} = ctx.request.body;
-    var params = {
+    let {userinfo} = ctx.request.body;
+    let params = {
         uid: userinfo.openId,
         nickName: userinfo.nickName,
         province: userinfo.province,

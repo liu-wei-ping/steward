@@ -23,7 +23,11 @@ var config = {
     //创建新的用户
     createUserInfo: `${host}/weapp/userinfo/create`,
     //更新用户信息
-    updateUserInfo: `${host}/weapp/userinfo/update`
+    updateUserInfo: `${host}/weapp/userinfo/update`,
+    //新建任务
+    createTaskInfo: `${host}/weapp/task/create`,
+    //查询任务
+    queryTaskInfo: `${host}/weapp/task/query`
   }
 };
 

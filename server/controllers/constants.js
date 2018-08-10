@@ -1,7 +1,7 @@
 CNF = {
 	DB_TABLE: {
-		"csessioninfo": "csessioninfo",
-		"user_info": "user_info"
+		"user_info": "user_info",
+		"task_info": "task_info"
 	},
 	OPT_STATE: {
 		SUCCESS_CODE: 1,

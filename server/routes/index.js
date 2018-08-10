@@ -37,5 +37,11 @@ router.get('/userinfo/get', controllers.userinfo.get)
 router.post('/userinfo/create', controllers.userinfo.create)
 //跟新用户信息
 router.post('/userinfo/update', controllers.userinfo.update)
+//创建任务
+router.post('/task/create', controllers.task.create)
+//删除任务
+router.del('/task/delete', controllers.task.del)
+//查询任务
+router.post('/task/query', controllers.task.query)
 
 module.exports = router

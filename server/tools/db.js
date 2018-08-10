@@ -44,7 +44,7 @@ async function geByCondition(table, condition, callback) {
 async function create(table, data, callback) {
     data.id = uuidGenerator().replace(/-/g, "");
     await mysql(table).insert(data).then(function (res) {
-        callback(res);
+        callback(data.id);
     }).catch(function (error) {
         console.error(error);
     });
@@ -66,9 +66,25 @@ async function update(table, data, condition, callback) {
     });
 }
 
+/**
+ * 删除
+ * @param table
+ * @param condition
+ * @param callback
+ * @returns {Promise<void>}
+ */
+async function del(table, condition, callback) {
+    await mysql(table).del().where(condition).then(function (res) {
+        callback(res);
+    }).catch(function (error) {
+        console.error(error);
+    });
+}
+
 module.exports = {
     getById,
     geByCondition,
+    del,
     create,
     update
 }

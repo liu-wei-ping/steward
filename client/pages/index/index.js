@@ -52,7 +52,7 @@ Page({
             console.log(data);
             var result = data.data;
             //用户已存在直接登录
-            if (data.code == 1 && result && result.lenght!==0) {
+            if (data.code == 1 && result && result.lenght>0) {
               //用户信息更新为系统获取信息
               console.log("用户信息已存在：", result)
               qcloud.Session.set(result[0]);
@@ -175,7 +175,6 @@ Page({
       // 首次登录
       qcloud.login({
         success: res => {
-          wx.setStorageSync("USER_TEMP", res);
           this.setData({
             userInfo: res,
             logged: true
