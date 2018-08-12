@@ -11,7 +11,9 @@
     "pages/statistic/task",
     "pages/traffic_detail/traffic_detail",
     "pages/statistic/setting",
-    "pages/statistic/address"
+    "pages/statistic/address",
+    "pages/template/task",
+    "pages/daycycle/daycycle"
   ],
   "window": {
     "backgroundColor": "#f8f8f8",

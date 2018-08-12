@@ -27,7 +27,17 @@ var config = {
     //新建任务
     createTaskInfo: `${host}/weapp/task/create`,
     //查询任务
-    queryTaskInfo: `${host}/weapp/task/query`
+    queryTaskInfo: `${host}/weapp/task/query`,
+    //更新任务
+    updateTaskInfo: `${host}/weapp/task/update`,
+    //删除任务
+    deleteTaskInfo: `${host}/weapp/task/del`,
+    //查询一天时间记录
+    queryDaycycleInfo: `${host}/weapp/daycycle/query`,
+    //创建一天时间记录
+    createDaycycleInfo: `${host}/weapp/daycycle/create`,
+    //更新一天时间记录
+    upateDaycycleInfo: `${host}/weapp/daycycle/update`,
   }
 };
 

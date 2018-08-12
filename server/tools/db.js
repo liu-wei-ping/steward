@@ -3,7 +3,7 @@ const debug = require('debug');
 const uuidGenerator = require('uuid/v4');
 const moment = require('moment');
 const logger = require('koa-log4')
-
+const assert = require('assert');
 /**
  *  根据id查询
  * @param table
@@ -16,6 +16,7 @@ async function getById(table, id, callback) {
         callback(res);
     }).catch(function (error) {
         console.error(error);
+        callback(-1);
     })
 }
 
@@ -27,10 +28,11 @@ async function getById(table, id, callback) {
  * @returns {Promise<void>}
  */
 async function geByCondition(table, condition, callback) {
-    await mysql(table).select("*").where(condition).then(function (res) {
+    await mysql(table).select("*").where(condition).orderBy('update_time', 'desc').then(function (res) {
         callback(res);
     }).catch(function (error) {
         console.error(error);
+        callback(-1);
     })
 }
 
@@ -42,11 +44,14 @@ async function geByCondition(table, condition, callback) {
  * @returns {Promise<void>}
  */
 async function create(table, data, callback) {
+    assert.ok(data.uid,"用户uid不能为空")
     data.id = uuidGenerator().replace(/-/g, "");
+    data.version = 1;
     await mysql(table).insert(data).then(function (res) {
-        callback(data.id);
+        callback({id: data.id, version: data.version});
     }).catch(function (error) {
         console.error(error);
+        callback(-1);
     });
 }
 
@@ -59,11 +64,26 @@ async function create(table, data, callback) {
  * @returns {Promise<void>}
  */
 async function update(table, data, condition, callback) {
-    await mysql(table).update(data).where(condition).then(function (res) {
-        callback(res);
+    assert.ok(condition.version,"版本号不能为空")
+    assert.ok(condition.id,"更新id不能为空")
+    assert.ok(condition.uid,"用户uid不能为空")
+    await mysql(table).select("version").where(condition).then(async (v) => {
+        if (v) {
+            data.version = v[0].version + 1;
+            await mysql(table).update(data).where(condition).then(function (res) {
+                callback({id:condition.id,version:data.version});
+            }).catch(function (error) {
+                console.error(error);
+                callback(-1);
+            });
+        } else {
+            callback(-1);
+        }
     }).catch(function (error) {
         console.error(error);
-    });
+        callback(-1);
+    })
+
 }
 
 /**
@@ -74,10 +94,13 @@ async function update(table, data, condition, callback) {
  * @returns {Promise<void>}
  */
 async function del(table, condition, callback) {
+    assert.ok(condition.id,"删除id不能为空")
+    assert.ok(condition.uid,"用户uid不能为空")
     await mysql(table).del().where(condition).then(function (res) {
         callback(res);
     }).catch(function (error) {
         console.error(error);
+        callback(-1);
     });
 }
 

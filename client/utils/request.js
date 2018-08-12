@@ -37,13 +37,15 @@ const postReq = (funKey, params, callback, tip) => {
   var url = config.service[funKey];
   params = params ? params : {};
   params.uid = userinfo && userinfo.uid ? userinfo.uid : "";
-  console.info("Post request：" + url, "Post request params：" + JSON.stringify(params));
+  params.realName = userinfo && userinfo.realName ? userinfo.realName : "";
+  console.info("Post request：" + url);
+  console.info("Post request params：", params);
   var options = {
     url: url,
     data: params ? params : {},
     method: 'POST',
     success: (res) => {
-      // console.log('get request result', res);
+      console.log("Post result:",res);
       if (callback && typeof(callback) == 'function') {
         callback(res.data);
       }
@@ -57,27 +59,52 @@ const postReq = (funKey, params, callback, tip) => {
   // qcloud.request(options)
 };
 /**
+ * PostReqOfAll 请求
+ */
+const postReqOfAll = (funKey, params, callback, tip) => {
+  var userinfo = cache.getUserInfoCache();
+  var url = config.service[funKey];
+  params = params ? params : {};
+  console.info("PostReqOfAll request：" + url);
+  console.info("PostReqOfAll request params：", params);
+  var options = {
+    url: url,
+    data: params ? params : {},
+    method: 'POST',
+    success: (res) => {
+      console.log("PostReqOfAll result:", res);
+      if (callback && typeof (callback) == 'function') {
+        callback(res.data);
+      }
+    },
+    fail: (error) => {
+      console.log('PostReqOfAll request fail', error);
+      util.showModel('请求失败', error);
+    }
+  };
+  wx.request(options);
+  // qcloud.request(options)
+};
+/**
  * delete 请求
  */
 const delReq = (funKey, params, callback) => {
-  console.info("delete request：" + url, "delete request params:" + params);
+  if (!params) {
+    util.showModel('删除失败', "参数错误");
+  }
+  var userinfo = cache.getUserInfoCache();
+  var urlParams = ("?uid" + userinfo.uid + "&") + params;
+  console.info("delete request：" + url + urlParams);
   wx.showModal({
     content: "确定删除？",
     success: function(res) {
       if (res.confirm) {
         var url = config.service[funKey];
-        if (params) {
-          url += ("?" + params);
-        } else {
-          util.showModel('删除失败', "参数错误");
-        }
         console.log('delete request' + url);
-        var that = this
         var options = {
-          url: url,
+          url: url + urlParams,
           method: 'DELETE',
           success(result) {
-            // console.log('delete request result', result);
             if (callback && typeof(callback) == 'function') {
               callback(result);
             }
@@ -91,11 +118,11 @@ const delReq = (funKey, params, callback) => {
       } else if (res.cancel) {}
     }
   })
-
 };
 
 module.exports = {
   getReq,
   postReq,
+  postReqOfAll,
   delReq
 };

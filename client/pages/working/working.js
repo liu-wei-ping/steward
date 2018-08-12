@@ -9,31 +9,49 @@ Page({
    * 页面的初始数据
    */
   data: {
-    taskId: -1,
-    taskTip: "没有任务执行~~",
-    _timerDate: '',
-    taskList: [{
-      content: '',
-      optType: 1,
-      btnText: '保存'
-    }]
+    currentTab: 0,
+    radioItems: [{
+        name: '一级',
+        value: '1',
+        checked: 'true'
+      },
+      {
+        name: '二级',
+        value: '2'
+      },
+      {
+        name: '三级',
+        value: '3'
+      }
+    ],
+    taskName: '',
+    taskInfo: '',
+    planHour: '',
+    haveData: true,
+    taskList: [{}, {}]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    request.postReq("queryTaskInfo",null,function(res){
-        console.log(res);
-    })
+    // var that = this;
+    // request.postReq("queryTaskInfo", null, function(res) {
+    //   console.log(res);
+    //   if (res.code == 1 && res.data) {
+    //     var taskList = res.data;
+    //     console.log(taskList);
+    //     that.setData({
+    //       taskList: taskList
+    //     })
+    //   }
+    // })
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
-
-  },
+  onReady: function() {},
 
   /**
    * 生命周期函数--监听页面显示
@@ -76,113 +94,153 @@ Page({
   onShareAppMessage: function() {
 
   },
-  addTask: function(e) {
-    var last = this.data.taskList;
-    var task = {
-      content: '',
-      optType: 1,
-      btnText: '保存'
-    };
-    last.push(task);
+  swichTab: function(e) {
+    var currentTab = e.currentTarget.dataset.currenttab;
     this.setData({
-      taskList: last
+      currentTab: currentTab
     })
-  },
-  deleteTask: function(e) {
-    var index = e.currentTarget.dataset.index; //位置索引从0开始
-    var optType = e.currentTarget.dataset.opttype;
-    console.log(optType);
-    if (optType == 3) {
-      wx.showToast({
-        title: '任务正在执行中',
-      })
-      return;
-    }
-    var taskList = this.data.taskList;
-    var that = this;
-    wx.showModal({
-      title: '提示',
-      content: '是否删除此任务？',
-      success: function(res) {
-        if (res.confirm) {
-          taskList.splice(index, 1);
-          that.setData({
-            taskList: taskList
-          })
+    if (currentTab == 0) {
+
+    } else {
+      var that = this;
+      var params = {};
+      if (currentTab == 1) {
+        params.stat = 0;
+      } else if (currentTab == 2) {
+        params.stat = 1;
+      } else if (currentTab == 3) {
+        params.stat = 2;
+      }
+      var taskList = [];
+      var haveData = false;
+      request.postReq("queryTaskInfo", params, function(res) {
+        console.log(res);
+        if (res.code == 1 && res.data.length > 0) {
+          taskList = res.data;
+          haveData = true;
         }
-      }
-    })
-  },
-  editTask: function(e) {
-    var index = e.currentTarget.dataset.index; //位置索引从0开始
-    var taskList = this.data.taskList;
-    var item = taskList[index];
-    var taskId = this.data.taskId;
-    var taskTip = this.data.taskTip;
-    if (!item['content']) {
-      wx.showToast({
-        title: '填写任务信息！',
-        icon: 'none',
-        duration: 2000
-      })
-      return;
-    }
-    var optType = e.currentTarget.dataset.opttype;
-    var content = e.currentTarget.dataset.content;
-    var userinfo = cache.getUserInfoCache();
-    if (optType == 1) { //保存任务
-      var params = {
-        uid: userinfo.uid,
-        taskName: content,
-        stat: 0
-      }
-      //创建任务
-      request.postReq("createTaskInfo", params, function (res) {
-        util.showSuccess("保存成功");
-      })
-      console.log(res);
-      item.optType = 2;
-      item.btnText = '执行';
-      taskList[index] = item;
-    } else if (optType == 2) { //任务执行
-      if (taskId >= 0) {
-        wx.showToast({
-          title: '有任务在执行',
+        console.log(taskList);
+        that.setData({
+          taskList: taskList,
+          haveData: haveData
         })
-        return;
-      }
-      taskId = index;
-      item.optType = 3;
-      item.btnText = '完成';
-      taskTip = item['content'];
-      taskList[index] = item;
-      util.timer(this)
-      //初始化
-      this.initTimer();
-      if (!this.setTimeout) {
-        this.getDateTimer();
-      }
-    } else if (optType == 3) { //任务完成
-      taskId = -1;
-      this.clearTimeout()
-      item.optType = 4;
-      item.btnText = '已完成';
-      taskList[index] = item;
-      taskList.splice(index, 1);
-      taskList.push(item);
+      })
     }
-    this.setData({
-      taskTip: taskTip,
-      taskList: taskList,
-      taskId: taskId
+  },
+  radioChange: function(e) {
+    var checked = e.detail.value
+    var changed = {}
+    for (var i = 0; i < this.data.radioItems.length; i++) {
+      if (checked.indexOf(this.data.radioItems[i].value) !== -1) {
+        changed['radioItems[' + i + '].checked'] = true
+      } else {
+        changed['radioItems[' + i + '].checked'] = false
+      }
+    }
+    this.setData(changed)
+  },
+  taskSubmit: function(e) {
+    var task = e.detail.value;
+    var that = this;
+    request.postReq("createTaskInfo", task, function(res) {
+      that.formReset();
+      util.showSuccess("保存成功")
     })
   },
-  input: function(e) {
-    var index = e.currentTarget.dataset.index; //位置索引从0开始
-    var taskList = this.data.taskList;
-    taskList[index]['content'] = e.detail.value;
+  formReset: function() {
+    var radioItems = this.data.radioItems;
+    for (var i = 0; i < radioItems.length; i++) {
+      if (i == 0) {
+        radioItems[i].checked = true;
+      } else {
+        radioItems[i].checked = false;
+      }
+    }
     this.setData({
-      taskList: taskList,
+      radioItems: radioItems,
+      taskName: '',
+      taskInfo: '',
+      planHour: ''
     })
-  }
+  },
+  bracketClick: function(e) {
+    var bracket = e.currentTarget.dataset.bracket;
+    var index = e.currentTarget.dataset.index;
+    var taskList = this.data.taskList;
+    if (taskList) {
+      var item = taskList[index];
+      var bracket = item['bracket'];
+      item['bracket'] = bracket && bracket == "up" ? "down" : "up";
+      if (item['bracket'] == "down") { //隐身
+        item.hiddenFlag = true;
+      } else { //显身
+        item.hiddenFlag = false;
+      }
+      taskList[index] = item;
+      console.log(taskList);
+      this.setData({
+        taskList: taskList
+      })
+    }
+  },
+  assignTask: function(e) {},
+  startTask: function(e) {
+    var index = e.currentTarget.dataset.index;
+    var taskList = this.data.taskList || [];
+    var item = taskList[index];
+    console.log(item);
+    var params = {
+      id: item.id,
+      stat: 1,
+      version: item.version
+    }
+    var that = this;
+    request.postReq("updateTaskInfo", params, function(res) {
+      taskList.splice(index, 1);
+      that.setData({
+        taskList: taskList,
+        haveData: taskList.length > 0
+      })
+    })
+  },
+  stopTask: function(e) {
+    var index = e.currentTarget.dataset.index;
+    var taskList = this.data.taskList || [];
+    var item = taskList[index];
+    console.log(item);
+    var params = {
+      id: item.id,
+      stat: -1,
+      version: item.version
+    }
+    var that = this;
+    request.postReq("updateTaskInfo", params, function(res) {
+      taskList.splice(index, 1);
+      that.setData({
+        taskList: taskList,
+        haveData: taskList.length > 0
+      })
+    })
+  },
+  doneTask: function(e) {
+    var index = e.currentTarget.dataset.index;
+    var taskList = this.data.taskList || [];
+    var item = taskList[index];
+    var params = {
+      id: item.id,
+      stat: 2,
+      version: item.version
+    }
+    var that=this;
+    request.postReq("updateTaskInfo", params, function(res) {
+      taskList.splice(index, 1);
+      that.setData({
+        taskList: taskList,
+        haveData: taskList.length > 0
+      })
+    })
+  },
+  notifyAssigner: function(e) {
+    console.log("通知分配人")
+  },
 })

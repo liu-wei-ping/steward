@@ -177,9 +177,6 @@ Page({
     var mapscale = e.currentTarget.dataset.mapscale;
     var mapheight = e.currentTarget.dataset.mapheight;
     var height = this.data.winHeight;
-    console.log(mapscale);
-    console.log(mapheight);
-    console.log(height);
     if (mapscale) {
       height = height * 0.2
     } else {

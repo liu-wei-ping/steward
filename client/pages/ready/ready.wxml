@@ -54,7 +54,7 @@
         <view class='work-item record'>
           <view class='record-item'>
             <view class='record-text'>
-              <text>{{wakeUpTime}}</text>
+              <text>{{wakeUpTimeConfig['min']+'~'+wakeUpTimeConfig['max']}}</text>
             </view>
             <view class='btn wakeUp' bindtap='wakeUp'>
               <text>早起</text>
@@ -62,9 +62,9 @@
           </view>
           <view class='record-item'>
             <view class='record-text'>
-              <text>{{punchInTime}}</text>
+              <text>{{attendanceFlag?'已经打过卡了':'09:30上班'}}</text>
             </view>
-            <view class='btn punchIn' bindtap='punchIn'>
+            <view class='btn punchIn' bindtap='attendance'>
               <text>上班打卡</text>
             </view>
           </view>
@@ -73,9 +73,9 @@
 
     </block>
     <block wx:if="{{currentTab==1}}">
-    下班
+      下班
       <!-- <view class="flex-item map"> -->
-        <!-- <import src="../template/traffic.wxml" />
+      <!-- <import src="../template/traffic.wxml" />
         <template is="traffic" data="{{originName,destinationName,strategy,scale,longitude,latitude,markers,polyline,transitStrategy,drivingStrategy}}" /> -->
     </block>
   </view>

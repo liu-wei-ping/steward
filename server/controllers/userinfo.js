@@ -28,6 +28,7 @@ async function create(ctx, next) {
     let params = {
         uid: userinfo.openId,
         nickName: userinfo.nickName,
+        realName: userinfo.realName ? userinfo.realName : userinfo.nickName,
         province: userinfo.province,
         city: userinfo.city,
         country: userinfo.country,
@@ -49,8 +50,8 @@ async function create(ctx, next) {
  */
 async function update(ctx, next) {
     var {userinfo} = ctx.request.body;
-    var condition ={
-        uid:userinfo.uid
+    var condition = {
+        uid: userinfo.uid
     }
     await db.update(CNF.DB_TABLE.user_info, userinfo, condition, function (res) {
         SUCCESS(ctx, res);

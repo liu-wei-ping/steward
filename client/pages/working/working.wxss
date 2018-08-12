@@ -1,103 +1,117 @@
-/* pages/working/working.wxss */
+@import "../template/task.wxss";
 
-pag {
-  display: flex;
-  flex-direction: column;
-}
-
-.task-tip {
-  display: flex;
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-  height: 40%;
+page {
   width: 100%;
-  background: #ccc;
+  background: #e8ecef;
 }
 
-.circle-out {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 50%;
-  background-color: #415cab;
-}
-
-.circle-in {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  width: 190px;
-  height: 190px;
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 50%;
+.flex-tab {
+  position: fixed;
   top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
-  margin: auto;
-  background-color: #fff;
-  justify-content: center;
-  align-items: center;
-}
-
-.tip {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  background: #0af;
+  line-height: 40px;
   text-align: center;
-  padding: 10rpx;
-  width: 100%;
+  color: #fff;
+  z-index: 1;
 }
 
-.task-list {
-  position: fixed;
-  top: 40%;
-  height: 50%;
-  width: 100%;
-}
-
-.task-btn {
-  position: fixed;
-  bottom: 0;
-    height: 46px;
-  /* height: 10%; */
-  width: 100%;
-}
-
-.task {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  height: 60px;
-  margin: 10px 0;
-}
-
-.t-delete {
-  height: 10px;
-  margin-bottom: 50px;
-  color: #ccc;
-  width: 5%;
-}
-
-.t-input {
-  border-bottom: #ccc 1px solid;
-  width: 75%;
-}
-.task-btn button{
-  height:100%;
-}
-.t-save {
-  display: flex;
-  flex-direction: row;
-  text-align: right;
+.flex-tab-item {
   width: 25%;
 }
 
-.odd {
-  /* background: blue; */
+.active {
+  background: #e8ecef;
+  color: #000;
 }
 
-.even {
-  /* background: yellow; */
+.task-box {
+  width: 100%;
+  margin: 40px auto;
+}
+
+.task-add {
+  width: 98%;
+  margin: 50px auto;
+  text-align: center;
+  border: #ccc 1px solid;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.add-item {
+  margin: 10px auto;
+  width: inherit;
+  display: flex;
+  flex-direction: row;
+}
+
+.add-item> label {
+  padding-right: 20rpx;
+  text-align: right;
+  width: 40%;
+}
+
+.add-item>input {
+  text-align: left;
+  width: 100%;
+  border-bottom: #ccc 1px solid;
+}
+
+.add-item>textarea {
+  text-align: left;
+  width: 100%;
+  border: #ccc 1px solid;
+  border-radius: 10rpx;
+}
+
+radio-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.label {
+  height: 30px;
+  margin-right: 10rpx;
+}
+
+.label-icon {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 18px;
+  height: 18px;
+  background: #fcfff4;
+  border-radius: 50px;
+}
+
+.icon {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  background: #ccc;
+  border-radius: 50%;
+}
+
+.label-text {
+  /* color: red; */
+  font-size: 18px;
+}
+
+.checked {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  background: #1aad19;
+  border-radius: 50%;
 }
