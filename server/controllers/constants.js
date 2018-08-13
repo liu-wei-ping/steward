@@ -2,7 +2,7 @@ CNF = {
 	DB_TABLE: {
 		"user_info": "user_info",
 		"task_info": "task_info",
-		"day_cycle_info": "day_cycle_info"
+		"cycle_info": "cycle_info"
 	},
 	OPT_STATE: {
 		SUCCESS_CODE: 1,

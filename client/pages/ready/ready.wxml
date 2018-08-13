@@ -1,82 +1,12 @@
-<!--pages/ready/ready.wxml-->
-<view class='container' style="height:{{winHeight}}px">
-  <view class='flex-tab' style="height:40px">
+<view style="height:{{winHeight}}px;">
+  <view class='flex-tab' style="height:40px;background:#ccc;">
     <view bindtap='swichTab' data-currentTab='0' class="flex-tab-list left {{currentTab=='0'?'active':''}}">上 班</view>
     <view bindtap='swichTab' data-currentTab='1' class="flex-tab-list right {{currentTab=='1'?'active':''}}">下 班</view>
   </view>
-  <view class="flex-box" style="height:{{winHeight-40}}px">
-    <block wx:if="{{currentTab==0}}">
-      <view class="flex-item work">
-        <view class='work-item'>
-          <view class='tips-weather'>
-            <view class='weather-text'>
-              <view>{{weatherData.city.text}}</view>
-              <view>{{weatherData.weather.text}}</view>
-              <view>{{weatherData.windpower.text}}</view>
-              <view>{{weatherData.temperature.text}}</view>
-              <view>{{weatherData.winddirection.text}}</view>
-            </view>
-            <view class='weather-split'>
-              <view space="nbsp"> : </view>
-              <view space="nbsp"> : </view>
-              <view space="nbsp"> : </view>
-              <view space="nbsp"> : </view>
-              <view space="nbsp"> : </view>
-            </view>
-            <view class='weather-data'>
-              <view>{{weatherData.city.data}}</view>
-              <view>{{weatherData.weather.data}}</view>
-              <view>{{weatherData.windpower.data}}</view>
-              <view>{{weatherData.temperature.data}}</view>
-              <view>{{weatherData.winddirection.data}}</view>
-            </view>
-          </view>
-        </view>
-        <view class='work-item'>
-          <view class='item'>
-            <image src='../images/早餐.png'></image>
-            <input type='digit' placeholder="我的早餐费~"></input>
-          </view>
-          <view class='item'>
-            <image src='../images/交通.png'></image>
-            <input type='digit' placeholder="我的交通费~"></input>
-          </view>
-          <view class='item'>
-            <image src='../images/其他.png'></image>
-            <input type='digit' placeholder="其他费用~"></input>
-          </view>
-          <view class='bottom-box'>
-            <view class='btn'>
-              <text>确定</text>
-            </view>
-          </view>
-        </view>
-        <view class='work-item record'>
-          <view class='record-item'>
-            <view class='record-text'>
-              <text>{{wakeUpTimeConfig['min']+'~'+wakeUpTimeConfig['max']}}</text>
-            </view>
-            <view class='btn wakeUp' bindtap='wakeUp'>
-              <text>早起</text>
-            </view>
-          </view>
-          <view class='record-item'>
-            <view class='record-text'>
-              <text>{{attendanceFlag?'已经打过卡了':'09:30上班'}}</text>
-            </view>
-            <view class='btn punchIn' bindtap='attendance'>
-              <text>上班打卡</text>
-            </view>
-          </view>
-        </view>
-      </view>
-
-    </block>
-    <block wx:if="{{currentTab==1}}">
-      下班
-      <!-- <view class="flex-item map"> -->
-      <!-- <import src="../template/traffic.wxml" />
-        <template is="traffic" data="{{originName,destinationName,strategy,scale,longitude,latitude,markers,polyline,transitStrategy,drivingStrategy}}" /> -->
-    </block>
+  <view style="height:{{winHeight-120}}px;background:blue;">
+   
+  </view>
+  <view style="height:80px;background:red;" >
+      88888
   </view>
 </view>

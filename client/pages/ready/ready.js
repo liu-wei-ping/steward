@@ -10,8 +10,12 @@ Page({
    */
   data: {
     wakeUpTimeConfig: {
-      min: '00:00',
-      max: '23:56'
+      min: '5:30',
+      max: '08:30'
+    },
+    attendanceTimeConfig: {
+      min: '05:30',
+      max: '11:00'
     },
     wakeUpFlag: false,
     attendanceFlag: false,
@@ -29,22 +33,21 @@ Page({
     var weatherData = app.globalData.weatherData;
     var winHeight = app.globalData.phoneInfo.windowHeight;
     var wakeUpTimeConfig = this.data.wakeUpTimeConfig;
+    var attendanceTimeConfig = this.data.attendanceTimeConfig;
     var nowTime = util.formatDate(new Date(), "h:m:s");
-    var wakeUpFlag = true;
-    if (wakeUpTimeConfig['max'] > nowTime && wakeUpTimeConfig['min'] < nowTime) {
-      var params = {
-        recordDate: util.formatDate(new Date(), "Y-M-D")
-      }
-      request.postReq("queryDaycycleInfo", params, function(res) {
-        console.log(res);
-      })
-
-    } else {
-      wakeUpFlag = false;
-      console.log(nowTime, "当前时间不能早起")
+    var wakeUpFlag = this.data.wakeUpFlag;
+    var attendanceFlag = this.data.attendanceFlag;
+    if (wakeUpTimeConfig['max'] >= nowTime && wakeUpTimeConfig['min'] <= nowTime) {
+      wakeUpFlag = true;
+      console.log(nowTime, "早起打卡时间了")
+    }
+    if (attendanceTimeConfig['max'] >= nowTime && attendanceTimeConfig['min'] <= nowTime) {
+      attendanceFlag = true;
+      console.log(nowTime, "上班打卡时间了")
     }
     this.setData({
       wakeUpFlag: wakeUpFlag,
+      attendanceFlag: attendanceFlag,
       winHeight: winHeight,
       weatherData: weatherData
     })
@@ -117,14 +120,14 @@ Page({
   },
   wakeUp: function(e) {
     var wakeUpFlag = this.data.wakeUpFlag;
-    if (wakeUpFlag) { //起床打卡
+    if (wakeUpFlag) { //早起打卡
       var wakeUpTime = util.formatDate(new Date(), "h:m:s");
       var params = {
         recordTime: wakeUpTime,
         timeType: 1,
         timeTypeName: '起床'
       }
-      request.postReq("createDaycycleInfo", params, (res) => {
+      request.postReq("createCycleInfo", params, (res) => {
         if (res.code == 1) {
           wx.vibrateLong();
         }
@@ -137,22 +140,34 @@ Page({
     })
   },
   attendance: function(e) {
-    var attendance = this.data.attendanceFlag;
-    if (attendance) {
+    var attendanceFlag = this.data.attendanceFlag;
+    if (attendanceFlag) {
       var attendanceTime = util.formatDate(new Date(), "h:m:s");
       var params = {
         recordTime: attendanceTime,
         timeType: 2,
         timeTypeName: '上班打卡'
       }
-      request.postReq("createDaycycleInfo", params, (res) => {
+      request.postReq("createCycleInfo", params, (res) => {
         if (res.code == 1) {
           wx.vibrateLong()
         }
       })
-    } else {}
+    } else {
+      console.log("当前时间不能上班打卡了")
+    }
     wx.navigateTo({
       url: '../daycycle/daycycle?timeType=2',
     })
+  },
+  bindchange: function(e) {
+    console.log(e);
+    var currentItemId = e.detail.currentItemId;
+    var source = e.detail.source;
+    if (source == "touch") {
+      this.setData({
+        currentTab: currentItemId
+      })
+    }
   }
 })

@@ -1,4 +1,4 @@
-// pages/daycycle/daycycle.js
+// pages/daycycle/cycle.js
 var util = require('../../utils/util.js')
 var request = require('../../utils/request')
 Page({
@@ -8,14 +8,13 @@ Page({
    */
   data: {
     dayCycleList: [],
-    time: 'wakeUp',
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    request.postReqOfAll("queryDaycycleInfo", {
+    request.postReqOfAll("queryCycleInfo", {
       timeType: options.timeType,
       recordDate: util.formatDate(new Date(), "Y-M-D")
     }, (res) => {

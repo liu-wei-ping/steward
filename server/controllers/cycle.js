@@ -3,7 +3,7 @@ const debug = require('debug');
 const assert = require('assert');
 const db = require("../tools/db")
 const dateUtil = require("../utils/dateUtil")
-
+const {mysql} = require("../qcloud");
 
 /**
  * 创建
@@ -14,7 +14,7 @@ const dateUtil = require("../utils/dateUtil")
 async function create(ctx, next) {
     let dayCycleInfo = ctx.request.body;
     dayCycleInfo.recordDate=dateUtil.formatUnixTime(new Date(),"Y-M-D");
-    await db.create(CNF.DB_TABLE.day_cycle_info, dayCycleInfo, function (res) {
+    await db.create(CNF.DB_TABLE.cycle_info, dayCycleInfo, function (res) {
         assert.notEqual(res, -1, "create day_cycle_info fail");
         SUCCESS(ctx, res);
     }).catch(function (error) {
@@ -53,7 +53,7 @@ async function update(ctx, next) {
         uid: reqinfo.uid,
         id: reqinfo.id
     }
-    await db.update(CNF.DB_TABLE.day_cycle_info, dayCycleInfo, condition, function (res) {
+    await db.update(CNF.DB_TABLE.cycle_info, dayCycleInfo, condition, function (res) {
         assert.notEqual(res, -1, "update day_cycle_info fail");
         SUCCESS(ctx, res);
     }).catch(function (error) {
@@ -79,11 +79,14 @@ async function query(ctx, next) {
     if(reqinfo.timeType){
         condition.timeType=reqinfo.timeType
     }
+    if(reqinfo.timeType){
+        condition.timeType=reqinfo.timeType
+    }
     if(reqinfo.id){
         condition.id=reqinfo.id
     }
-    await db.geByCondition(CNF.DB_TABLE.day_cycle_info, condition, function (res) {
-        assert.notEqual(res, -1, "query day_cycle_info fail");
+    await db.geByCondition(CNF.DB_TABLE.cycle_info, condition, function (res) {
+        assert.notEqual(res, -1, "query cycle_info fail");
         SUCCESS(ctx, res);
     }).catch(function (error) {
         console.error(error);

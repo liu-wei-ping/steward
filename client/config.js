@@ -33,11 +33,11 @@ var config = {
     //删除任务
     deleteTaskInfo: `${host}/weapp/task/del`,
     //查询一天时间记录
-    queryDaycycleInfo: `${host}/weapp/daycycle/query`,
+    queryCycleInfo: `${host}/weapp/cycle/query`,
     //创建一天时间记录
-    createDaycycleInfo: `${host}/weapp/daycycle/create`,
+    createCycleInfo: `${host}/weapp/cycle/create`,
     //更新一天时间记录
-    upateDaycycleInfo: `${host}/weapp/daycycle/update`,
+    upateCycleInfo: `${host}/weapp/cycle/update`,
   }
 };
 

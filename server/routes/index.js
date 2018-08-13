@@ -46,9 +46,9 @@ router.post('/task/query', controllers.task.query)
 //更新任务信息
 router.post('/task/update', controllers.task.update)
 //创建一天时间记录
-router.post('/daycycle/create', controllers.daycycle.create)
+router.post('/cycle/create', controllers.cycle.create)
 //更新一天时间记录
-router.post('/daycycle/update', controllers.daycycle.update)
+router.post('/cycle/update', controllers.cycle.update)
 //查询一天时间记录
-router.post('/daycycle/query', controllers.daycycle.query)
+router.post('/cycle/query', controllers.cycle.query)
 module.exports = router

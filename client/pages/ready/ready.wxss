@@ -8,6 +8,7 @@
   width: 100%;
   top: 0;
   background: #00abff;
+  /* z-index: 1; */
 }
 
 .flex-tab-list {
@@ -33,98 +34,77 @@
   background: #5a79ba;
 }
 
-.flex-box {
+.swiper-box {
   position: fixed;
   top: 40px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background: yellowgreen;
+}
+
+.swiper-item {
   height: 100%;
-  width: 100%;
 }
 
-.work {
-  height: 100%;
-  padding: 10px;
-}
-
-.work-tips {
-  border: #ccc 1px solid;
-  border-radius: 10px;
-  margin: 10px 10px;
-}
-
-.tips-weather {
+.task-box {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  font: 13px;
-  /* background: #0cd1df; */
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  width: 90%;
 }
 
-.weather-split {
-  margin: 0px 8px 0px 8px;
+.task-declare {
+  background: #ccc;
 }
 
-.work-item {
-  margin: 0px 10px 10px 10px;
-  padding: 20px;
+.task-scroll {
   border: #ccc 1px solid;
-  border-radius: 10px;
-  /* background: #00abff; */
-}
-
-.work-item > .item {
-  display: flex;
-  flex-direction: row;
-  border-bottom: #ccc 1px solid;
-  align-items: flex-end;
-  margin-bottom: 15px;
-}
-
-.item image {
-  height: 30px;
-  width: 30px;
-}
-
-.item input {
-  padding-left: 20rpx;
+  height: 180px;
+  /* margin: 10px; */
+  background: blue;
+  margin-bottom: 10px;
 }
 
 .bottom-box {
   display: flex;
-  width: 100%;
-  justify-content: flex-end;
-}
-
-.record {
-  display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
+  /* background: red; */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* z-index: 1; */
 }
 
-.record-item {
+.clock-box {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width: 50%;
-  height: 100%;
 }
 
-.record-text {
-  height: 50%;
+.clock-in {
+  font-size: 14px;
   color: #ccc;
-  font-size:15px; 
-  font-weight:700;
+}
+
+.clock-dec {
+  font-size: 15px;
+  font-weight: 500;
+  color: #ccc;
+}
+
+.btn {
+  /* padding: 10rpx; */
+  background: #0af;
+  border-radius: 10px;
 }
 
 .wakeUp {
   background: #1aad19;
-  width: 80%;
-  padding: 10rpx;
-}
-
-.punchIn {
-  padding: 10rpx;
-  background: #00abff;
-  width: 80%;
 }
