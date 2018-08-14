@@ -1,0 +1,56 @@
+<!--pages/working/detail.wxml-->
+<!-- <view class='d-continer'> -->
+<form bindsubmit="editSubmit" bindreset="formReset">
+  <input hidden name="id" value='{{taskInfo.id}}'></input>
+  <!-- <view class='task-add'> -->
+  <view class='add-item'>
+    <label>创建人</label>
+    <input name="planHour" disabled="{{true}}" value="{{taskInfo.realName}}"></input>
+  </view>
+  <view class='add-item'>
+    <label>创建时间</label>
+    <input name="planHour" disabled="{{true}}" value="{{taskInfo.create_time}}"></input>
+  </view>
+  <view class='add-item'>
+    <label>任务名称</label>
+    <input placeholder='任务名称' name="taskName" value="{{taskInfo.taskName}}"></input>
+  </view>
+  <view class='add-item'>
+    <label>预估(小时)</label>
+    <input placeholder='计划时间（小时）' type="digit" name="planHour" value="{{taskInfo.planHour}}"></input>
+  </view>
+  <view class='add-item'>
+    <label>任务级别</label>
+    <radio-group class="group" name="level" bindchange="radioChange">
+      <view class="label" wx:for="{{radioItems}}" wx:key="{{key}}">
+        <radio id="{{item.name}}" hidden value="{{item.value}}" checked="{{item.checked}}"></radio>
+        <view class="label-icon">
+          <view class="icon {{item.checked ? 'checked ': ''}}"></view>
+        </view>
+        <label class="label-text" for="{{item.name}}">
+          <text>{{item.name}}</text>
+        </label>
+      </view>
+    </radio-group>
+  </view>
+  <view class='add-item'>
+    <label>任务内容</label>
+    <textarea name="taskInfo" value="{{taskInfo.taskInfo}}" placeholder='任务内容'></textarea>
+  </view>
+  <block wx:if="{{isAssign}}">
+    <input hidden name="stat" value='3'></input>
+    <view class='add-item'>
+      <label>经办人</label>
+      <input placeholder='经办人' name="assignerName"></input>
+    </view>
+    <view class='add-item'>
+      <label>经办人邮箱</label>
+      <input placeholder='经办人邮箱' name="assignerMail"></input>
+    </view>
+  </block>
+  <!-- </view> -->
+  <view>
+    <button form-type='submit'>确定</button>
+  </view>
+</form>
+<!-- </view> -->

@@ -183,7 +183,14 @@ Page({
       })
     }
   },
-  assignTask: function(e) {},
+  assignTask: function(e) {
+    var index = e.currentTarget.dataset.index;
+    var taskList = this.data.taskList || [];
+    var item = taskList[index];
+    wx.navigateTo({
+      url: './detail?isAssign=true&tid=' + item.id,
+    })
+  },
   startTask: function(e) {
     var index = e.currentTarget.dataset.index;
     var taskList = this.data.taskList || [];
@@ -231,13 +238,21 @@ Page({
       stat: 2,
       version: item.version
     }
-    var that=this;
+    var that = this;
     request.postReq("updateTaskInfo", params, function(res) {
       taskList.splice(index, 1);
       that.setData({
         taskList: taskList,
         haveData: taskList.length > 0
       })
+    })
+  },
+  navigateToDetail: function(e) {
+    var index = e.currentTarget.dataset.index;
+    var taskList = this.data.taskList || [];
+    var item = taskList[index];
+    wx.navigateTo({
+      url: './detail?tid=' + item.id,
     })
   },
   notifyAssigner: function(e) {

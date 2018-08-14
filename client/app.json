@@ -13,7 +13,8 @@
     "pages/statistic/setting",
     "pages/statistic/address",
     "pages/template/task",
-    "pages/daycycle/daycycle"
+    "pages/daycycle/daycycle",
+    "pages/working/detail"
   ],
   "window": {
     "backgroundColor": "#f8f8f8",

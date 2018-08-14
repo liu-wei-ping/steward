@@ -6,14 +6,14 @@
         <view class='title-level'>
           <text>{{item.levelText}}</text>
         </view>
-        <view class='title-taskName'>
+        <view class='title-taskName' data-index='{{index}}' bindtap='navigateToDetail'>
           <text>{{item.taskName}}</text>
         </view>
         <view class='title-bracket' data-index='{{index}}' data-bracket="{{item.bracket?item.bracket:'down'}}" bindtap='bracketClick'>
           <image class='bk-image' src="../images/{{item.bracket?item.bracket:'down'}}.png"></image>
         </view>
       </view>
-      <view class='t-task-info'>
+      <view class='t-task-info' data-index='{{index}}' bindtap='navigateToDetail'>
         <text>{{item.taskInfo}}</text>
       </view>
       <view hidden="{{item.hiddenFlag==true || item.hiddenFlag==false ?item.hiddenFlag:true}}">

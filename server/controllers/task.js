@@ -57,7 +57,7 @@ async function update(ctx, next) {
     if (reqinfo.endTime) {
         taskinfo.endTime = reqinfo.endTime;
     }
-    if (reqinfo.stat) {
+    if (reqinfo.stat) {updateTaskInfo
         taskinfo.stat = reqinfo.stat;
     }
     preUpdateTask(reqinfo, taskinfo);

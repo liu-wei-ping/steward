@@ -1,6 +1,6 @@
 /* pages/ready/ready.wxss */
 
-.flex-tab {
+.head-box {
   position: fixed;
   display: flex;
   flex-direction: row;
@@ -8,15 +8,14 @@
   width: 100%;
   top: 0;
   background: #00abff;
-  /* z-index: 1; */
+  z-index: 1;
 }
 
-.flex-tab-list {
+.head-item {
   width: 30%;
   color: #fff;
   font-size: 20px;
   background: #ccc;
-  line-height: 40px;
   text-align: center;
 }
 
@@ -34,13 +33,13 @@
   background: #5a79ba;
 }
 
+.body-box {
+  height: 10%;
+}
+
 .swiper-box {
-  position: fixed;
-  top: 40px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  background: yellowgreen;
+  margin-top: 40px;
+  height: 100%;
 }
 
 .swiper-item {
@@ -55,16 +54,26 @@
   width: 90%;
 }
 
+.weather {
+  width: 100%;
+}
+
 .task-declare {
-  background: #ccc;
+  /* background: #ccc; */
 }
 
 .task-scroll {
   border: #ccc 1px solid;
-  height: 180px;
-  /* margin: 10px; */
-  background: blue;
+  height: 200px;
   margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.weather-scroll {
+  height: 40px;
+  border-radius: 0px;
+  border: #ccc 0px solid;
+  text-align: center;
 }
 
 .bottom-box {
@@ -72,12 +81,11 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  /* background: red; */
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  /* z-index: 1; */
+  background: #fff;
 }
 
 .clock-box {
@@ -94,15 +102,14 @@
 }
 
 .clock-dec {
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 13px;
   color: #ccc;
 }
 
 .btn {
-  /* padding: 10rpx; */
-  background: #0af;
-  border-radius: 10px;
+  background: #1aad19;
+  border-radius: 5px;
+  width: 70%;
 }
 
 .wakeUp {

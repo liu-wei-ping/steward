@@ -13,7 +13,7 @@
           <input placeholder='任务名称' name="taskName" value="{{taskName}}" focus='{{true}}'></input>
         </view>
         <view class='add-item'>
-          <label>任务时间</label>
+          <label>预估时间</label>
           <input placeholder='计划时间（小时）' type="digit" name="planHour" value="{{planHour}}"></input>
         </view>
         <view class='add-item'>

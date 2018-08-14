@@ -51,6 +51,7 @@ Page({
       winHeight: winHeight,
       weatherData: weatherData
     })
+    console.log(weatherData);
   },
 
   /**

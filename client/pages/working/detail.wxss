@@ -1,0 +1,70 @@
+/* pages/working/detail.wxss */
+.task-add {
+  width: 98%;
+  margin: 50px auto;
+  text-align: center;
+  border: #ccc 1px solid;
+  border-radius: 10px;
+  background: #fff;
+}
+.add-item {
+  margin: 10px auto;
+  width: inherit;
+  display: flex;
+  flex-direction: row;
+}
+.add-item> label {
+  padding-right: 20rpx;
+  text-align: right;
+  width: 25%;
+  font-size: 14px;
+}
+.add-item>input {
+  text-align: left;
+  width: 100%;
+  border-bottom: #ccc 1px solid;
+}
+.add-item>textarea {
+  text-align: left;
+  width: 100%;
+  border: #ccc 1px solid;
+  border-radius: 10rpx;
+}
+radio-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.label-icon {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 18px;
+  height: 18px;
+  background: #fcfff4;
+  border-radius: 50px;
+}
+.icon {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  background: #ccc;
+  border-radius: 50%;
+}
+.checked {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  background: #1aad19;
+  border-radius: 50%;
+}
+.label-text {
+  /* color: red; */
+  font-size: 18px;
+}
