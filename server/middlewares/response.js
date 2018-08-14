@@ -6,10 +6,10 @@ const debug = require('debug')('koa-weapp-demo')
 module.exports = async function (ctx, next) {
     try {
         // 调用下一个 middleware
-        console.info("request is running start");
-        console.log("GET 请求解码参数之前。。。")
-        console.log(ctx.querystring)
-        console.log(ctx.query);
+        // console.info('request is running start')
+        // console.log('GET 请求解码参数之前。。。')
+        // console.log(ctx.querystring)
+        // console.log(ctx.query)
         await next()
 
         // 处理响应结果

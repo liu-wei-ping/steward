@@ -14,7 +14,7 @@
         </view>
       </view>
       <view class='t-task-info' data-index='{{index}}' bindtap='navigateToDetail'>
-        <text>{{item.taskInfo}}</text>
+        <text>{{item.taskDescribe}}</text>
       </view>
       <view hidden="{{item.hiddenFlag==true || item.hiddenFlag==false ?item.hiddenFlag:true}}">
         <view class='t-task-time'>
@@ -77,7 +77,7 @@
         </view>
       </view>
       <view class='t-run-info'>
-        <text>{{item.taskInfo}}</text>
+        <text>{{item.taskDescribe}}</text>
       </view>
       <view class='t-run-time'>
         <view class='task-item'>

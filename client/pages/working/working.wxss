@@ -52,6 +52,7 @@ page {
 
 .add-item> label {
   padding-right: 20rpx;
+  font-size: 15px;
   text-align: right;
   width: 40%;
 }

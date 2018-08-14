@@ -112,9 +112,9 @@ Page({
   },
   editSubmit: function(e) {
     var params = e.detail.value;
-    console.log(value);
+    console.log(params);
     request.postReq("updateTaskInfo", params, (res) => {
-
+          console.log(res);
     });
   },
 })

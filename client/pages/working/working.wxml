@@ -13,7 +13,7 @@
           <input placeholder='任务名称' name="taskName" value="{{taskName}}" focus='{{true}}'></input>
         </view>
         <view class='add-item'>
-          <label>预估时间</label>
+          <label>预估时间(小时)</label>
           <input placeholder='计划时间（小时）' type="digit" name="planHour" value="{{planHour}}"></input>
         </view>
         <view class='add-item'>
@@ -31,8 +31,8 @@
           </radio-group>
         </view>
         <view class='add-item'>
-          <label>任务内容</label>
-          <textarea name="taskInfo" value="{{taskInfo}}" placeholder='任务内容'></textarea>
+          <label>描述</label>
+          <textarea name="taskDescribe" value="{{taskDescribe}}" placeholder='任务内容'></textarea>
         </view>
         <view style='width:90%;margin:10px auto;'>
           <button form-type='submit' type="primary">保 存</button>

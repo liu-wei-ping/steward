@@ -2,6 +2,7 @@
 <!-- <view class='d-continer'> -->
 <form bindsubmit="editSubmit" bindreset="formReset">
   <input hidden name="id" value='{{taskInfo.id}}'></input>
+  <input hidden name="version" value='{{taskInfo.version}}'></input>
   <!-- <view class='task-add'> -->
   <view class='add-item'>
     <label>创建人</label>
@@ -35,17 +36,17 @@
   </view>
   <view class='add-item'>
     <label>任务内容</label>
-    <textarea name="taskInfo" value="{{taskInfo.taskInfo}}" placeholder='任务内容'></textarea>
+    <textarea name="taskInfo" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
   </view>
   <block wx:if="{{isAssign}}">
     <input hidden name="stat" value='3'></input>
     <view class='add-item'>
       <label>经办人</label>
-      <input placeholder='经办人' name="assignerName"></input>
+      <input placeholder='经办人' value="{{'威威'}}" name="handlerName"></input>
     </view>
     <view class='add-item'>
       <label>经办人邮箱</label>
-      <input placeholder='经办人邮箱' name="assignerMail"></input>
+      <input placeholder='经办人邮箱' value="{{'888888@163.com'}}" name="e_mail"></input>
     </view>
   </block>
   <!-- </view> -->

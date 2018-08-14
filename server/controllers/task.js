@@ -1,8 +1,10 @@
-const {SUCCESS, FAILED, CNF} = require("./constants")
-const debug = require('debug');
-const assert = require('assert');
-const db = require("../tools/db")
-const dateUtil = require("../utils/dateUtil")
+const {SUCCESS, FAILED, CNF} = require('./constants')
+const {mysql} = require('../qcloud')
+const debug = require('debug')
+const assert = require('assert')
+const db = require('../tools/db')
+const dateUtil = require('../utils/dateUtil')
+const uuidGenerator = require('uuid/v4')
 
 /**
  * 删除任务
@@ -11,15 +13,14 @@ const dateUtil = require("../utils/dateUtil")
  * @returns {Promise<void>}
  */
 async function del(ctx, next) {
-    let {uid, id} = ctx.query;
+    let {uid, id} = ctx.query
     await db.del(CNF.DB_TABLE.task_info, {id: id, uid: uid}, function (res) {
-        SUCCESS(ctx, res);
+        SUCCESS(ctx, res)
     }).catch(function (error) {
-        console.error(error);
-        FAILED(ctx, error);
+        console.error(error)
+        FAILED(ctx, error)
     })
 }
-
 
 /**
  * 创建任务
@@ -28,13 +29,13 @@ async function del(ctx, next) {
  * @returns {Promise<void>}
  */
 async function create(ctx, next) {
-    let taskinfo = ctx.request.body;
+    let taskinfo = ctx.request.body
     await db.create(CNF.DB_TABLE.task_info, taskinfo, function (res) {
-        assert.notEqual(res, -1, "create task fail");
-        SUCCESS(ctx, res);
+        assert.notEqual(res, -1, 'create task fail')
+        SUCCESS(ctx, res)
     }).catch(function (error) {
-        console.error(error);
-        FAILED(ctx, error);
+        console.error(error)
+        FAILED(ctx, error)
     })
 }
 
@@ -46,33 +47,93 @@ async function create(ctx, next) {
  * @returns {Promise<void>}
  */
 async function update(ctx, next) {
-    let reqinfo = ctx.request.body;
-    let taskinfo = {};
+    let reqinfo = ctx.request.body
+    let taskinfo = {}
     if (reqinfo.taskName) {
-        taskinfo.taskName = reqinfo.taskName;
+        taskinfo.taskName = reqinfo.taskName
     }
     if (reqinfo.startTime) {
-        taskinfo.startTime = reqinfo.startTime;
+        taskinfo.startTime = reqinfo.startTime
     }
     if (reqinfo.endTime) {
-        taskinfo.endTime = reqinfo.endTime;
+        taskinfo.endTime = reqinfo.endTime
     }
-    if (reqinfo.stat) {updateTaskInfo
-        taskinfo.stat = reqinfo.stat;
+    if (reqinfo.stat) {
+        taskinfo.stat = reqinfo.stat
     }
-    preUpdateTask(reqinfo, taskinfo);
+    if (reqinfo.handlerUid) {
+        taskinfo.handlerUid = reqinfo.handlerUid
+    }
+    if (reqinfo.handlerName) {
+        taskinfo.handlerName = reqinfo.handlerName
+    }
+    preUpdateTask(reqinfo, taskinfo)
     let condition = {
         version: reqinfo.version,
         uid: reqinfo.uid,
         id: reqinfo.id
     }
-    await db.update(CNF.DB_TABLE.task_info, taskinfo, condition, function (res) {
-        assert.notEqual(res, -1, "update task fail");
-        SUCCESS(ctx, res);
-    }).catch(function (error) {
-        console.error(error);
-        FAILED(ctx, error);
-    })
+    //分配
+    if (taskinfo.stat == 3) {
+        await  db.updateOfTx(CNF.DB_TABLE.task_info, taskinfo, condition, function (res, t) {
+            // return  db.getById(CNF.DB_TABLE.task_info,condition.id,function (result) {
+            //     if (result && result[0]) {
+            //         var taksInfo = result[0];
+            //         // id:"00001",
+            //         var params = {
+            //             id:"00001",
+            //             taskId: taksInfo.id,
+            //             taskName: taksInfo.taskName,
+            //             taskCreateTime: taksInfo.create_time,
+            //             assignerUid: taksInfo.uid,
+            //             assignerName: taksInfo.realName,
+            //             handlerUid: taksInfo.handlerUid,
+            //             handlerName: taksInfo.handlerName,
+            //             e_mail: reqinfo.e_mail || '',
+            //             stat: 0
+            //         }
+            //         return db.create(CNF.DB_TABLE.task_handle_info,params,function (reps) {
+            //
+            //         });
+            //     }
+            //  })
+            return mysql(CNF.DB_TABLE.task_info).select("*").where({id: condition.id}).then(function (result) {
+                if (result && result[0]) {
+                    var taksInfo = result[0];
+                    var params = {
+                        id: uuidGenerator().replace(/-/g, ''),
+                        taskId: taksInfo.id,
+                        taskName: taksInfo.taskName,
+                        taskCreateTime: taksInfo.create_time,
+                        assignerUid: taksInfo.uid,
+                        assignerName: taksInfo.realName,
+                        handlerUid: taksInfo.handlerUid,
+                        handlerName: taksInfo.handlerName,
+                        e_mail: reqinfo.e_mail || '',
+                        stat: 0
+                    }
+                    return mysql(CNF.DB_TABLE.task_handle_info).insert(params);
+                }
+            })
+        }, function (resp) {
+            console.log("更新结果：", resp);
+            if (resp == -1) {
+                FAILED(ctx, resp)
+            } else {
+                SUCCESS(ctx, resp)
+            }
+        })
+
+    } else {
+        await
+            db.update(CNF.DB_TABLE.task_info, taskinfo, condition, function (res) {
+                assert.notEqual(res, -1, 'update task fail')
+                SUCCESS(ctx, res)
+            }).catch(function (error) {
+                console.error(error)
+                FAILED(ctx, error)
+            })
+    }
 }
 
 /**
@@ -81,21 +142,23 @@ async function update(ctx, next) {
  * @returns {Promise<*>}
  */
 async function preUpdateTask(reqinfo, taskinfo) {
-    var taskinfo = taskinfo || {};
-    //启动任务
+    var taskinfo = taskinfo || {}
+    // 启动任务
     if (reqinfo && reqinfo.stat == 1) {
         await db.getById(CNF.DB_TABLE.task_info, reqinfo.id, async function (res) {
             var nowTime = dateUtil.nowTime();
-            taskinfo.assignerUid = res[0].uid;
-            taskinfo.assignerName = res[0].realName;
-            taskinfo.assignTime = nowTime
-            taskinfo.startTime = nowTime
+            taskinfo.handlerUid = res[0].uid;
+            taskinfo.handlerName = res[0].realName;
+            taskinfo.assignTime = nowTime;
+            taskinfo.startTime = nowTime;
             taskinfo.planEndTime = dateUtil.dateAdd(nowTime, res[0].planHour || 0);
         })
-    } else if (reqinfo && reqinfo.stat == 2) {//任务完成
-        taskinfo.endTime = dateUtil.nowTime();
+    } else if (reqinfo && reqinfo.stat == 2) { // 任务完成
+        taskinfo.endTime = dateUtil.nowTime()
+    } else if (reqinfo && reqinfo.stat == 3) {//任务分配
+        taskinfo.assignTime = dateUtil.nowTime();
     }
-    return taskinfo;
+    return taskinfo
 }
 
 /**
@@ -106,12 +169,12 @@ async function preUpdateTask(reqinfo, taskinfo) {
  * @returns {Promise<void>}
  */
 async function query(ctx, next) {
-    let condition = ctx.request.body;
+    let condition = ctx.request.body
     await db.geByCondition(CNF.DB_TABLE.task_info, condition, function (res) {
-        SUCCESS(ctx, convert(res));
+        SUCCESS(ctx, convert(res))
     }).catch(function (error) {
-        console.error(error);
-        FAILED(ctx, error);
+        console.error(error)
+        FAILED(ctx, error)
     })
 }
 
@@ -129,8 +192,8 @@ function convert(res) {
             }
             if (item.planEndTime) {
                 item.planEndTime = dateUtil.formatTime(new Date(item.planEndTime))
-                //剩余时间负数说明超时了
-                item.remainTime = dateUtil.dateDiff(item.planEndTime, dateUtil.nowTime())+dateUtil.dateUnit();
+                // 剩余时间负数说明超时了
+                item.remainTime = dateUtil.dateDiff(item.planEndTime, dateUtil.nowTime()) + dateUtil.dateUnit()
             }
             if (item.endTime) {
                 item.endTime = dateUtil.formatTime(new Date(item.endTime))
@@ -140,15 +203,15 @@ function convert(res) {
             }
 
             if (item.level == 1) {
-                item.levelText = "一级";
+                item.levelText = '一级'
             } else if (item.level == 2) {
-                item.levelText = "二级";
+                item.levelText = '二级'
             } else if (item.level == 3) {
-                item.levelText = "三级";
+                item.levelText = '三级'
             }
         })
     }
-    return res;
+    return res
 }
 
 module.exports = {
