@@ -27,12 +27,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    var params = {
-      id: options.tid,
-    }
     var radioItems = this.data.radioItems;
-    request.postReq("queryTaskInfo", params, (res) => {
-      if (res.code == 1) {
+    request.getReq("getTaskInfo", "id=" + options.tid, (res) => {
+      if (res.code == 1 && res.data.length>0) {
         var taskInfos = res.data;
         var taskInfo = taskInfos ? taskInfos[0] : {};
         for (var i = 0; i < radioItems.length; i++) {
@@ -114,7 +111,13 @@ Page({
     var params = e.detail.value;
     console.log(params);
     request.postReq("updateTaskInfo", params, (res) => {
-          console.log(res);
+      console.log(res);
+      if (res.code == 1) {
+        wx.navigateBack({
+          delta: 1
+        })
+      }
+
     });
   },
 })

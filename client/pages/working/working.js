@@ -35,6 +35,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    console.log("onLoad");
     // var that = this;
     // request.postReq("queryTaskInfo", null, function(res) {
     //   console.log(res);
@@ -57,7 +58,30 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    console.log("onShow");
+    var taskList = [];
+    var haveData = false;
+    var params = {};
+    var currentTab = this.data.currentTab;
+    if (currentTab != 0) {
+      if (currentTab == 1) {
+        params.stat = 0;
+      } else if (currentTab == 2) {
+        params.stat = 1;
+      } else if (currentTab == 3) {
+        params.stat = 2;
+      }
+      request.postReq("queryTaskInfo", params, (res) => {
+        if (res.code == 1 && res.data.length > 0) {
+          taskList = res.data;
+          haveData = true;
+        }
+        this.setData({
+          taskList: taskList,
+          haveData: haveData
+        })
+      })
+    }
   },
 
   /**

@@ -16,7 +16,7 @@ function getReq(funKey, params, callback) {
     url: url,
     method: 'GET',
     success(result) {
-      // console.log('get request result' + JSON.stringify(result));
+      console.log('get request result' + JSON.stringify(result));
       if (callback && typeof(callback) == 'function') {
         callback(result.data);
       }

@@ -14,11 +14,11 @@
   </view>
   <view class='add-item'>
     <label>任务名称</label>
-    <input placeholder='任务名称' name="taskName" value="{{taskInfo.taskName}}"></input>
+    <input placeholder='任务名称' disabled="{{taskInfo.stat==3}}" name="taskName" value="{{taskInfo.taskName}}"></input>
   </view>
   <view class='add-item'>
     <label>预估(小时)</label>
-    <input placeholder='计划时间（小时）' type="digit" name="planHour" value="{{taskInfo.planHour}}"></input>
+    <input placeholder='计划时间（小时）' disabled="{{taskInfo.stat==3}}" type="digit" name="planHour" value="{{taskInfo.planHour}}"></input>
   </view>
   <view class='add-item'>
     <label>任务级别</label>
@@ -36,7 +36,7 @@
   </view>
   <view class='add-item'>
     <label>任务内容</label>
-    <textarea name="taskInfo" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
+    <textarea name="taskInfo" disabled="{{taskInfo.stat==3}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
   </view>
   <block wx:if="{{isAssign}}">
     <input hidden name="stat" value='3'></input>
@@ -48,10 +48,14 @@
       <label>经办人邮箱</label>
       <input placeholder='经办人邮箱' value="{{'888888@163.com'}}" name="e_mail"></input>
     </view>
+    <view>
+      <button form-type='submit' type='primary'>确定</button>
+    </view>
   </block>
-  <!-- </view> -->
-  <view>
-    <button form-type='submit'>确定</button>
-  </view>
+  <block wx:if="{{!isAssign && taskInfo.stat!=3 }}">
+    <view>
+      <button form-type='submit'>确定</button>
+    </view>
+  </block>
 </form>
 <!-- </view> -->

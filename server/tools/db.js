@@ -12,7 +12,7 @@ const assert = require('assert')
  * @param callback
  * @returns {Promise<void>}
  */
-async function getById (table, id, callback) {
+async function getById(table, id, callback) {
     await mysql(table).select('*').where({id: id}).then(function (res) {
         callback(res)
     }).catch(function (error) {
@@ -28,7 +28,7 @@ async function getById (table, id, callback) {
  * @param condition
  * @returns {Promise<void>}
  */
-async function geByCondition (table, condition, callback) {
+async function geByCondition(table, condition, callback) {
     await mysql(table).select('*').where(condition).orderBy('update_time', 'desc').then(function (res) {
         callback(res)
     }).catch(function (error) {
@@ -44,7 +44,7 @@ async function geByCondition (table, condition, callback) {
  * @param callback
  * @returns {Promise<void>}
  */
-async function create (table, data, callback) {
+async function create(table, data, callback) {
     data.id = uuidGenerator().replace(/-/g, '')
     data.version = 1
     await mysql(table).insert(data).then(function (res) {
@@ -63,12 +63,12 @@ async function create (table, data, callback) {
  * @param callback
  * @returns {Promise<void>}
  */
-async function update (table, data, condition, callback) {
-    assert.ok(condition.version, '版本号不能为空')
+async function update(table, data, condition, callback) {
+    // assert.ok(condition.version, '版本号不能为空')
     assert.ok(condition.id, '更新id不能为空')
     assert.ok(condition.uid, '用户uid不能为空')
     await mysql(table).select('version').where(condition).then(async (v) => {
-        if (v) {
+        if (v && v.length > 0) {
             data.version = v[0].version + 1
             await mysql(table).update(data).where(condition).then(function (res) {
                 callback({id: condition.id, version: data.version})
@@ -92,7 +92,7 @@ async function update (table, data, condition, callback) {
  * @param callback
  * @returns {Promise<void>}
  */
-async function del (table, condition, callback) {
+async function del(table, condition, callback) {
     assert.ok(condition.id, '删除id不能为空')
     assert.ok(condition.uid, '用户uid不能为空')
     await mysql(table).del().where(condition).then(function (res) {
@@ -103,7 +103,7 @@ async function del (table, condition, callback) {
     })
 }
 
-function updateOfTx (table, data, conditon, callback, result) {
+function updateOfTx(table, data, conditon, callback, result) {
     mysql.transaction(function (t) {
         return mysql(table)
             .transacting(t)
@@ -125,6 +125,7 @@ function updateOfTx (table, data, conditon, callback, result) {
         return result(-1)
     })
 }
+
 // knex.transaction(function(t) {
 //     return knex('foo')
 //         .transacting(t)

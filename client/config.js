@@ -28,6 +28,8 @@ var config = {
     createTaskInfo: `${host}/weapp/task/create`,
     //查询任务
     queryTaskInfo: `${host}/weapp/task/query`,
+    //查询任务明细
+    getTaskInfo: `${host}/weapp/task/get`,
     //更新任务
     updateTaskInfo: `${host}/weapp/task/update`,
     //删除任务

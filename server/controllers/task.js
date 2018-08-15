@@ -73,67 +73,14 @@ async function update(ctx, next) {
         uid: reqinfo.uid,
         id: reqinfo.id
     }
-    //分配
-    if (taskinfo.stat == 3) {
-        await  db.updateOfTx(CNF.DB_TABLE.task_info, taskinfo, condition, function (res, t) {
-            // return  db.getById(CNF.DB_TABLE.task_info,condition.id,function (result) {
-            //     if (result && result[0]) {
-            //         var taksInfo = result[0];
-            //         // id:"00001",
-            //         var params = {
-            //             id:"00001",
-            //             taskId: taksInfo.id,
-            //             taskName: taksInfo.taskName,
-            //             taskCreateTime: taksInfo.create_time,
-            //             assignerUid: taksInfo.uid,
-            //             assignerName: taksInfo.realName,
-            //             handlerUid: taksInfo.handlerUid,
-            //             handlerName: taksInfo.handlerName,
-            //             e_mail: reqinfo.e_mail || '',
-            //             stat: 0
-            //         }
-            //         return db.create(CNF.DB_TABLE.task_handle_info,params,function (reps) {
-            //
-            //         });
-            //     }
-            //  })
-            return mysql(CNF.DB_TABLE.task_info).select("*").where({id: condition.id}).then(function (result) {
-                if (result && result[0]) {
-                    var taksInfo = result[0];
-                    var params = {
-                        id: uuidGenerator().replace(/-/g, ''),
-                        taskId: taksInfo.id,
-                        taskName: taksInfo.taskName,
-                        taskCreateTime: taksInfo.create_time,
-                        assignerUid: taksInfo.uid,
-                        assignerName: taksInfo.realName,
-                        handlerUid: taksInfo.handlerUid,
-                        handlerName: taksInfo.handlerName,
-                        e_mail: reqinfo.e_mail || '',
-                        stat: 0
-                    }
-                    return mysql(CNF.DB_TABLE.task_handle_info).insert(params);
-                }
-            })
-        }, function (resp) {
-            console.log("更新结果：", resp);
-            if (resp == -1) {
-                FAILED(ctx, resp)
-            } else {
-                SUCCESS(ctx, resp)
-            }
+    await
+        db.update(CNF.DB_TABLE.task_info, taskinfo, condition, function (res) {
+            assert.notEqual(res, -1, 'update task fail')
+            SUCCESS(ctx, res)
+        }).catch(function (error) {
+            console.error(error)
+            FAILED(ctx, error)
         })
-
-    } else {
-        await
-            db.update(CNF.DB_TABLE.task_info, taskinfo, condition, function (res) {
-                assert.notEqual(res, -1, 'update task fail')
-                SUCCESS(ctx, res)
-            }).catch(function (error) {
-                console.error(error)
-                FAILED(ctx, error)
-            })
-    }
 }
 
 /**
@@ -147,35 +94,101 @@ async function preUpdateTask(reqinfo, taskinfo) {
     if (reqinfo && reqinfo.stat == 1) {
         await db.getById(CNF.DB_TABLE.task_info, reqinfo.id, async function (res) {
             var nowTime = dateUtil.nowTime();
-            taskinfo.handlerUid = res[0].uid;
-            taskinfo.handlerName = res[0].realName;
-            taskinfo.assignTime = nowTime;
-            taskinfo.startTime = nowTime;
-            taskinfo.planEndTime = dateUtil.dateAdd(nowTime, res[0].planHour || 0);
+
+            if (res[0].stat == 0) {//自己创建的任务 启动
+                taskinfo.handlerUid = res[0].uid;
+                taskinfo.handlerName = res[0].realName;
+                taskinfo.planEndTime = dateUtil.dateAdd(nowTime, res[0].planHour || 0);
+                taskinfo.assignTime = nowTime;
+                taskinfo.startTime = nowTime;
+            } else if (res[0].stat == 3) {//分配给我的任务 启动
+                let handleInfo = {
+                    stat: 1
+                }
+                db.update(CNF.DB_TABLE.task_handle_info, handleInfo, {
+                    taskId: reqinfo.id,
+                    handlerUid: reqinfo.uid
+                }, function (resp) {
+                    console.log("更新任务处理表状态")
+                })
+            }
         })
     } else if (reqinfo && reqinfo.stat == 2) { // 任务完成
         taskinfo.endTime = dateUtil.nowTime()
     } else if (reqinfo && reqinfo.stat == 3) {//任务分配
         taskinfo.assignTime = dateUtil.nowTime();
+        db.getById(CNF.DB_TABLE.task_info, reqinfo.id, function (result) {
+            if (result && result[0]) {
+                var taksInfo = result[0];
+                var params = {
+                    taskId: taksInfo.id,
+                    taskName: taksInfo.taskName,
+                    taskCreateTime: taksInfo.create_time,
+                    assignerUid: taksInfo.uid,
+                    assignerName: taksInfo.realName,
+                    handlerUid: taksInfo.handlerUid,
+                    handlerName: taksInfo.handlerName,
+                    e_mail: reqinfo.e_mail || '',
+                    stat: 0
+                }
+                db.create(CNF.DB_TABLE.task_handle_info, params, function (res) {
+
+                })
+            }
+        })
     }
     return taskinfo
 }
 
 /**
- *  查询任务列表
- *
+ * 查询任务明细
+ * @param ctx
+ * @param next
+ * @returns {Promise<void>}
+ */
+async function get(ctx, next) {
+    let {id} = ctx.query
+    await db.getById(CNF.DB_TABLE.task_info, id, function (res) {
+        SUCCESS(ctx, convert(res));
+    }).catch(function (error) {
+        console.error(error)
+        FAILED(ctx, error)
+    })
+}
+
+/**
+ * 查询任务列表
  * @param ctx
  * @param next
  * @returns {Promise<void>}
  */
 async function query(ctx, next) {
     let condition = ctx.request.body
-    await db.geByCondition(CNF.DB_TABLE.task_info, condition, function (res) {
-        SUCCESS(ctx, convert(res))
-    }).catch(function (error) {
-        console.error(error)
-        FAILED(ctx, error)
-    })
+    assert.ok(condition && condition.uid, "用户uid不存在")
+    if (condition.stat == 0) {//待办
+        //0 或3
+        await mysql(CNF.DB_TABLE.task_info).select("*").where({handlerUid: condition.uid, stat: 3}).orWhere({
+            stat: 0,
+            uid: condition.uid
+        }).then(async function (res) {
+            SUCCESS(ctx, convert(res))
+        }).catch(function (error) {
+            console.error(error)
+            FAILED(ctx, error)
+        })
+    } else if (condition.stat == 1 || condition.stat == 2) {//处理中或处理完成
+        await mysql(CNF.DB_TABLE.task_info).select("*").where({
+            handlerUid: condition.uid,
+            stat: condition.stat
+        }).then(function (res) {
+            SUCCESS(ctx, convert(res))
+        }).catch(function (error) {
+            console.error(error)
+            FAILED(ctx, error)
+        })
+
+    }
+
 }
 
 function convert(res) {
@@ -218,5 +231,6 @@ module.exports = {
     del,
     create,
     update,
+    get,
     query
 }

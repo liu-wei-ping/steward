@@ -49,7 +49,7 @@
       </view>
       <view class='t-task-opt'>
         <view class='opt-item l-btn' data-index='{{index}}' bindtap='assignTask'>
-          <text>分 配</text>
+          <text>{{item.stat==3?'重新分配':'分 配'}}</text>
         </view>
         <view style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>
           <view class='harp-line'></view>

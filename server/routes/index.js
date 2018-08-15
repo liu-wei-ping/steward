@@ -43,6 +43,8 @@ router.post('/task/create', controllers.task.create)
 router.del('/task/delete', controllers.task.del)
 //查询任务
 router.post('/task/query', controllers.task.query)
+//查询任务明细
+router.get('/task/get', controllers.task.get)
 //更新任务信息
 router.post('/task/update', controllers.task.update)
 //创建一天时间记录
