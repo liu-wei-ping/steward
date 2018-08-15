@@ -10,13 +10,23 @@ Page({
    */
   data: {
     wakeUpTimeConfig: {
-      min: '5:30',
+      min: '00:00',
       max: '08:30'
     },
     attendanceTimeConfig: {
-      min: '05:30',
+      min: '00:00',
       max: '11:00'
     },
+    offWorkTimeConfig: {
+      min: '00:00',
+      max: '11:00'
+    },
+    sleepTimeConfig: {
+      min: '00:00',
+      max: '11:00'
+    },
+    offWorkFlag: false,
+    sleepFlag: false,
     wakeUpFlag: false,
     attendanceFlag: false,
     winHeight: '300', //手机屏幕高度
@@ -34,9 +44,13 @@ Page({
     var winHeight = app.globalData.phoneInfo.windowHeight;
     var wakeUpTimeConfig = this.data.wakeUpTimeConfig;
     var attendanceTimeConfig = this.data.attendanceTimeConfig;
+    var offWorkTimeConfig = this.data.offWorkTimeConfig;
+    var sleepTimeConfig = this.data.sleepTimeConfig;
     var nowTime = util.formatDate(new Date(), "h:m:s");
     var wakeUpFlag = this.data.wakeUpFlag;
     var attendanceFlag = this.data.attendanceFlag;
+    var offWorkFlag = this.data.offWorkFlag;
+    var sleepFlag = this.data.sleepFlag;
     if (wakeUpTimeConfig['max'] >= nowTime && wakeUpTimeConfig['min'] <= nowTime) {
       wakeUpFlag = true;
       console.log(nowTime, "早起打卡时间了")
@@ -45,9 +59,19 @@ Page({
       attendanceFlag = true;
       console.log(nowTime, "上班打卡时间了")
     }
+    if (offWorkTimeConfig['max'] >= nowTime && offWorkTimeConfig['min'] <= nowTime) {
+      offWorkFlag = true;
+      console.log(nowTime, "下班打卡时间了")
+    }
+    if (sleepTimeConfig['max'] >= nowTime && sleepTimeConfig['min'] <= nowTime) {
+      sleepFlag = true;
+      console.log(nowTime, "睡觉打卡时间了")
+    }
     this.setData({
       wakeUpFlag: wakeUpFlag,
       attendanceFlag: attendanceFlag,
+      offWorkFlag: offWorkFlag,
+      sleepFlag: sleepFlag,
       winHeight: winHeight,
       weatherData: weatherData
     })
@@ -159,6 +183,48 @@ Page({
     }
     wx.navigateTo({
       url: '../daycycle/daycycle?timeType=2',
+    })
+  },
+  offWork: function(e) {
+    var offWorkFlag = this.data.offWorkFlag;
+    if (offWorkFlag) {
+      var offWorkTime = util.formatDate(new Date(), "h:m:s");
+      var params = {
+        recordTime: offWorkTime,
+        timeType: 3,
+        timeTypeName: '下班打卡'
+      }
+      request.postReq("createCycleInfo", params, (res) => {
+        if (res.code == 1) {
+          wx.vibrateLong()
+        }
+      })
+    } else {
+      console.log("当前时间不能下班打卡了")
+    }
+    wx.navigateTo({
+      url: '../daycycle/daycycle?timeType=3',
+    })
+  },
+  sleep: function(e) {
+    var sleepFlag = this.data.sleepFlag;
+    if (sleepFlag) { //sleepTime打卡
+      var sleepTime = util.formatDate(new Date(), "h:m:s");
+      var params = {
+        recordTime: sleepTime,
+        timeType: 4,
+        timeTypeName: '睡觉'
+      }
+      request.postReq("createCycleInfo", params, (res) => {
+        if (res.code == 1) {
+          wx.vibrateLong();
+        }
+      })
+    } else {
+      console.log("当前时间不能打卡睡觉")
+    }
+    wx.navigateTo({
+      url: '../daycycle/daycycle?timeType=4',
     })
   },
   bindchange: function(e) {

@@ -87,7 +87,7 @@
       <view class='clock-in'>
         <text>XXX</text>
       </view>
-      <view class='btn wakeUp'>
+      <view class='btn wakeUp' bindtap='wakeUp'>
         <text>早起</text>
       </view>
       <view class='clock-dec'>
@@ -98,7 +98,7 @@
       <view class='clock-in'>
         <text>XXX</text>
       </view>
-      <view class='btn'>
+      <view class='btn' bindtap='attendance'>
         <text>上班打卡</text>
       </view>
       <view class='clock-dec'>
@@ -111,22 +111,22 @@
       <view class='clock-in'>
         <text>XXX</text>
       </view>
-      <view class='btn wakeUp'>
+      <view class='btn' bindtap='sleep'>
         <text>睡觉</text>
       </view>
       <view class='clock-dec'>
-        <text>XXX</text>
+        <text>{{'(睡觉时间 '+sleepTimeConfig['min']+'~'+sleepTimeConfig['max']+')'}}</text>
       </view>
     </view>
     <view class='clock-box'>
       <view class='clock-in'>
         <text>XXX</text>
       </view>
-      <view class='btn'>
+      <view class='btn' bindtap='offWork'>
         <text>下班打卡</text>
       </view>
       <view class='clock-dec'>
-        <text>XXX</text>
+       <text>{{'(打卡时间 '+offWorkTimeConfig['min']+'~'+offWorkTimeConfig['max']+')'}}</text>
       </view>
     </view>
   </block>
