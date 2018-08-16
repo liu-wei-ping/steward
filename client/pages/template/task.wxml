@@ -54,9 +54,9 @@
         <view style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>
           <view class='harp-line'></view>
         </view>
-        <view class='opt-item r-btn' data-index='{{index}}' bindtap='startTask'>
-          <text>启 动</text>
-        </view>
+          <view class='opt-item r-btn' data-index='{{index}}' bindtap='startTask'>
+            <text>启 动</text>
+          </view>
       </view>
     </view>
   </view>

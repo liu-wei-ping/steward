@@ -23,7 +23,7 @@ Page({
     },
     sleepTimeConfig: {
       min: '00:00',
-      max: '11:00'
+      max: '23:00'
     },
     offWorkFlag: false,
     sleepFlag: false,

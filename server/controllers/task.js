@@ -30,6 +30,7 @@ async function del(ctx, next) {
  */
 async function create(ctx, next) {
     let taskinfo = ctx.request.body
+    assert.ok(taskinfo && taskinfo.uid, "用户uid不存在")
     await db.create(CNF.DB_TABLE.task_info, taskinfo, function (res) {
         assert.notEqual(res, -1, 'create task fail')
         SUCCESS(ctx, res)
@@ -57,9 +58,6 @@ async function update(ctx, next) {
     }
     if (reqinfo.endTime) {
         taskinfo.endTime = reqinfo.endTime
-    }
-    if (reqinfo.stat) {
-        taskinfo.stat = reqinfo.stat
     }
     if (reqinfo.handlerUid) {
         taskinfo.handlerUid = reqinfo.handlerUid
@@ -92,16 +90,16 @@ async function preUpdateTask(reqinfo, taskinfo) {
     var taskinfo = taskinfo || {}
     // 启动任务
     if (reqinfo && reqinfo.stat == 1) {
+        taskinfo.stat = 1;
         await db.getById(CNF.DB_TABLE.task_info, reqinfo.id, async function (res) {
             var nowTime = dateUtil.nowTime();
-
-            if (res[0].stat == 0) {//自己创建的任务 启动
+            if (res[0].stat == 0 && res[0].uid == reqinfo.uid) {//自己创建的任务 启动
                 taskinfo.handlerUid = res[0].uid;
                 taskinfo.handlerName = res[0].realName;
                 taskinfo.planEndTime = dateUtil.dateAdd(nowTime, res[0].planHour || 0);
                 taskinfo.assignTime = nowTime;
                 taskinfo.startTime = nowTime;
-            } else if (res[0].stat == 3) {//分配给我的任务 启动
+            } else if (res[0].stat == 3 && res[0].uid != reqinfo.uid) {//其他人分配给我的任务 启动
                 let handleInfo = {
                     stat: 1
                 }
@@ -111,12 +109,25 @@ async function preUpdateTask(reqinfo, taskinfo) {
                 }, function (resp) {
                     console.log("更新任务处理表状态")
                 })
+            } else {
+
             }
         })
     } else if (reqinfo && reqinfo.stat == 2) { // 任务完成
-        taskinfo.endTime = dateUtil.nowTime()
+        taskinfo.endTime = dateUtil.nowTime();
+        taskinfo.stat = 2;
+        let handleInfo = {
+            stat: 2
+        }
+        db.update(CNF.DB_TABLE.task_handle_info, handleInfo, {
+            taskId: reqinfo.id,
+            handlerUid: reqinfo.uid
+        }, function (resp) {
+            console.log("更新任务处理表状态", resp);
+        })
     } else if (reqinfo && reqinfo.stat == 3) {//任务分配
         taskinfo.assignTime = dateUtil.nowTime();
+        taskinfo.stat = 3;
         db.getById(CNF.DB_TABLE.task_info, reqinfo.id, function (result) {
             if (result && result[0]) {
                 var taksInfo = result[0];
@@ -126,13 +137,13 @@ async function preUpdateTask(reqinfo, taskinfo) {
                     taskCreateTime: taksInfo.create_time,
                     assignerUid: taksInfo.uid,
                     assignerName: taksInfo.realName,
-                    handlerUid: taksInfo.handlerUid,
-                    handlerName: taksInfo.handlerName,
+                    handlerUid: reqinfo.handlerUid,
+                    handlerName: reqinfo.handlerName,
                     e_mail: reqinfo.e_mail || '',
                     stat: 0
                 }
-                db.create(CNF.DB_TABLE.task_handle_info, params, function (res) {
-
+                db.create(CNF.DB_TABLE.task_handle_info, params, function (resp) {
+                    console.log("任务分配成功", resp)
                 })
             }
         })
@@ -167,7 +178,10 @@ async function query(ctx, next) {
     assert.ok(condition && condition.uid, "用户uid不存在")
     if (condition.stat == 0) {//待办
         //0 或3
-        await mysql(CNF.DB_TABLE.task_info).select("*").where({handlerUid: condition.uid, stat: 3}).orWhere({
+        await mysql(CNF.DB_TABLE.task_info).select("*").where({handlerUid: condition.uid}).orWhere({
+            stat: 3,
+            uid: condition.uid
+        }).orWhere({
             stat: 0,
             uid: condition.uid
         }).then(async function (res) {
@@ -214,7 +228,12 @@ function convert(res) {
             if (item.startTime) {
                 item.startTime = dateUtil.formatTime(new Date(item.startTime))
             }
-
+            //判断是否是自己的任务标识
+            if (item.uid == item.handlerUid) {
+                item.isOwn = true;
+            } else {
+                item.isOwn = false;
+            }
             if (item.level == 1) {
                 item.levelText = '一级'
             } else if (item.level == 2) {

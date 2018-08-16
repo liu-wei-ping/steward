@@ -20,7 +20,7 @@ CNF = {
 }
 
 function SUCCESS (ctx, result) {
-    console.log('Success 结果：' + result)
+    console.log('Success 结果：' ,result);
     const body = {}
     body.message = CNF.OPT_STATE.SUCCESS
     body.code = CNF.OPT_STATE.SUCCESS_CODE
@@ -29,7 +29,7 @@ function SUCCESS (ctx, result) {
 }
 
 function FAILED (ctx, result) {
-    console.log('Failed 结果：' + result)
+    console.log('Failed 结果：' , result);
     const body = {}
     body.message = result != null && result != '' ? result : CNF.OPT_STATE.FAILED
     body.code = CNF.OPT_STATE.FAILED_CODE
