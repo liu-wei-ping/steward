@@ -42,13 +42,12 @@
     <input hidden name="stat" value='3'></input>
     <view class='add-item'>
       <label>经办人</label>
-      <input placeholder='经办人' value="{{'威威'}}" name="handlerName"></input>
-      <input  hidden name="handlerUid"></input>
+      <input  placeholder='经办人' bindblur='showSelect' value="{{taskInfo.handlerName}}" name="handlerName"></input>
+      <input  hidden name="handlerUid" value='{{taskInfo.handlerUid}}'></input>
     </view>
     <view class='add-item'>
       <label>经办人邮箱</label>
       <input placeholder='经办人邮箱' value="{{'888888@163.com'}}" name="e_mail"></input>
-      <dialog></dialog>
     </view>
     <view>
       <button form-type='submit' type='primary'>确定</button>
@@ -60,4 +59,5 @@
     </view>
   </block>
 </form>
+<selectable id="selectable" selectItems="{{selectItems}}"  bind:selected='selected'></selectable>
 <!-- </view> -->

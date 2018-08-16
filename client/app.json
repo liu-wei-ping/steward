@@ -14,8 +14,7 @@
     "pages/statistic/address",
     "pages/template/task",
     "pages/daycycle/daycycle",
-    "pages/working/detail",
-    "components/selectable/selectable"
+    "pages/working/detail"
   ],
   "window": {
     "backgroundColor": "#f8f8f8",

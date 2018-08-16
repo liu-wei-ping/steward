@@ -6,6 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    selectItems: [],
     radioItems: [{
         name: '一级',
         value: '1'
@@ -29,7 +30,7 @@ Page({
   onLoad: function(options) {
     var radioItems = this.data.radioItems;
     request.getReq("getTaskInfo", "id=" + options.tid, (res) => {
-      if (res.code == 1 && res.data.length>0) {
+      if (res.code == 1 && res.data.length > 0) {
         var taskInfos = res.data;
         var taskInfo = taskInfos ? taskInfos[0] : {};
         for (var i = 0; i < radioItems.length; i++) {
@@ -51,7 +52,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-
+    this.selectable = this.selectComponent("#selectable");
   },
 
   /**
@@ -120,4 +121,33 @@ Page({
 
     });
   },
+  showSelect: function(e) {
+    console.log(e);
+    console.log(this.selectable);
+    var selectItems = [{
+        name: '欧阳琳',
+        value: '001',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+    ]
+    this.setData({
+      selectItems: selectItems
+    })
+    this.selectable.showSelect(e);
+  },
+  selected: function(e) {
+    var selectedItem = this.selectable.data.selectedItem;
+    console.log(selectedItem);
+    var taskInfo = this.data.taskInfo;
+    taskInfo.handlerName = selectedItem.name;
+    taskInfo.handlerUid = selectedItem.value;
+    this.setData({
+      taskInfo: taskInfo
+    })
+  }
 })
