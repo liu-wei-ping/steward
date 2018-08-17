@@ -68,14 +68,15 @@
         <view>
           <label>经办人</label>
         </view>
-        <view style='border:none;'>
-          <input placeholder='经办人' name="handlerName"/>
+        <view class='handler' style=' border: none;'>
+          <view class='handler-text'>
+            <input placeholder='经办人' value="{{taskInfo.handlerName}}" name="handlerName" />
+          </view>
           <!-- <textable placeholder='经办人' textable-class="textable" name="handlerName" value="{{taskInfo.handlerName}}" bind:click="showSelect"></textable> -->
-          <view bindtap='showSelect'>
+          <view class='handler-btn' bindtap='showSelect'>
             <text>选择联系人</text>
           </view>
         </view>
-        <!-- <input  placeholder='经办人' bindfocus='showSelect'  name="handlerName"></input> -->
         <input hidden name="handlerUid" value='{{taskInfo.handlerUid}}'></input>
       </view>
       <view class='add-item'>
