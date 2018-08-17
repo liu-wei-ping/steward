@@ -3,7 +3,8 @@ CNF = {
         'user_info': 'user_info',
         'task_info': 'task_info',
         'task_handle_info': 'task_handle_info',
-        'cycle_info': 'cycle_info'
+        'cycle_info': 'cycle_info',
+        'user_linkman_info': 'user_linkman_info'
     },
     OPT_STATE: {
         SUCCESS_CODE: 1,

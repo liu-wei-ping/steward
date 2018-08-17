@@ -1,63 +1,100 @@
 <!--pages/working/detail.wxml-->
-<!-- <view class='d-continer'> -->
-<form bindsubmit="editSubmit" bindreset="formReset">
-  <input hidden name="id" value='{{taskInfo.id}}'></input>
-  <input hidden name="version" value='{{taskInfo.version}}'></input>
-  <!-- <view class='task-add'> -->
-  <view class='add-item'>
-    <label>创建人</label>
-    <input name="planHour" disabled="{{true}}" value="{{taskInfo.realName}}"></input>
-  </view>
-  <view class='add-item'>
-    <label>创建时间</label>
-    <input name="planHour" disabled="{{true}}" value="{{taskInfo.create_time}}"></input>
-  </view>
-  <view class='add-item'>
-    <label>任务名称</label>
-    <input placeholder='任务名称' disabled="{{taskInfo.stat==3}}" name="taskName" value="{{taskInfo.taskName}}"></input>
-  </view>
-  <view class='add-item'>
-    <label>预估(小时)</label>
-    <input placeholder='计划时间（小时）' disabled="{{taskInfo.stat==3}}" type="digit" name="planHour" value="{{taskInfo.planHour}}"></input>
-  </view>
-  <view class='add-item'>
-    <label>任务级别</label>
-    <radio-group class="group" name="level" bindchange="radioChange">
-      <view class="label" wx:for="{{radioItems}}" wx:key="{{key}}">
-        <radio id="{{item.name}}" hidden value="{{item.value}}" checked="{{item.checked}}"></radio>
-        <view class="label-icon">
-          <view class="icon {{item.checked ? 'checked ': ''}}"></view>
-        </view>
-        <label class="label-text" for="{{item.name}}">
-          <text>{{item.name}}</text>
-        </label>
+<view class='continer' style='position: {{position}}'>
+  <form bindsubmit="editSubmit" bindreset="formReset">
+    <input hidden name="id" value='{{taskInfo.id}}'></input>
+    <input hidden name="version" value='{{taskInfo.version}}'></input>
+    <!-- <view class='task-add'> -->
+    <view class='add-item'>
+      <view>
+        <label>创建人</label>
       </view>
-    </radio-group>
-  </view>
-  <view class='add-item'>
-    <label>任务内容</label>
-    <textarea name="taskInfo" disabled="{{taskInfo.stat==3}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
-  </view>
-  <block wx:if="{{isAssign}}">
-    <input hidden name="stat" value='3'></input>
-    <view class='add-item'>
-      <label>经办人</label>
-      <input  placeholder='经办人' bindblur='showSelect' value="{{taskInfo.handlerName}}" name="handlerName"></input>
-      <input  hidden name="handlerUid" value='{{taskInfo.handlerUid}}'></input>
+      <view>
+        <input name="planHour" disabled="{{true}}" value="{{taskInfo.realName}}"></input>
+      </view>
     </view>
     <view class='add-item'>
-      <label>经办人邮箱</label>
-      <input placeholder='经办人邮箱' value="{{'888888@163.com'}}" name="e_mail"></input>
+      <view>
+        <label>创建时间</label>
+      </view>
+      <view>
+        <input name="planHour" disabled="{{true}}" value="{{taskInfo.create_time}}"></input>
+      </view>
     </view>
-    <view>
-      <button form-type='submit' type='primary'>确定</button>
+    <view class='add-item'>
+      <view>
+        <label>任务名称</label>
+      </view>
+      <view>
+        <input placeholder='任务名称' disabled="{{taskInfo.stat==3}}" name="taskName" value="{{taskInfo.taskName}}"></input>
+      </view>
     </view>
-  </block>
-  <block wx:if="{{!isAssign && taskInfo.stat!=3 }}">
-    <view>
-      <button form-type='submit'>确定</button>
+    <view class='add-item'>
+      <view>
+        <label>预估(小时)</label>
+      </view>
+      <view>
+        <input placeholder='计划时间（小时）' disabled="{{taskInfo.stat==3}}" type="digit" name="planHour" value="{{taskInfo.planHour}}"></input>
+      </view>
     </view>
-  </block>
-</form>
-<selectable id="selectable" selectItems="{{selectItems}}"  bind:selected='selected'></selectable>
-<!-- </view> -->
+    <view class='add-item'>
+      <view>
+        <label>任务级别</label>
+      </view>
+      <view>
+        <radio-group class="group" name="level" bindchange="radioChange">
+          <view class="label" wx:for="{{radioItems}}" wx:key="{{key}}">
+            <radio id="{{item.name}}" hidden value="{{item.value}}" checked="{{item.checked}}"></radio>
+            <view class="label-icon">
+              <view class="icon {{item.checked ? 'checked ': ''}}"></view>
+            </view>
+            <label class="label-text" for="{{item.name}}">
+              <text>{{item.name}}</text>
+            </label>
+          </view>
+        </radio-group>
+      </view>
+    </view>
+    <view class='add-item'>
+      <view>
+        <label>任务内容</label>
+      </view>
+      <view style='border:none;'>
+        <textarea name="taskInfo" disabled="{{taskInfo.stat==3}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
+      </view>
+    </view>
+    <block wx:if="{{isAssign}}">
+      <input hidden name="stat" value='3'></input>
+      <view class='add-item'>
+        <view>
+          <label>经办人</label>
+        </view>
+        <view style='border:none;'>
+          <input placeholder='经办人' name="handlerName"/>
+          <!-- <textable placeholder='经办人' textable-class="textable" name="handlerName" value="{{taskInfo.handlerName}}" bind:click="showSelect"></textable> -->
+          <view bindtap='showSelect'>
+            <text>选择联系人</text>
+          </view>
+        </view>
+        <!-- <input  placeholder='经办人' bindfocus='showSelect'  name="handlerName"></input> -->
+        <input hidden name="handlerUid" value='{{taskInfo.handlerUid}}'></input>
+      </view>
+      <view class='add-item'>
+        <view>
+          <label>经办人邮箱</label>
+        </view>
+        <view>
+          <input placeholder='经办人邮箱' value="{{'888888@163.com'}}" name="e_mail"></input>
+        </view>
+      </view>
+      <view>
+        <button form-type='submit' type='primary'>确定</button>
+      </view>
+    </block>
+    <block wx:if="{{!isAssign && taskInfo.stat!=3 }}">
+      <view style='background:red;'>
+        <button form-type='submit'>确定</button>
+      </view>
+    </block>
+  </form>
+  <selectable id="selectable" selectItems="{{selectItems}}" bind:closeSelect="closeSelect" bind:selected='selected'></selectable>
+</view>

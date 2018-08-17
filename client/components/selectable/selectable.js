@@ -25,8 +25,9 @@ Component({
   methods: {
     closeSelect(e) {
       this.setData({
-        isHidden: !this.data.isHidden
+        isHidden: !this.data.isHidden,
       })
+      this.triggerEvent("closeSelect");
     },
     showSelect(e) {
       console.log(this.data.selectItems);

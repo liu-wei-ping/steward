@@ -1,4 +1,10 @@
 /* pages/working/detail.wxss */
+.continer{
+  width: 95%;
+  margin: 0 auto;
+  right:0;
+  left: 0;
+}
 .task-add {
   width: 98%;
   margin: 50px auto;
@@ -7,29 +13,32 @@
   border-radius: 10px;
   background: #fff;
 }
+
 .add-item {
   margin: 10px auto;
   width: inherit;
   display: flex;
   flex-direction: row;
 }
-.add-item> label {
-  padding-right: 20rpx;
+
+.add-item> view:nth-child(1) {
+  padding-right: 10rpx;
   text-align: right;
   width: 25%;
   font-size: 14px;
 }
-.add-item>input {
+
+textarea {
+  border: #ccc 1px solid;
+  width: 99%;
+}
+
+.add-item>view:nth-child(2) {
   text-align: left;
   width: 100%;
   border-bottom: #ccc 1px solid;
 }
-.add-item>textarea {
-  text-align: left;
-  width: 100%;
-  border: #ccc 1px solid;
-  border-radius: 10rpx;
-}
+
 radio-group {
   width: 100%;
   display: flex;
@@ -46,6 +55,7 @@ radio-group {
   background: #fcfff4;
   border-radius: 50px;
 }
+
 .icon {
   position: absolute;
   left: 3px;
@@ -55,6 +65,7 @@ radio-group {
   background: #ccc;
   border-radius: 50%;
 }
+
 .checked {
   position: absolute;
   left: 3px;
@@ -64,7 +75,14 @@ radio-group {
   background: #1aad19;
   border-radius: 50%;
 }
+
 .label-text {
   /* color: red; */
   font-size: 18px;
+}
+
+.textable {
+  font-size: 15px;
+  border: #ccc 1px solid;
+  width: 80px;
 }

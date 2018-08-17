@@ -21,6 +21,7 @@ Page({
       }
     ],
     isAssign: false,
+    position: "static",
     taskInfo: {}
   },
 
@@ -136,7 +137,8 @@ Page({
       },
     ]
     this.setData({
-      selectItems: selectItems
+      selectItems: selectItems,
+      position: "fixed"
     })
     this.selectable.showSelect(e);
   },
@@ -148,6 +150,11 @@ Page({
     taskInfo.handlerUid = selectedItem.value;
     this.setData({
       taskInfo: taskInfo
+    })
+  },
+  closeSelect: function(e) {
+    this.setData({
+      position: "static"
     })
   }
 })

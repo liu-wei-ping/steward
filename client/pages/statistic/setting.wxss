@@ -9,7 +9,7 @@ page {
   top: 0;
   left: 0;
   right: 0;
-  height: 91%;
+  height: 91%; 
 }
 
 .setting-scroll {

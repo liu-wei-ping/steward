@@ -174,6 +174,5 @@ module.exports = {
     geByCondition,
     del,
     create,
-    updateOfTx,
     update
 }

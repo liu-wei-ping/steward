@@ -1,5 +1,5 @@
 <!--components/selectable.wxml-->
-<view hidden='{{isHidden}}'>
+<view class='selectable' hidden='{{isHidden}}'>
   <view class='wx-mask' catchtap='closeSelect'></view>
   <view class='selectable-box'>
     <radio-group class="group" name="level" bindchange="_selectChange">

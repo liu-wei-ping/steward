@@ -53,4 +53,13 @@ router.post('/cycle/create', controllers.cycle.create)
 router.post('/cycle/update', controllers.cycle.update)
 //查询一天时间记录
 router.post('/cycle/query', controllers.cycle.query)
+
+//创建联系人信息
+router.post('/linkman/create', controllers.linkman.create)
+//更新联系人信息
+router.post('/linkman/update', controllers.linkman.update)
+//查询联系人信息
+router.get('/linkman/get', controllers.linkman.get)
+//查询联系人信息列表
+router.post('/linkman/query', controllers.linkman.query)
 module.exports = router
