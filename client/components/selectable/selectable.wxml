@@ -1,22 +1,19 @@
 <!--components/selectable.wxml-->
 <view class='selectable' hidden='{{isHidden}}'>
   <view class='wx-mask' catchtap='closeSelect'></view>
-  <view class='selectable-box'>
-    <radio-group class="group" name="level" bindchange="_selectChange">
-      <view class="label" wx:for="{{selectItems}}" wx:key="{{key}}">
-        <radio id="{{item.name}}" hidden value="{{item.value}}" checked="{{item.checked}}"></radio>
+  <scroll-view scroll-y class='selectable-box'>
+    <block wx:for="{{selectItems}}" wx:key="{{key}}" wx:index="{{index}}">
+      <view class="selectable-item {{index%2==0?'even':'odd'}}" data-index='{{index}}' catchtap='_selectedItem'>
         <view class="label-icon">
           <view class="icon {{item.checked ? 'checked ': ''}}"></view>
         </view>
-        <label class="label-box" for="{{item.name}}">
-          <view class='label-image'>
-            <image class='image' src='{{item.imagePath}}'></image>
-          </view>
-          <view class='label-text'>
-            <text>{{item.name}}</text>
-          </view>
-        </label>
+        <view class='label-image'>
+          <image class='image' src='{{item.imagePath}}'></image>
+        </view>
+        <view class='label-text'>
+          <text>{{item.name}}</text>
+        </view>
       </view>
-    </radio-group>
-  </view>
+    </block>
+  </scroll-view>
 </view>

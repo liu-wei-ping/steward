@@ -54,11 +54,11 @@
         </radio-group>
       </view>
     </view>
-    <view class='add-item'>
+    <view class='add-item' wx:if="{{textareaShow}}" >
       <view>
         <label>任务内容</label>
       </view>
-      <view style='border:none;'>
+      <view  style='border:none;'>
         <textarea name="taskInfo" disabled="{{taskInfo.stat==3}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
       </view>
     </view>
@@ -97,5 +97,5 @@
       </view>
     </block>
   </form>
-  <selectable id="selectable" selectItems="{{selectItems}}" bind:closeSelect="closeSelect" bind:selected='selected'></selectable>
 </view>
+  <selectable id="selectable" selectItems="{{selectItems}}"  multiSelect="{{false}}" bind:closeSelect="closeSelect" catch:selected='selected'></selectable>

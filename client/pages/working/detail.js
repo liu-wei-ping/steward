@@ -22,6 +22,7 @@ Page({
     ],
     isAssign: false,
     position: "static",
+    textareaShow:true,
     taskInfo: {}
   },
 
@@ -126,8 +127,73 @@ Page({
     console.log(e);
     console.log(this.selectable);
     var selectItems = [{
-        name: '欧阳琳',
+        name: '欧阳琳ppppppp',
         value: '001',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷999999',
+        value: '002',
+        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
+      },
+      {
+        name: '王大雷',
+        value: '002',
         imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
       },
       {
@@ -138,23 +204,33 @@ Page({
     ]
     this.setData({
       selectItems: selectItems,
-      position: "fixed"
+      position: "fixed",
+      textareaShow:false
     })
     this.selectable.showSelect(e);
   },
   selected: function(e) {
-    var selectedItem = this.selectable.data.selectedItem;
-    console.log(selectedItem);
+    console.log("选中事件",e);
+    var selectedItems = this.selectable.data.selectedItems;
     var taskInfo = this.data.taskInfo;
-    taskInfo.handlerName = selectedItem.name;
-    taskInfo.handlerUid = selectedItem.value;
+
+    var selectedItem = selectedItems[0];
+    if (selectedItem) {
+      taskInfo.handlerName = selectedItem.name;
+      taskInfo.handlerUid = selectedItem.value;
+    } else {
+      taskInfo.handlerName = '';
+      taskInfo.handlerUid = '';
+    }
     this.setData({
       taskInfo: taskInfo
     })
   },
   closeSelect: function(e) {
+    console.log("关闭", e);
     this.setData({
-      position: "static"
+      position: "static",
+      textareaShow:true,
     })
   }
 })
