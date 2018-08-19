@@ -22,7 +22,7 @@ Page({
     ],
     isAssign: false,
     position: "static",
-    textareaShow:true,
+    textareaShow: true,
     taskInfo: {}
   },
 
@@ -114,113 +114,41 @@ Page({
     var params = e.detail.value;
     console.log(params);
     request.postReq("updateTaskInfo", params, (res) => {
-      console.log(res);
       if (res.code == 1) {
         wx.navigateBack({
           delta: 1
         })
       }
-
     });
   },
   showSelect: function(e) {
-    console.log(e);
-    console.log(this.selectable);
-    var selectItems = [{
-        name: '欧阳琳ppppppp',
-        value: '001',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷999999',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-      {
-        name: '王大雷',
-        value: '002',
-        imagePath: 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo3nBz5NMrYaO6whIrdylZMmhhDNsgeV12eO5rF0USW4umiaPT4bhv0ja8VibArzxP1Mzn4XywZcjmw/132'
-      },
-    ]
-    this.setData({
-      selectItems: selectItems,
-      position: "fixed",
-      textareaShow:false
+    var selectItems = []
+    request.postReq("queryLinkmanInfo", null, res => {
+      if (res.code == 1) {
+        this.setData({
+          selectItems: res.data,
+          position: "fixed",
+          textareaShow: false
+        })
+        this.selectable.showSelect(e);
+      }
     })
-    this.selectable.showSelect(e);
+
   },
   selected: function(e) {
-    console.log("选中事件",e);
+    console.log("选中事件", e);
     var selectedItems = this.selectable.data.selectedItems;
     var taskInfo = this.data.taskInfo;
-
     var selectedItem = selectedItems[0];
+    console.log(selectedItem);
     if (selectedItem) {
       taskInfo.handlerName = selectedItem.name;
       taskInfo.handlerUid = selectedItem.value;
+      taskInfo.handlerMail = selectedItem.linkmanMail;
     } else {
       taskInfo.handlerName = '';
       taskInfo.handlerUid = '';
+      taskInfo.handlerMail = '';
     }
     this.setData({
       taskInfo: taskInfo
@@ -230,7 +158,26 @@ Page({
     console.log("关闭", e);
     this.setData({
       position: "static",
-      textareaShow:true,
+      textareaShow: true,
     })
-  }
+  },
+  bindinput: function(e) {
+    var taskInfo = this.data.taskInfo;
+    taskInfo.handlerName = e.detail.value;
+    taskInfo.handlerUid = '';
+    taskInfo.handlerMail = '';
+    this.setData({
+      taskInfo: taskInfo
+    })
+  },
+  deleteTask: function(e) {
+    var taskId = e.currentTarget.dataset.taskid;
+    request.delReq("deleteTaskInfo", "id=" + taskId, (res) => {
+      if (res.code == 1) {
+        wx.navigateBack({
+          delta: 1
+        })
+      }
+    });
+  },
 })

@@ -3,8 +3,8 @@
  */
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
-var host = 'https://taflgi5t.qcloud.la';
-// var host = 'http://127.0.0.1:5757';
+// var host = 'https://taflgi5t.qcloud.la';
+var host = 'http://127.0.0.1:5757';
 
 var config = {
   // 下面的地址配合云端 Demo 工作
@@ -33,13 +33,15 @@ var config = {
     //更新任务
     updateTaskInfo: `${host}/weapp/task/update`,
     //删除任务
-    deleteTaskInfo: `${host}/weapp/task/del`,
+    deleteTaskInfo: `${host}/weapp/task/delete`,
     //查询一天时间记录
     queryCycleInfo: `${host}/weapp/cycle/query`,
     //创建一天时间记录
     createCycleInfo: `${host}/weapp/cycle/create`,
     //更新一天时间记录
     upateCycleInfo: `${host}/weapp/cycle/update`,
+    //查询联系人信息列表
+    queryLinkmanInfo: `${host}/weapp/linkman/query`,
   }
 };
 

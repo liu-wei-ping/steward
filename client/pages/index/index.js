@@ -23,16 +23,16 @@ Page({
     var that = this;
     //用户信息缓存
     const session = qcloud.Session.get()
-    console.log("用户信息缓存",session);
+    console.log("用户信息缓存", session);
     //已有过登录
     if (session) {
       var uid = session.uid;
-      if (!uid){
-        uid= session.userinfo.openId;
+      if (!uid) {
+        uid = session.userinfo.openId;
       }
       console.log("第二次登录")
       //刷新用户信息
-      request.getReq("getUserInfo", "uid=" + uid, function (data) {
+      request.getReq("getUserInfo", "uid=" + uid, function(data) {
         var result = data.data;
         if (data.code == 1 && result && result.lenght !== 0) {
           console.log("刷新用户信息", result);
@@ -48,14 +48,14 @@ Page({
         success: res => {
           console.log(res);
           //获取用户信息 判断是否是老用户
-          request.getReq("getUserInfo", "uid=" + res.openId, function(data) {
-            console.log(data);
-            var result = data.data;
+          request.getReq("getUserInfo", "uid=" + res.openId, function(result) {
+            var user = result.data;
             //用户已存在直接登录
-            if (data.code == 1 && result && result.lenght>0) {
+            if (result.code == 1 && user && user.length > 0) {
               //用户信息更新为系统获取信息
-              console.log("用户信息已存在：", result)
-              qcloud.Session.set(result[0]);
+              console.log("用户信息已存在：", user)
+              qcloud.Session.set(user[0]);
+              console.log("用户信息缓存", qcloud.Session.get())
               that.setData({
                 logged: true,
               });
@@ -69,8 +69,8 @@ Page({
                   that.setData({
                     logged: true,
                   });
-                    console.log("用户创建成功!");
-                }else{
+                  console.log("用户创建成功!");
+                } else {
                   //清除缓存
                   qcloud.Session.clear();
                 }

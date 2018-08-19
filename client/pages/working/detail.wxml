@@ -25,7 +25,7 @@
         <label>任务名称</label>
       </view>
       <view>
-        <input placeholder='任务名称' disabled="{{taskInfo.stat==3}}" name="taskName" value="{{taskInfo.taskName}}"></input>
+        <input placeholder='任务名称' disabled="{{taskInfo.stat==1||taskInfo.stat==2||!taskInfo.isOwn}}" name="taskName" value="{{taskInfo.taskName}}"></input>
       </view>
     </view>
     <view class='add-item'>
@@ -33,15 +33,15 @@
         <label>预估(小时)</label>
       </view>
       <view>
-        <input placeholder='计划时间（小时）' disabled="{{taskInfo.stat==3}}" type="digit" name="planHour" value="{{taskInfo.planHour}}"></input>
+        <input placeholder='计划时间（小时）' disabled="{{taskInfo.stat==1||taskInfo.stat==2||!taskInfo.isOwn}}" type="digit" name="planHour" value="{{taskInfo.planHour}}"></input>
       </view>
     </view>
     <view class='add-item'>
       <view>
         <label>任务级别</label>
       </view>
-      <view>
-        <radio-group class="group" name="level" bindchange="radioChange">
+      <view style='border:none;'>
+        <radio-group class="group" name="level" bindchange="{{taskInfo.stat==1||taskInfo.stat==2||!taskInfo.isOwn?'':'radioChange'}}">
           <view class="label" wx:for="{{radioItems}}" wx:key="{{key}}">
             <radio id="{{item.name}}" hidden value="{{item.value}}" checked="{{item.checked}}"></radio>
             <view class="label-icon">
@@ -54,12 +54,12 @@
         </radio-group>
       </view>
     </view>
-    <view class='add-item' wx:if="{{textareaShow}}" >
+    <view class='add-item' wx:if="{{textareaShow}}">
       <view>
         <label>任务内容</label>
       </view>
-      <view  style='border:none;'>
-        <textarea name="taskInfo" disabled="{{taskInfo.stat==3}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
+      <view style='border:none;'>
+        <textarea name="taskInfo" disabled="{{taskInfo.stat==1||taskInfo.stat==2||!taskInfo.isOwn}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
       </view>
     </view>
     <block wx:if="{{isAssign}}">
@@ -70,7 +70,7 @@
         </view>
         <view class='handler' style=' border: none;'>
           <view class='handler-text'>
-            <input placeholder='经办人' value="{{taskInfo.handlerName}}" name="handlerName" />
+            <input placeholder='经办人' bindinput="bindinput" value="{{taskInfo.handlerName}}" name="handlerName" />
           </view>
           <!-- <textable placeholder='经办人' textable-class="textable" name="handlerName" value="{{taskInfo.handlerName}}" bind:click="showSelect"></textable> -->
           <view class='handler-btn' bindtap='showSelect'>
@@ -84,18 +84,23 @@
           <label>经办人邮箱</label>
         </view>
         <view>
-          <input placeholder='经办人邮箱' value="{{'888888@163.com'}}" name="e_mail"></input>
+          <input placeholder='经办人邮箱' value="{{taskInfo.handlerMail}}" name="handlerMail"></input>
         </view>
       </view>
       <view>
         <button form-type='submit' type='primary'>确定</button>
       </view>
     </block>
-    <block wx:if="{{!isAssign && taskInfo.stat!=3 }}">
-      <view style='background:red;'>
-        <button form-type='submit'>确定</button>
+    <block wx:if="{{!isAssign}}">
+      <block wx:if="{{taskInfo.isOwn && (taskInfo.stat==0 || taskInfo.stat==3)}}">
+        <view style='margin-bottom:10px; '>
+          <button type="primary" form-type='submit'>保存</button>
+        </view>
+      </block>
+      <view wx:if="{{taskInfo.stat==0 &&  taskInfo.isOwn}}">
+        <button type='warn' data-taskid='{{taskInfo.id}}' bindtap='deleteTask'>删除</button>
       </view>
     </block>
   </form>
 </view>
-  <selectable id="selectable" selectItems="{{selectItems}}"  multiSelect="{{false}}" bind:closeSelect="closeSelect" catch:selected='selected'></selectable>
+<selectable id="selectable" name_key="linkmanName" value_key="linkUid" image_key="linkmanAvatarUrl  " selectItems="{{selectItems}}" multiSelect="{{false}}" bind:closeSelect="closeSelect" catch:selected='selected'></selectable>

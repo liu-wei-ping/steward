@@ -227,11 +227,13 @@ Page({
     }
     var that = this;
     request.postReq("updateTaskInfo", params, function(res) {
-      taskList.splice(index, 1);
-      that.setData({
-        taskList: taskList,
-        haveData: taskList.length > 0
-      })
+      if (res.code == 1) {
+        taskList.splice(index, 1);
+        that.setData({
+          taskList: taskList,
+          haveData: taskList.length > 0
+        })
+      }
     })
   },
   stopTask: function(e) {
@@ -241,16 +243,19 @@ Page({
     console.log(item);
     var params = {
       id: item.id,
-      stat: -1,
+      handlerUid: item.handlerUid,
+      stat: 0,
       version: item.version
     }
     var that = this;
     request.postReq("updateTaskInfo", params, function(res) {
-      taskList.splice(index, 1);
-      that.setData({
-        taskList: taskList,
-        haveData: taskList.length > 0
-      })
+      if (res.code == 1) {
+        taskList.splice(index, 1);
+        that.setData({
+          taskList: taskList,
+          haveData: taskList.length > 0
+        })
+      }
     })
   },
   doneTask: function(e) {
@@ -264,11 +269,13 @@ Page({
     }
     var that = this;
     request.postReq("updateTaskInfo", params, function(res) {
-      taskList.splice(index, 1);
-      that.setData({
-        taskList: taskList,
-        haveData: taskList.length > 0
-      })
+      if (res.code == 1) {
+        taskList.splice(index, 1);
+        that.setData({
+          taskList: taskList,
+          haveData: taskList.length > 0
+        })
+      }
     })
   },
   navigateToDetail: function(e) {

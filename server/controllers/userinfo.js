@@ -37,6 +37,7 @@ async function create(ctx, next) {
         gender: userinfo.gender
     }
     await db.create(CNF.DB_TABLE.user_info, params, function (res) {
+        assert.notEqual(res, -1, "create user fail")
         SUCCESS(ctx, res);
     }).catch(function (error) {
         FAILED(ctx, error);

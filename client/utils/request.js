@@ -7,9 +7,14 @@ const cache = require("./cache.js")
  */
 function getReq(funKey, params, callback) {
   var url = config.service[funKey];
+  var userinfo = cache.getUserInfoCache();
   if (params) {
     url += ("?" + params);
+    if (userinfo && userinfo.uid && params.indexOf("uid=") == -1) {
+      url += ("&uid=" + userinfo.uid);
+    }
   }
+
   console.log('get request：' + url);
   var that = this
   var options = {
@@ -45,7 +50,7 @@ const postReq = (funKey, params, callback, tip) => {
     data: params ? params : {},
     method: 'POST',
     success: (res) => {
-      console.log("Post result:",res);
+      console.log("Post result:", res);
       if (callback && typeof(callback) == 'function') {
         callback(res.data);
       }
@@ -73,7 +78,7 @@ const postReqOfAll = (funKey, params, callback, tip) => {
     method: 'POST',
     success: (res) => {
       console.log("PostReqOfAll result:", res);
-      if (callback && typeof (callback) == 'function') {
+      if (callback && typeof(callback) == 'function') {
         callback(res.data);
       }
     },
@@ -93,20 +98,20 @@ const delReq = (funKey, params, callback) => {
     util.showModel('删除失败', "参数错误");
   }
   var userinfo = cache.getUserInfoCache();
-  var urlParams = ("?uid" + userinfo.uid + "&") + params;
+  var url = config.service[funKey];
+  var urlParams = ("?uid=" + userinfo.uid + "&") + params;
   console.info("delete request：" + url + urlParams);
   wx.showModal({
     content: "确定删除？",
     success: function(res) {
       if (res.confirm) {
-        var url = config.service[funKey];
-        console.log('delete request' + url);
         var options = {
           url: url + urlParams,
           method: 'DELETE',
           success(result) {
+            console.log(result);
             if (callback && typeof(callback) == 'function') {
-              callback(result);
+              callback(result.data);
             }
           },
           fail(error) {

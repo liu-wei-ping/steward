@@ -4,13 +4,19 @@ Component({
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
   // externalClasses: ['selectable','selectable-box'],
+  attached: function() {
+
+  },
   /**
    * 组件的属性列表
    */
   properties: {
     selectItems: Array,
     selectedItem: Object,
-    multiSelect: Boolean
+    multiSelect: Boolean,
+    name_key: String,
+    value_key: String,
+    image_key: String,
   },
 
   /**
@@ -19,8 +25,11 @@ Component({
   data: {
     isHidden: true,
     multiSelect: false, //false:单选；true:多选
-    selectItems: [],
-    selectedItems:[]//选中的
+    selectItems: [], //数据
+    selectedItems: [], //选中的数据
+    name_key: 'name',
+    value_key: 'value',
+    image_key: 'image'
   },
   detached: function() {},
   /**
@@ -34,11 +43,27 @@ Component({
       this.triggerEvent("closeSelect");
     },
     showSelect(e) {
-      console.log(this.data.selectItems);
-      console.log(!this.data.isHidden);
-      console.log(this.data.multiSelect);
+      console.log(e);
+      var selectItems = this.data.selectItems;
+      console.log("数据格式转换前", selectItems)
+      var name_key = this.data.name_key;
+      var value_key = this.data.value_key;
+      var image_key = this.data.image_key;
+      if (selectItems && selectItems.length > 0) {
+        //数据格式转换
+        for (var i = 0; i < selectItems.length; i++) {
+          // var converItem = {};
+          var item = selectItems[i]
+          item['name'] = item[name_key];
+          item['value'] = item[value_key];
+          item['image'] = item[image_key];
+          // selectItems[i] = converItem;
+        }
+        console.log("数据格式转换后", selectItems)
+      }
       this.setData({
-        isHidden: !this.data.isHidden
+        isHidden: !this.data.isHidden,
+        selectItems: selectItems
       })
     },
     _selectedItem: function(e) {
@@ -48,24 +73,23 @@ Component({
       var changed = {}
       var selectItems = this.data.selectItems;
       var selectedItems = this.data.selectedItems;
-      var multiSelect=this.data.multiSelect
-      for (var i = 0;i < selectItems.length; i++) {
+      var multiSelect = this.data.multiSelect
+      for (var i = 0; i < selectItems.length; i++) {
         if (index == i) {
-          if (!multiSelect){//单选
-            selectedItems=[];
-            changed['selectItems[' + i + '].checked'] = true;
-            selectedItems.push(selectItems[i]);
-          }else{
-            var index = selectedItems.indexOf(selectItems[i]);
-            if (index!==-1){
-              changed['selectItems[' + i + '].checked'] = false;
-              selectedItems.splice(index,1);
-            }else{
+          var currIndex = selectedItems.indexOf(selectItems[i]);
+          if (currIndex !== -1) {
+            changed['selectItems[' + i + '].checked'] = false;
+            selectedItems.splice(currIndex, 1);
+          } else {
+            if (!multiSelect) { //单选
+              selectedItems = [];
+              changed['selectItems[' + i + '].checked'] = true;
+              selectedItems.push(selectItems[i]);
+            } else {
               changed['selectItems[' + i + '].checked'] = true;
               selectedItems.push(selectItems[i]);
             }
           }
-         
         } else {
           if (!multiSelect) {
             changed['selectItems[' + i + '].checked'] = false;
@@ -74,7 +98,9 @@ Component({
       }
       changed.selectedItems = selectedItems;
       this.setData(changed)
-      this.triggerEvent("selected", { composed: true });
+      this.triggerEvent("selected", {
+        composed: true
+      });
     }
   }
 })

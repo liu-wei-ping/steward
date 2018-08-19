@@ -5,6 +5,7 @@ const assert = require('assert')
 const db = require('../tools/db')
 const dateUtil = require('../utils/dateUtil')
 const uuidGenerator = require('uuid/v4')
+const linkman = require('./linkman')
 
 /**
  * 删除任务
@@ -14,7 +15,9 @@ const uuidGenerator = require('uuid/v4')
  */
 async function del(ctx, next) {
     let {uid, id} = ctx.query
-    await db.del(CNF.DB_TABLE.task_info, {id: id, uid: uid}, function (res) {
+    assert.ok(condition.id, '删除id不能为空')
+    assert.ok(condition.uid, '用户uid不能为空')
+    await mysql(CNF.DB_TABLE.task_info).del().where({id: id, uid: uid}).whereIn('stat', [0, 3]).then(function (res) {
         SUCCESS(ctx, res)
     }).catch(function (error) {
         console.error(error)
@@ -29,9 +32,9 @@ async function del(ctx, next) {
  * @returns {Promise<void>}
  */
 async function create(ctx, next) {
-    let taskinfo = ctx.request.body
-    assert.ok(taskinfo && taskinfo.uid, "用户uid不存在")
-    await db.create(CNF.DB_TABLE.task_info, taskinfo, function (res) {
+    let taksInfo = ctx.request.body
+    assert.ok(taksInfo && taksInfo.uid, "用户uid不存在")
+    await db.create(CNF.DB_TABLE.task_info, taksInfo, function (res) {
         assert.notEqual(res, -1, 'create task fail')
         SUCCESS(ctx, res)
     }).catch(function (error) {
@@ -49,30 +52,29 @@ async function create(ctx, next) {
  */
 async function update(ctx, next) {
     let reqinfo = ctx.request.body
-    let taskinfo = {}
+    let taksInfo = {}
     if (reqinfo.taskName) {
-        taskinfo.taskName = reqinfo.taskName
+        taksInfo.taskName = reqinfo.taskName
     }
     if (reqinfo.startTime) {
-        taskinfo.startTime = reqinfo.startTime
+        taksInfo.startTime = reqinfo.startTime
     }
     if (reqinfo.endTime) {
-        taskinfo.endTime = reqinfo.endTime
+        taksInfo.endTime = reqinfo.endTime
     }
     if (reqinfo.handlerUid) {
-        taskinfo.handlerUid = reqinfo.handlerUid
+        taksInfo.handlerUid = reqinfo.handlerUid
     }
     if (reqinfo.handlerName) {
-        taskinfo.handlerName = reqinfo.handlerName
+        taksInfo.handlerName = reqinfo.handlerName
     }
-    preUpdateTask(reqinfo, taskinfo)
+    preUpdateTask(reqinfo, taksInfo)
     let condition = {
         version: reqinfo.version,
-        uid: reqinfo.uid,
         id: reqinfo.id
     }
     await
-        db.update(CNF.DB_TABLE.task_info, taskinfo, condition, function (res) {
+        db.update(CNF.DB_TABLE.task_info, taksInfo, condition, function (res) {
             assert.notEqual(res, -1, 'update task fail')
             SUCCESS(ctx, res)
         }).catch(function (error) {
@@ -83,22 +85,39 @@ async function update(ctx, next) {
 
 /**
  *
- * @param taskinfo
+ * @param taksInfo
  * @returns {Promise<*>}
  */
-async function preUpdateTask(reqinfo, taskinfo) {
-    var taskinfo = taskinfo || {}
-    // 启动任务
-    if (reqinfo && reqinfo.stat == 1) {
-        taskinfo.stat = 1;
+async function preUpdateTask(reqinfo, taksInfo) {
+    var taksInfo = taksInfo || {}
+    if (reqinfo && reqinfo.stat == 0) {//任务撤销
+        taksInfo.startTime = null;
+        taksInfo.planEndTime = null;
+        taksInfo.stat = reqinfo.uid != reqinfo.uid ? 3 : 0;
         await db.getById(CNF.DB_TABLE.task_info, reqinfo.id, async function (res) {
-            var nowTime = dateUtil.nowTime();
+            if (res[0].uid !== reqinfo.uid){//不是自己创建的任务 撤回到分配状态
+                taksInfo.stat = 3;
+            } else {
+                taksInfo.stat = 0;
+            }
+            db.update(CNF.DB_TABLE.task_handle_info, {stat: 0}, {
+                taskId: reqinfo.id,
+                handlerUid: reqinfo.uid
+            }, function (resp) {
+                console.log("更新任务处理表状态", resp)
+            })
+        })
+
+    } else if (reqinfo && reqinfo.stat == 1) {    // 启动任务
+        var nowTime = dateUtil.nowTime();
+        taksInfo.stat = 1;
+        taksInfo.startTime = nowTime;
+        await db.getById(CNF.DB_TABLE.task_info, reqinfo.id, async function (res) {
+            taksInfo.planEndTime = dateUtil.dateAdd(nowTime, res[0].planHour || 0);
             if (res[0].stat == 0 && res[0].uid == reqinfo.uid) {//自己创建的任务 启动
-                taskinfo.handlerUid = res[0].uid;
-                taskinfo.handlerName = res[0].realName;
-                taskinfo.planEndTime = dateUtil.dateAdd(nowTime, res[0].planHour || 0);
-                taskinfo.assignTime = nowTime;
-                taskinfo.startTime = nowTime;
+                taksInfo.handlerUid = res[0].uid;
+                taksInfo.handlerName = res[0].realName;
+                taksInfo.assignTime = nowTime;
             } else if (res[0].stat == 3 && res[0].uid != reqinfo.uid) {//其他人分配给我的任务 启动
                 let handleInfo = {
                     stat: 1
@@ -114,8 +133,8 @@ async function preUpdateTask(reqinfo, taskinfo) {
             }
         })
     } else if (reqinfo && reqinfo.stat == 2) { // 任务完成
-        taskinfo.endTime = dateUtil.nowTime();
-        taskinfo.stat = 2;
+        taksInfo.endTime = dateUtil.nowTime();
+        taksInfo.stat = 2;
         let handleInfo = {
             stat: 2
         }
@@ -126,29 +145,45 @@ async function preUpdateTask(reqinfo, taskinfo) {
             console.log("更新任务处理表状态", resp);
         })
     } else if (reqinfo && reqinfo.stat == 3) {//任务分配
-        taskinfo.assignTime = dateUtil.nowTime();
-        taskinfo.stat = 3;
+        taksInfo.assignTime = dateUtil.nowTime();
+        taksInfo.stat = 3;
+        taksInfo.handlerName = reqinfo.handlerName;
+        if (!reqinfo.handlerUid) {
+            let linkUid = uuidGenerator().replace(/-/g, '');
+            let linkmanInfo = {
+                uid: reqinfo.uid,
+                linkUid: linkUid,
+                linkmanName: reqinfo.handlerName,
+                linkmanMail: reqinfo.handlerMail
+            }
+            taksInfo.handlerUid = linkUid;
+            linkman.save(linkmanInfo, function (res) {
+                console.log(res);
+            })
+        } else {
+            taksInfo.handlerUid = reqinfo.handlerUid;
+        }
         db.getById(CNF.DB_TABLE.task_info, reqinfo.id, function (result) {
             if (result && result[0]) {
-                var taksInfo = result[0];
+                var task = result[0];
                 var params = {
-                    taskId: taksInfo.id,
-                    taskName: taksInfo.taskName,
-                    taskCreateTime: taksInfo.create_time,
-                    assignerUid: taksInfo.uid,
-                    assignerName: taksInfo.realName,
-                    handlerUid: reqinfo.handlerUid,
+                    taskId: task.id,
+                    taskName: task.taskName,
+                    taskCreateTime: task.create_time,
+                    assignerUid: task.uid,
+                    assignerName: task.realName,
+                    handlerUid: taksInfo.handlerUid,
                     handlerName: reqinfo.handlerName,
-                    e_mail: reqinfo.e_mail || '',
+                    handlerMail: reqinfo.handlerMail || '',
                     stat: 0
                 }
                 db.create(CNF.DB_TABLE.task_handle_info, params, function (resp) {
-                    console.log("任务分配成功", resp)
+                    console.log("任务分配结果", resp)
                 })
             }
         })
     }
-    return taskinfo
+    return taksInfo
 }
 
 /**
@@ -158,13 +193,22 @@ async function preUpdateTask(reqinfo, taskinfo) {
  * @returns {Promise<void>}
  */
 async function get(ctx, next) {
-    let {id} = ctx.query
-    await db.getById(CNF.DB_TABLE.task_info, id, function (res) {
-        SUCCESS(ctx, convert(res));
+    let {id, uid} = ctx.query
+    assert.ok(id, "id不存在")
+    await mysql(CNF.DB_TABLE.task_info).select('task_info.*', 'task_handle_info.handlerUid', 'task_handle_info.handlerName', 'task_handle_info.handlerMail').leftJoin(CNF.DB_TABLE.task_handle_info, function () {
+        this.on('task_info.id', '=', 'task_handle_info.taskId').on('task_info.handlerUid', '=', 'task_handle_info.handlerUid')
+    }).whereRaw("task_info.id=?", [id]).then(function (res) {
+        SUCCESS(ctx, convert(res, uid));
     }).catch(function (error) {
         console.error(error)
         FAILED(ctx, error)
     })
+    // await db.getById(CNF.DB_TABLE.task_info, id, function (res) {
+    //     SUCCESS(ctx, convert(res));
+    // }).catch(function (error) {
+    //     console.error(error)
+    //     FAILED(ctx, error)
+    // })
 }
 
 /**
@@ -177,15 +221,15 @@ async function query(ctx, next) {
     let condition = ctx.request.body
     assert.ok(condition && condition.uid, "用户uid不存在")
     if (condition.stat == 0) {//待办
-        //0 或3
-        await mysql(CNF.DB_TABLE.task_info).select("*").where({handlerUid: condition.uid}).orWhere({
+        //查询我创建待办的任务和分配给我的任务
+        await mysql(CNF.DB_TABLE.task_info).select("*").where({handlerUid: condition.uid, stat: 3}).orWhere({
             stat: 3,
             uid: condition.uid
         }).orWhere({
             stat: 0,
             uid: condition.uid
         }).then(async function (res) {
-            SUCCESS(ctx, convert(res))
+            SUCCESS(ctx, convert(res, condition.uid))
         }).catch(function (error) {
             console.error(error)
             FAILED(ctx, error)
@@ -195,7 +239,7 @@ async function query(ctx, next) {
             handlerUid: condition.uid,
             stat: condition.stat
         }).then(function (res) {
-            SUCCESS(ctx, convert(res))
+            SUCCESS(ctx, convert(res, condition.uid))
         }).catch(function (error) {
             console.error(error)
             FAILED(ctx, error)
@@ -205,7 +249,7 @@ async function query(ctx, next) {
 
 }
 
-function convert(res) {
+function convert(res, uid) {
     if (res && res.length > 0) {
         res.forEach(function (item, index) {
             if (item.create_time) {
@@ -229,7 +273,7 @@ function convert(res) {
                 item.startTime = dateUtil.formatTime(new Date(item.startTime))
             }
             //判断是否是自己的任务标识
-            if (item.uid == item.handlerUid) {
+            if (item.uid == uid) {
                 item.isOwn = true;
             } else {
                 item.isOwn = false;

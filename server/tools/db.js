@@ -46,7 +46,8 @@ async function geByCondition(table, condition, callback) {
  */
 async function create(table, data, callback) {
     data.id = uuidGenerator().replace(/-/g, '')
-    data.version = 1
+    data.version = 1;
+    data.stat=0;
     await mysql(table).insert(data).then(function (res) {
         callback({id: data.id, version: data.version})
     }).catch(function (error) {
@@ -65,8 +66,8 @@ async function create(table, data, callback) {
  */
 async function update(table, data, condition, callback) {
     // assert.ok(condition.version, '版本号不能为空')
-    assert.ok(condition.id, '更新id不能为空')
-    assert.ok(condition.uid, '用户uid不能为空')
+    // assert.ok(condition.id, '更新id不能为空')
+    // assert.ok(condition.uid, '用户uid不能为空')
     await mysql(table).select('version').where(condition).then(async (v) => {
         if (v && v.length > 0) {
             data.version = v[0].version + 1
