@@ -62,4 +62,6 @@ router.post('/linkman/update', controllers.linkman.update)
 router.get('/linkman/get', controllers.linkman.get)
 //查询联系人信息列表
 router.post('/linkman/query', controllers.linkman.query)
+//保存通知消息
+router.post('/notify/create', controllers.notify.create)
 module.exports = router

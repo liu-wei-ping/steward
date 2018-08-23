@@ -62,7 +62,7 @@
         <view style='display: flex;flex-direction: row;align-items: center;justify-content: center;'>
           <view class='harp-line'></view>
         </view>
-        <view wx:if="{{item.isOwn && item.stat==3}}" class='opt-item r-btn' data-index='{{index}}' bindtap='startTask'>
+        <view wx:if="{{item.isOwn && item.stat==3}}" class='opt-item r-btn' data-index='{{index}}' bindtap='notifyMessage'>
           <text>通知经办人</text>
         </view>
         <view class='opt-item r-btn' data-index='{{index}}' bindtap='startTask' wx:else>

@@ -42,6 +42,8 @@ var config = {
     upateCycleInfo: `${host}/weapp/cycle/update`,
     //查询联系人信息列表
     queryLinkmanInfo: `${host}/weapp/linkman/query`,
+    //创建消息推送
+    createNotifyInfo: `${host}/weapp/notify/create`,
   }
 };
 

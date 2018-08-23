@@ -15,8 +15,8 @@ const linkman = require('./linkman')
  */
 async function del(ctx, next) {
     let {uid, id} = ctx.query
-    assert.ok(condition.id, '删除id不能为空')
-    assert.ok(condition.uid, '用户uid不能为空')
+    assert.ok(id, '删除id不能为空')
+    assert.ok(uid, '用户uid不能为空')
     await mysql(CNF.DB_TABLE.task_info).del().where({id: id, uid: uid}).whereIn('stat', [0, 3]).then(function (res) {
         SUCCESS(ctx, res)
     }).catch(function (error) {
@@ -57,16 +57,28 @@ async function update(ctx, next) {
         taksInfo.taskName = reqinfo.taskName
     }
     if (reqinfo.startTime) {
-        taksInfo.startTime = reqinfo.startTime
+        taksInfo.startTime = reqinfo.startTime;
     }
     if (reqinfo.endTime) {
-        taksInfo.endTime = reqinfo.endTime
+        taksInfo.endTime = reqinfo.endTime;
+    }
+    if (reqinfo.planHour) {
+        taksInfo.planHour = reqinfo.planHour;
+    }
+    if (reqinfo.taskDescribe) {
+        taksInfo.taskDescribe = reqinfo.taskDescribe;
+    }
+    if (reqinfo.level) {
+        taksInfo.level = reqinfo.level;
+    }
+    if (reqinfo.taskName) {
+        taksInfo.taskName = reqinfo.taskName;
     }
     if (reqinfo.handlerUid) {
-        taksInfo.handlerUid = reqinfo.handlerUid
+        taksInfo.handlerUid = reqinfo.handlerUid;
     }
     if (reqinfo.handlerName) {
-        taksInfo.handlerName = reqinfo.handlerName
+        taksInfo.handlerName = reqinfo.handlerName;
     }
     preUpdateTask(reqinfo, taksInfo)
     let condition = {

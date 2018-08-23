@@ -59,7 +59,7 @@
         <label>任务内容</label>
       </view>
       <view style='border:none;'>
-        <textarea name="taskInfo" disabled="{{taskInfo.stat==1||taskInfo.stat==2||!taskInfo.isOwn}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
+        <textarea name="taskDescribe" disabled="{{taskInfo.stat==1||taskInfo.stat==2||!taskInfo.isOwn}}" value="{{taskInfo.taskDescribe}}" placeholder='任务内容'></textarea>
       </view>
     </view>
     <block wx:if="{{isAssign}}">
@@ -96,10 +96,10 @@
         <view style='margin-bottom:10px; '>
           <button type="primary" form-type='submit'>保存</button>
         </view>
+        <view>
+          <button type='warn' data-taskid='{{taskInfo.id}}' bindtap='deleteTask'>删除</button>
+        </view>
       </block>
-      <view wx:if="{{taskInfo.stat==0 &&  taskInfo.isOwn}}">
-        <button type='warn' data-taskid='{{taskInfo.id}}' bindtap='deleteTask'>删除</button>
-      </view>
     </block>
   </form>
 </view>

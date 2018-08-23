@@ -288,5 +288,15 @@ Page({
   },
   notifyAssigner: function(e) {
     console.log("通知分配人")
+    var index = e.currentTarget.dataset.index;
+    var taskList = this.data.taskList;
+    var taskInfo=taskList[index];
+    var params={
+      
+    }
+    request.postReq("createNotifyInfo", params, function (res) {
+
+    });
+
   },
 })
