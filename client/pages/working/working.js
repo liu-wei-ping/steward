@@ -291,11 +291,9 @@ Page({
     var index = e.currentTarget.dataset.index;
     var taskList = this.data.taskList;
     var taskInfo=taskList[index];
-    var params={
-      
-    }
-    request.postReq("createNotifyInfo", params, function (res) {
-
+    console.log(taskInfo);
+    request.postReq("taskInfoNotify", {taskId: taskInfo.id}, function (res) {
+      console.log(res);
     });
 
   },

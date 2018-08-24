@@ -47,6 +47,8 @@ router.post('/task/query', controllers.task.query)
 router.get('/task/get', controllers.task.get)
 //更新任务信息
 router.post('/task/update', controllers.task.update)
+//保存通知消息
+router.post('/task/notify', controllers.task.notify)
 //创建一天时间记录
 router.post('/cycle/create', controllers.cycle.create)
 //更新一天时间记录
@@ -62,6 +64,5 @@ router.post('/linkman/update', controllers.linkman.update)
 router.get('/linkman/get', controllers.linkman.get)
 //查询联系人信息列表
 router.post('/linkman/query', controllers.linkman.query)
-//保存通知消息
-router.post('/notify/create', controllers.notify.create)
+
 module.exports = router

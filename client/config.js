@@ -34,6 +34,8 @@ var config = {
     updateTaskInfo: `${host}/weapp/task/update`,
     //删除任务
     deleteTaskInfo: `${host}/weapp/task/delete`,
+    //创建消息推送
+    taskInfoNotify: `${host}/weapp/task/notify`,
     //查询一天时间记录
     queryCycleInfo: `${host}/weapp/cycle/query`,
     //创建一天时间记录
@@ -41,9 +43,7 @@ var config = {
     //更新一天时间记录
     upateCycleInfo: `${host}/weapp/cycle/update`,
     //查询联系人信息列表
-    queryLinkmanInfo: `${host}/weapp/linkman/query`,
-    //创建消息推送
-    createNotifyInfo: `${host}/weapp/notify/create`,
+    queryLinkmanInfo: `${host}/weapp/linkman/query`
   }
 };
 

@@ -6,6 +6,7 @@ const db = require('../tools/db')
 const dateUtil = require('../utils/dateUtil')
 const uuidGenerator = require('uuid/v4')
 const linkman = require('./linkman')
+const notifyJs = require('./notify')
 
 /**
  * 删除任务
@@ -107,7 +108,7 @@ async function preUpdateTask(reqinfo, taksInfo) {
         taksInfo.planEndTime = null;
         taksInfo.stat = reqinfo.uid != reqinfo.uid ? 3 : 0;
         await db.getById(CNF.DB_TABLE.task_info, reqinfo.id, async function (res) {
-            if (res[0].uid !== reqinfo.uid){//不是自己创建的任务 撤回到分配状态
+            if (res[0].uid !== reqinfo.uid) {//不是自己创建的任务 撤回到分配状态
                 taksInfo.stat = 3;
             } else {
                 taksInfo.stat = 0;
@@ -302,10 +303,35 @@ function convert(res, uid) {
     return res
 }
 
+async function notify(ctx, next) {
+    let {taskId} = ctx.request.body;
+    await mysql("task_info").select("*").innerJoin("task_handle_info", function () {
+        this.on("task_handle_info.taskId", "=", "task_info.id").on("task_handle_info.handlerUid", "=", "task_info.handlerUid")
+    }).whereRaw("task_info.id=?", [taskId]).then(async (res) => {
+        if (res && res[0]) {
+            let notifyInfo = {};
+            notifyInfo.receiverUid = res[0].handlerUid;
+            notifyInfo.receiverName = res[0].handlerName;
+            notifyInfo.notifyUid = res[0].uid;
+            notifyInfo.notifyName = res[0].realName;
+            notifyInfo.notifyType = 1;
+            notifyInfo.notifyValue = res[0].handlerMail;
+            notifyInfo.bizType = 1;
+            await notifyJs.save(notifyInfo, function (result) {
+                assert.notEqual(result, -1, 'notifyInfo task fail')
+                SUCCESS(ctx, result);
+            }).catch(function (error) {
+                FAILED(ctx, error);
+            });
+        }
+    })
+}
+
 module.exports = {
     del,
     create,
     update,
     get,
+    notify,
     query
 }

@@ -26,7 +26,10 @@ const CONF = {
         pass: 'root',
         char: 'utf8mb4'
     },
-
+    email:{
+        user:"",
+        pass:""
+    },
     cos: {
         /**
          * 地区简称
