@@ -317,6 +317,7 @@ async function notify(ctx, next) {
             notifyInfo.notifyType = 1;
             notifyInfo.notifyValue = res[0].handlerMail;
             notifyInfo.bizType = 1;
+            notifyInfo.taskName=res[0].taskName
             await notifyJs.save(notifyInfo, function (result) {
                 assert.notEqual(result, -1, 'notifyInfo task fail')
                 SUCCESS(ctx, result);

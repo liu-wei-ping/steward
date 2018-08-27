@@ -27,9 +27,11 @@ async function save(params, callback) {
     notifyInfo.version = 1;
     notifyInfo.create_time = dateUtil.nowTime();
     notifyInfo.update_time = notifyInfo.create_time;
-    notifyInfo.
     await  mysql("notify_message_info").insert(notifyInfo).then(res => {
-        mailSend.sendMail("")
+        if(notifyInfo.notifyType==1){
+            notifyInfo.taskName = params.taskName;
+            mailSend.sendMail(params.notifyValue, '新的任务消息',notifyInfo);
+        }
         callback(res);
     }).catch(function (error) {
         console.error(error);
