@@ -161,6 +161,7 @@ async function preUpdateTask(reqinfo, taksInfo) {
         taksInfo.assignTime = dateUtil.nowTime();
         taksInfo.stat = 3;
         taksInfo.handlerName = reqinfo.handlerName;
+        //新增 inkman
         if (!reqinfo.handlerUid) {
             let linkUid = uuidGenerator().replace(/-/g, '');
             let linkmanInfo = {
@@ -175,23 +176,58 @@ async function preUpdateTask(reqinfo, taksInfo) {
             })
         } else {
             taksInfo.handlerUid = reqinfo.handlerUid;
+            //更新linkman
+            await  mysql("user_linkman_info").select("*").where({handlerUid: reqinfo.handlerUid}).then(async (res) => {
+                if (res && res[0]) {
+                    if (res[0].linkmanName !== reqinfo.handlerName || res[0].linkmanName !== reqinfo.handlerMail) {
+                        let updateLinkman = {
+                            linkmanMail: reqinfo.handlerMail,
+                            handlerName: reqinfo.handlerName,
+                            version: res[0].version + 1
+                        }
+                        await mysql("user_linkman_info").update(updateLinkman).where({handlerUid: reqinfo.handlerUid}).then(res => {
+                            console.log("更新linkman", res);
+                        });
+                    }
+                }
+            })
         }
-        db.getById(CNF.DB_TABLE.task_info, reqinfo.id, function (result) {
+        //创建或更新任务处理记录
+        db.getById(CNF.DB_TABLE.task_info, reqinfo.id, async function (result) {
             if (result && result[0]) {
                 var task = result[0];
-                var params = {
-                    taskId: task.id,
-                    taskName: task.taskName,
-                    taskCreateTime: task.create_time,
-                    assignerUid: task.uid,
-                    assignerName: task.realName,
-                    handlerUid: taksInfo.handlerUid,
-                    handlerName: reqinfo.handlerName,
-                    handlerMail: reqinfo.handlerMail || '',
-                    stat: 0
-                }
-                db.create(CNF.DB_TABLE.task_handle_info, params, function (resp) {
-                    console.log("任务分配结果", resp)
+                await mysql("task_handle_info").select("*").where({
+                    handlerUid: reqinfo.handlerUid,
+                    taskId: task.id
+                }).then(async (res) => {
+                    if (res && res[0]) {
+                        let updateHandleInfo = {
+                            handlerMail: reqinfo.handlerMail,
+                            handlerName: reqinfo.handlerName,
+                            taskName: task.taskName
+                        }
+                        await   mysql("task_handle_info").update(updateHandleInfo).where({
+                            taskId: task.id,
+                            handlerUid: taksInfo.handlerUid
+                        }).then(update => {
+                            console.log("更新任务分配结果", resp)
+                        })
+                    } else {
+                        var params = {
+                            taskId: task.id,
+                            taskName: task.taskName,
+                            taskCreateTime: task.create_time,
+                            assignerUid: task.uid,
+                            assignerName: task.realName,
+                            handlerUid: taksInfo.handlerUid,
+                            handlerName: reqinfo.handlerName,
+                            handlerMail: reqinfo.handlerMail || '',
+                            stat: 0
+                        }
+                        db.create(CNF.DB_TABLE.task_handle_info, params, function (resp) {
+                            console.log("创建任务分配结果", resp)
+                        })
+                    }
                 })
             }
         })
@@ -317,7 +353,7 @@ async function notify(ctx, next) {
             notifyInfo.notifyType = 1;
             notifyInfo.notifyValue = res[0].handlerMail;
             notifyInfo.bizType = 1;
-            notifyInfo.taskName=res[0].taskName
+            notifyInfo.taskName = res[0].taskName
             await notifyJs.save(notifyInfo, function (result) {
                 assert.notEqual(result, -1, 'notifyInfo task fail')
                 SUCCESS(ctx, result);
